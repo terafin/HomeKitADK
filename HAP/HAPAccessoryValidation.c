@@ -159,6 +159,7 @@ static bool AccessoryIsValid(const HAPAccessory* accessory) {
                 kHAPAccessory_MaxSerialNumberBytes);
         return false;
     }
+    // Test comment
     if (!HAPUTF8IsValidData(accessory->serialNumber, numSerialNumberBytes)) {
         HAPLogAccessoryError(
                 &logObject,
