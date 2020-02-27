@@ -16,4 +16,4 @@ jobs:
     - name: Check paths
       run: ls -la
     - name: Run Lint
-      run: sudo test.sh
+      run: sudo ./test.sh
