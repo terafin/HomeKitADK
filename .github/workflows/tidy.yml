@@ -1,6 +1,6 @@
-name: CI
+name: Tidy
 
-on: [pull_request]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -9,7 +9,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: clang-tidy check
-      uses: muxee/clang-tidy-action@0.0.1-rc1
+    - name: Get changed files
+      uses: lots0logs/gh-action-get-changed-files@2.0.6
       with:
-        args: "-checks=* -- -IHAP -IPAL -IExternal/HTTP -IExternal/JSON -IExternal/Base64"
+        token: GITHUB_TOKEN
+    - name: Install Dependencies
+      run: apt-get -fy clang-format clang-tidy
+    - name: Check paths
+      run: ls -la
+    - name: Run clang on the whole repo
+      run: clang-tidy HAP/*.c  -- -IHAP -IPAL -IExternal/HTTP -IExternal/JSON -IExternal/Base64
+#     - name: Run Lint
+#       uses: actions/github-script@0.6.0
+#       with:
+#         # The script to run
+#         script: 
+#         # The GitHub token used to create an authenticated client
+#         github-token: # optional, default is ${{ github.token }}
+#         # Whether to tell the GitHub client to log details of its requests
+#         debug: # optional
+#         # An optional user-agent string
+#         user-agent: # optional, default is actions/github-script
+#         # A comma-separated list of API previews to accept
+#         previews: # optional
+#         # Either "string" or "json" (default "json")—how the result will be encoded
+#         result-encoding: # optional, default is json
