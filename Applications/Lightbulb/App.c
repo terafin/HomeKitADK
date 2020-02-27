@@ -7,7 +7,7 @@
 // An example that implements the light bulb HomeKit profile. It can serve as a basic implementation for
 // any platform. The accessory logic implementation is reduced to internal state updates and log output.
 //
-// This implementation is platform-independent.
+// This implementation is platform-independent.asdasdasd
 //
 // The code consists of multiple parts:
 //
