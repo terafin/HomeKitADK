@@ -1,0 +1,16 @@
+# action.yml
+name: "Clang lint"
+description: "clang-lint + clang-format"
+# inputs:
+#   who-to-greet: # id of input
+#     description: "Who to greet"
+#     required: true
+#     default: "World"
+outputs:
+  result: # id of output
+    description: "Output"
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  # args:
+  #   - ${{ inputs.who-to-greet }}
