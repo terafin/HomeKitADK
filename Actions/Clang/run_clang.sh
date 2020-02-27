@@ -4,21 +4,33 @@ cd $GITHUB_WORKSPACE
 
 
 
-clang-tidy HAP/*.c PAL/*.c PAL/Mock/*.c External/HTTP/*.c External/JSON/*.c External/Base64/*.c -- -IHAP -IPAL -IExternal/HTTP -IExternal/JSON -IExternal/Base64 > clang_output.txt
-
-CLANG_OUTPUT=`cat clang_output.txt`
-echo "Clang output:"
-echo $CLANG_OUTPUT
+# clang-tidy HAP/*.c PAL/*.c PAL/Mock/*.c External/HTTP/*.c External/JSON/*.c External/Base64/*.c -- -IHAP -IPAL -IExternal/HTTP -IExternal/JSON -IExternal/Base64 > clang_output.txt
 
 echo "clang_arguments: $CLANG_ARGUMENTS"
 echo "files-modified: $FILES_MODIFIED"
 echo "files-added: $FILES_ADDED"
 
+IFS=' ' read -r -a MODIFIED_FILES <<< "$FILES_MODIFIED"
+IFS=' ' read -r -a ADDED_FILES <<< "$FILES_ADDED"
+
+clang_arguments=""
+for element in "${array[@]}"
+do
+    clang_arguments+="$element "
+done
+clang_arguments+="$CLANG_ARGUMENTS "
+
+clang-tidy "$clang_arguments" > clang_output.txt
+
+CLANG_OUTPUT=`cat clang_output.txt`
+echo "Clang output:"
+echo $CLANG_OUTPUT
+
 PULL_REQUEST_COMMENT=""
 PULL_REQUEST_COMMENT+=$'\n```\n'
 PULL_REQUEST_COMMENT+=$'Clang output:\n'
 PULL_REQUEST_COMMENT+="$CLANG_OUTPUT"
-PULL_REQUEST_COMMENT+=$'\n```\n'
+PULL_REQUEST_COMMENTz+=$'\n```\n'
 
 echo "Event path: $GITHUB_EVENT_PATH"
 cat $GITHUB_EVENT_PATH
