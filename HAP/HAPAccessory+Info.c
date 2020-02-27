@@ -12,6 +12,7 @@
  * @see HomeKit Accessory Protocol Specification R14
  *      Table 5-9 Info Parameter Types
  */
+
 HAP_ENUM_BEGIN(uint8_t, HAPInfoResponseTLVType) { /**
                                                    * HAP-Param-Current-State-Number.
                                                    * 2 bytes.
