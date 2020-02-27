@@ -17,7 +17,7 @@ static const HAPLogObject logObject = { .subsystem = kHAP_LogSubsystem, .categor
 //    - A dynamic setup code is generated periodically that may be displayed in text form.
 //    - Setup payloads may not be derived without a setup ID, so QR codes and NFC tags don't work.
 //
-// 3. Accessory with a programmable NFC tag but no display.
+// 3. Accessory with a programm able NFC tag but no display.
 //    - Programmable NFC tag must only be enabled in response to user interaction.
 //    - NFC pairing mode expires after 5 minutes.
 //    - While NFC pairing mode is not active (or while accessory is paired) special setup payloads are generated
