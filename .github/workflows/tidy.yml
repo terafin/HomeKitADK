@@ -17,6 +17,7 @@ jobs:
         uses: ./Actions/Clang # Uses an action in the root directory
         id: clang-lint
         env:
+          GITHUB_TOKEN: ${{ github.token }}
           CLANG_ARGUMENTS: "-- -IHAP -IPAL -IExternal/HTTP -IExternal/JSON -IExternal/Base64"
           FILES_MODIFIED: ${{ steps.get-changed-files.outputs.files_updated }}
           FILES_ADDED: ${{ steps.get-changed-files.outputs.files_created }}
