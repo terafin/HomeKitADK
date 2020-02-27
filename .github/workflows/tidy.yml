@@ -13,20 +13,7 @@ jobs:
       uses: lots0logs/gh-action-get-changed-files@2.0.6
       with:
         token: GITHUB_TOKEN
-#     - name: Install Dependencies
-#       run: apt-get -fy clang-format clang-tidy
     - name: Check paths
       run: ls -la
-#     - name: Run clang on the whole repo
-#       run: clang-tidy HAP/*.c  -- -IHAP -IPAL -IExternal/HTTP -IExternal/JSON -IExternal/Base64
     - name: Run Lint
-      uses: actions/github-script@0.6.0
-      with:
-        # The script to run
-        script: test.sh
-        # The GitHub token used to create an authenticated client
-#         github-token: # optional, default is ${{ github.token }}
-        # Whether to tell the GitHub client to log details of its requests
-        debug: true
-        # Either "string" or "json" (default "json")—how the result will be encoded
-#         result-encoding: # optional, default is json
+      run: ./test.sh
