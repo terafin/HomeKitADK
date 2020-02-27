@@ -25,7 +25,9 @@ echo "Comment URL: $PULL_REQUEST_COMMENT_URL"
 
 echo ::set-output name=clang-result::$CLANG_OUTPUT
 
-if [ ! -z "$COMMENTS_URL" -a "$str"!="" -a "$str"!="null" ]; then
+if [ ! -z "$PULL_REQUEST_COMMENT_URL" -a "$str"!="" -a "$str"!="null" ]; then
+    echo "Posting to comment URL: $PULL_REQUEST_COMMENT_URL"
+
     REQUEST_DATA=$(echo '{}' | jq --arg body "$PULL_REQUEST_COMMENT" '.body = $body')
     curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/vnd.github.VERSION.text+json" --data "$REQUEST_DATA" "$PULL_REQUEST_COMMENT_URL"
 fi

@@ -13,8 +13,6 @@ jobs:
         uses: futuratrepadeira/changed-files@v3.0.0
         with:
           repo-token: ${{ github.token }}
-      - name: Check paths
-        run: ls -la
       - name: Run Lint
         uses: ./Actions/Clang # Uses an action in the root directory
         id: clang-lint
