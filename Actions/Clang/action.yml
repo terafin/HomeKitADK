@@ -1,5 +1,5 @@
 # action.yml
-name: "Clang lint"
+name: "Clang Pull Request Linter/Tidy"
 description: "clang-lint + clang-format"
 inputs:
   files_added:
