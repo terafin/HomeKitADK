@@ -7,7 +7,7 @@
 #include "HAP+Internal.h"
 
 static const HAPLogObject logObject = { .subsystem = kHAP_LogSubsystem, .category = "AccessorySetupInfo" };
-
+  
 // Use Cases:
 //
 // 1. Accessory that does not have a display or programmable NFC tag.
