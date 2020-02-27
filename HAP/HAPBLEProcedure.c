@@ -125,7 +125,7 @@ bool HAPBLEProcedureIsInProgress(const HAPBLEProcedureRef* bleProcedure_) {
     return bleProcedure->procedureTimer != 0;
 }
 
-/**
+/** test
  * Destroys request body and creates response body writer.
  *
  * @param      bleProcedure_        Procedure.
