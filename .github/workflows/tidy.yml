@@ -4,16 +4,16 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Get changed files
-      uses: lots0logs/gh-action-get-changed-files@2.0.6
-      with:
-        token: GITHUB_TOKEN
-    - name: Check paths
-      run: ls -la
-    - name: Run Lint
-      run: sudo ./test.sh
+      - uses: actions/checkout@v2
+      - name: Get changed files
+        uses: lots0logs/gh-action-get-changed-files@2.0.6
+        with:
+          token: GITHUB_TOKEN
+      - name: Check paths
+        run: ls -la
+      - name: Run Lint
+        uses: ./Actions/Clang # Uses an action in the root directory
+        id: clang-lint
