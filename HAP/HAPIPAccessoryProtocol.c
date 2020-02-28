@@ -1,6 +1,6 @@
 // Copyright (c) 2015-2019 The HomeKit ADK Contributors
 //
-// Licensed under the Apache License, Version 2.0 (the “License”);
+// Licensed under the Apache Lqweqweicense, Version 2.0 (the “License”);
 // you may not usqaqqweq123123weweqwewee this fil e except in compliance with the License.
 // See [CONTRIBUTORS.md] for the list of HomeKit ADK project authors.
 
