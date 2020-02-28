@@ -50,13 +50,13 @@ static size_t try_read_uint(const char* buffer, size_t length, unsigned int* r) 
     k = 0;
     HAPAssert(k <= length);
     while ((k < length) && ('0' <= buffer[k]) && (buffer[k] <= '9') &&
-           (*r <= (UINT_MAX - (unsigned int) (buffer[k] - '0')) / 10)) {
+            (*r <= (UINT_MAX - (unsigned int) (buffer[k] - '0')) / 10)) {
         *r = *r * 10 + (unsigned int) (buffer[k] - '0');
         k++;
     }
     HAPAssert(
-            (k == length) || ((k < length) && ((buffer[k] < '0') || (buffer[k] > '9') ||
-                                               (*r > (UINT_MAX - (unsigned int) (buffer[k] - '0')) / 10))));
+        (k == length) || ((k < length) && ((buffer[k] < '0') || (buffer[k] > '9') ||
+                                           (*r > (UINT_MAX - (unsigned int) (buffer[k] - '0')) / 10))));
     return k;
 }
 
@@ -69,13 +69,13 @@ static size_t try_read_uint64(const char* buffer, size_t length, uint64_t* r) {
     k = 0;
     HAPAssert(k <= length);
     while ((k < length) && ('0' <= buffer[k]) && (buffer[k] <= '9') &&
-           (*r <= (UINT64_MAX - (uint64_t)(buffer[k] - '0')) / 10)) {
+            (*r <= (UINT64_MAX - (uint64_t)(buffer[k] - '0')) / 10)) {
         *r = *r * 10 + (uint64_t)(buffer[k] - '0');
         k++;
     }
     HAPAssert(
-            (k == length) || ((k < length) && ((buffer[k] < '0') || (buffer[k] > '9') ||
-                                               (*r > (UINT64_MAX - (uint64_t)(buffer[k] - '0')) / 10))));
+        (k == length) || ((k < length) && ((buffer[k] < '0') || (buffer[k] > '9') ||
+                                           (*r > (UINT64_MAX - (uint64_t)(buffer[k] - '0')) / 10))));
     return k;
 }
 
@@ -150,12 +150,12 @@ static const HAPCharacteristic* _Nullable GetCharacteristic(HAPAccessoryServerRe
 
 HAP_RESULT_USE_CHECK
 HAPError HAPIPAccessoryProtocolGetCharacteristicReadRequests(
-        char* bytes,
-        size_t numBytes,
-        HAPIPReadContextRef* readContexts,
-        size_t maxReadContexts,
-        size_t* numReadContexts,
-        HAPIPReadRequestParameters* parameters) {
+    char* bytes,
+    size_t numBytes,
+    HAPIPReadContextRef* readContexts,
+    size_t maxReadContexts,
+    size_t* numReadContexts,
+    HAPIPReadRequestParameters* parameters) {
     HAPError err;
     bool done;
     unsigned int x;
@@ -217,8 +217,8 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicReadRequests(
                 } while (!err && !done);
             }
         } else if (
-                (numBytes - i >= 5) && (bytes[i] == 'm') && (bytes[i + 1] == 'e') && (bytes[i + 2] == 't') &&
-                (bytes[i + 3] == 'a') && (bytes[i + 4] == '=')) {
+            (numBytes - i >= 5) && (bytes[i] == 'm') && (bytes[i + 1] == 'e') && (bytes[i + 2] == 't') &&
+            (bytes[i + 3] == 'a') && (bytes[i + 4] == '=')) {
             i += 5;
             n = try_read_uint(&bytes[i], numBytes - i, &x);
             if ((n == 1) && ((x == 0) || (x == 1))) {
@@ -228,8 +228,8 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicReadRequests(
                 err = kHAPError_InvalidData;
             }
         } else if (
-                (numBytes - i >= 6) && (bytes[i] == 'p') && (bytes[i + 1] == 'e') && (bytes[i + 2] == 'r') &&
-                (bytes[i + 3] == 'm') && (bytes[i + 4] == 's') && (bytes[i + 5] == '=')) {
+            (numBytes - i >= 6) && (bytes[i] == 'p') && (bytes[i + 1] == 'e') && (bytes[i + 2] == 'r') &&
+            (bytes[i + 3] == 'm') && (bytes[i + 4] == 's') && (bytes[i + 5] == '=')) {
             i += 6;
             n = try_read_uint(&bytes[i], numBytes - i, &x);
             if ((n == 1) && ((x == 0) || (x == 1))) {
@@ -239,8 +239,8 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicReadRequests(
                 err = kHAPError_InvalidData;
             }
         } else if (
-                (numBytes - i >= 5) && (bytes[i] == 't') && (bytes[i + 1] == 'y') && (bytes[i + 2] == 'p') &&
-                (bytes[i + 3] == 'e') && (bytes[i + 4] == '=')) {
+            (numBytes - i >= 5) && (bytes[i] == 't') && (bytes[i + 1] == 'y') && (bytes[i + 2] == 'p') &&
+            (bytes[i + 3] == 'e') && (bytes[i + 4] == '=')) {
             i += 5;
             n = try_read_uint(&bytes[i], numBytes - i, &x);
             if ((n == 1) && ((x == 0) || (x == 1))) {
@@ -264,15 +264,15 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicReadRequests(
         HAPAssert(i <= numBytes);
         if (!err && (i < numBytes)) {
             switch (bytes[i]) {
-                case '&':
-                    i++;
-                    break;
-                case '#':
-                    numBytes = i;
-                    break;
-                default:
-                    err = kHAPError_InvalidData;
-                    break;
+            case '&':
+                i++;
+                break;
+            case '#':
+                numBytes = i;
+                break;
+            default:
+                err = kHAPError_InvalidData;
+                break;
             }
         }
     }
@@ -282,10 +282,10 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicReadRequests(
 
 HAP_RESULT_USE_CHECK
 size_t HAPIPAccessoryProtocolGetNumCharacteristicReadResponseBytes(
-        HAPAccessoryServerRef* server,
-        HAPIPReadContextRef* readContexts,
-        size_t numReadContexts,
-        HAPIPReadRequestParameters* parameters) {
+    HAPAccessoryServerRef* server,
+    HAPIPReadContextRef* readContexts,
+    size_t numReadContexts,
+    HAPIPReadRequestParameters* parameters) {
     HAPPrecondition(server);
     HAPPrecondition(readContexts);
     HAPPrecondition(parameters);
@@ -314,36 +314,46 @@ size_t HAPIPAccessoryProtocolGetNumCharacteristicReadResponseBytes(
         }
         if (parameters->meta && chr_) {
             switch (chr_->format) {
-                case kHAPCharacteristicFormat_Bool: {
-                    r += 16;
-                } break;
-                case kHAPCharacteristicFormat_UInt8: {
-                    r += 17;
-                } break;
-                case kHAPCharacteristicFormat_UInt16: {
-                    r += 18;
-                } break;
-                case kHAPCharacteristicFormat_UInt32: {
-                    r += 18;
-                } break;
-                case kHAPCharacteristicFormat_UInt64: {
-                    r += 18;
-                } break;
-                case kHAPCharacteristicFormat_Int: {
-                    r += 15;
-                } break;
-                case kHAPCharacteristicFormat_Float: {
-                    r += 17;
-                } break;
-                case kHAPCharacteristicFormat_String: {
-                    r += 18;
-                } break;
-                case kHAPCharacteristicFormat_TLV8: {
-                    r += 16;
-                } break;
-                case kHAPCharacteristicFormat_Data: {
-                    r += 16;
-                } break;
+            case kHAPCharacteristicFormat_Bool: {
+                r += 16;
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt8: {
+                r += 17;
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt16: {
+                r += 18;
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt32: {
+                r += 18;
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt64: {
+                r += 18;
+            }
+            break;
+            case kHAPCharacteristicFormat_Int: {
+                r += 15;
+            }
+            break;
+            case kHAPCharacteristicFormat_Float: {
+                r += 17;
+            }
+            break;
+            case kHAPCharacteristicFormat_String: {
+                r += 18;
+            }
+            break;
+            case kHAPCharacteristicFormat_TLV8: {
+                r += 16;
+            }
+            break;
+            case kHAPCharacteristicFormat_Data: {
+                r += 16;
+            }
+            break;
             }
         }
         if (readContext->status == 0) {
@@ -353,28 +363,33 @@ size_t HAPIPAccessoryProtocolGetNumCharacteristicReadResponseBytes(
                 r += 4;
             } else {
                 switch (chr_->format) {
-                    case kHAPCharacteristicFormat_Bool: {
-                        r += 1;
-                    } break;
-                    case kHAPCharacteristicFormat_UInt8:
-                    case kHAPCharacteristicFormat_UInt16:
-                    case kHAPCharacteristicFormat_UInt32:
-                    case kHAPCharacteristicFormat_UInt64: {
-                        r += HAPUInt64GetNumDescriptionBytes(readContext->value.unsignedIntValue);
-                    } break;
-                    case kHAPCharacteristicFormat_Int: {
-                        r += HAPInt32GetNumDescriptionBytes(readContext->value.intValue);
-                    } break;
-                    case kHAPCharacteristicFormat_Float: {
-                        r += HAPJSONUtilsGetFloatNumDescriptionBytes(readContext->value.floatValue);
-                    } break;
-                    case kHAPCharacteristicFormat_String:
-                    case kHAPCharacteristicFormat_TLV8:
-                    case kHAPCharacteristicFormat_Data: {
-                        r += 2 + HAPJSONUtilsGetNumEscapedStringDataBytes(
-                                         HAPNonnull(readContext->value.stringValue.bytes),
-                                         readContext->value.stringValue.numBytes);
-                    } break;
+                case kHAPCharacteristicFormat_Bool: {
+                    r += 1;
+                }
+                break;
+                case kHAPCharacteristicFormat_UInt8:
+                case kHAPCharacteristicFormat_UInt16:
+                case kHAPCharacteristicFormat_UInt32:
+                case kHAPCharacteristicFormat_UInt64: {
+                    r += HAPUInt64GetNumDescriptionBytes(readContext->value.unsignedIntValue);
+                }
+                break;
+                case kHAPCharacteristicFormat_Int: {
+                    r += HAPInt32GetNumDescriptionBytes(readContext->value.intValue);
+                }
+                break;
+                case kHAPCharacteristicFormat_Float: {
+                    r += HAPJSONUtilsGetFloatNumDescriptionBytes(readContext->value.floatValue);
+                }
+                break;
+                case kHAPCharacteristicFormat_String:
+                case kHAPCharacteristicFormat_TLV8:
+                case kHAPCharacteristicFormat_Data: {
+                    r += 2 + HAPJSONUtilsGetNumEscapedStringDataBytes(
+                             HAPNonnull(readContext->value.stringValue.bytes),
+                             readContext->value.stringValue.numBytes);
+                }
+                break;
                 }
             }
         } else {
@@ -390,150 +405,170 @@ size_t HAPIPAccessoryProtocolGetNumCharacteristicReadResponseBytes(
         if (parameters->meta && chr_) {
             HAPCharacteristicUnits unit = kHAPCharacteristicUnits_None;
             switch (chr_->format) {
-                case kHAPCharacteristicFormat_Bool: {
-                } break;
-                case kHAPCharacteristicFormat_UInt8: {
-                    unit = ((const HAPUInt8Characteristic*) chr_)->units;
-                } break;
-                case kHAPCharacteristicFormat_UInt16: {
-                    unit = ((const HAPUInt16Characteristic*) chr_)->units;
-                } break;
-                case kHAPCharacteristicFormat_UInt32: {
-                    unit = ((const HAPUInt32Characteristic*) chr_)->units;
-                } break;
-                case kHAPCharacteristicFormat_UInt64: {
-                    unit = ((const HAPUInt64Characteristic*) chr_)->units;
-                } break;
-                case kHAPCharacteristicFormat_Int: {
-                    unit = ((const HAPIntCharacteristic*) chr_)->units;
-                } break;
-                case kHAPCharacteristicFormat_Float: {
-                    unit = ((const HAPFloatCharacteristic*) chr_)->units;
-                } break;
-                case kHAPCharacteristicFormat_String:
-                case kHAPCharacteristicFormat_TLV8:
-                case kHAPCharacteristicFormat_Data: {
-                } break;
+            case kHAPCharacteristicFormat_Bool: {
+            } break;
+            case kHAPCharacteristicFormat_UInt8: {
+                unit = ((const HAPUInt8Characteristic*) chr_)->units;
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt16: {
+                unit = ((const HAPUInt16Characteristic*) chr_)->units;
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt32: {
+                unit = ((const HAPUInt32Characteristic*) chr_)->units;
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt64: {
+                unit = ((const HAPUInt64Characteristic*) chr_)->units;
+            }
+            break;
+            case kHAPCharacteristicFormat_Int: {
+                unit = ((const HAPIntCharacteristic*) chr_)->units;
+            }
+            break;
+            case kHAPCharacteristicFormat_Float: {
+                unit = ((const HAPFloatCharacteristic*) chr_)->units;
+            }
+            break;
+            case kHAPCharacteristicFormat_String:
+            case kHAPCharacteristicFormat_TLV8:
+            case kHAPCharacteristicFormat_Data: {
+            } break;
             }
             switch (unit) {
-                case kHAPCharacteristicUnits_None: {
-                    r += 0;
-                } break;
-                case kHAPCharacteristicUnits_Celsius: {
-                    r += 17;
-                } break;
-                case kHAPCharacteristicUnits_ArcDegrees: {
-                    r += 20;
-                } break;
-                case kHAPCharacteristicUnits_Percentage: {
-                    r += 20;
-                } break;
-                case kHAPCharacteristicUnits_Lux: {
-                    r += 13;
-                } break;
-                case kHAPCharacteristicUnits_Seconds: {
-                    r += 17;
-                } break;
+            case kHAPCharacteristicUnits_None: {
+                r += 0;
+            }
+            break;
+            case kHAPCharacteristicUnits_Celsius: {
+                r += 17;
+            }
+            break;
+            case kHAPCharacteristicUnits_ArcDegrees: {
+                r += 20;
+            }
+            break;
+            case kHAPCharacteristicUnits_Percentage: {
+                r += 20;
+            }
+            break;
+            case kHAPCharacteristicUnits_Lux: {
+                r += 13;
+            }
+            break;
+            case kHAPCharacteristicUnits_Seconds: {
+                r += 17;
+            }
+            break;
             }
             switch (chr_->format) {
-                case kHAPCharacteristicFormat_Bool: {
-                } break;
-                case kHAPCharacteristicFormat_UInt8: {
-                    const HAPUInt8Characteristic* chr = (const HAPUInt8Characteristic*) chr_;
-                    uint8_t minimumValue = chr->constraints.minimumValue;
-                    uint8_t maximumValue = chr->constraints.maximumValue;
-                    uint8_t stepValue = chr->constraints.stepValue;
-                    HAPAssert(minimumValue <= maximumValue);
+            case kHAPCharacteristicFormat_Bool: {
+            } break;
+            case kHAPCharacteristicFormat_UInt8: {
+                const HAPUInt8Characteristic* chr = (const HAPUInt8Characteristic*) chr_;
+                uint8_t minimumValue = chr->constraints.minimumValue;
+                uint8_t maximumValue = chr->constraints.maximumValue;
+                uint8_t stepValue = chr->constraints.stepValue;
+                HAPAssert(minimumValue <= maximumValue);
 
-                    if (minimumValue || maximumValue != UINT8_MAX) {
-                        r += 35 + HAPUInt64GetNumDescriptionBytes(minimumValue) +
-                             HAPUInt64GetNumDescriptionBytes(maximumValue) + HAPUInt64GetNumDescriptionBytes(stepValue);
-                    }
-                } break;
-                case kHAPCharacteristicFormat_UInt16: {
-                    const HAPUInt16Characteristic* chr = (const HAPUInt16Characteristic*) chr_;
-                    uint16_t minimumValue = chr->constraints.minimumValue;
-                    uint16_t maximumValue = chr->constraints.maximumValue;
-                    uint16_t stepValue = chr->constraints.stepValue;
-                    HAPAssert(minimumValue <= maximumValue);
+                if (minimumValue || maximumValue != UINT8_MAX) {
+                    r += 35 + HAPUInt64GetNumDescriptionBytes(minimumValue) +
+                         HAPUInt64GetNumDescriptionBytes(maximumValue) + HAPUInt64GetNumDescriptionBytes(stepValue);
+                }
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt16: {
+                const HAPUInt16Characteristic* chr = (const HAPUInt16Characteristic*) chr_;
+                uint16_t minimumValue = chr->constraints.minimumValue;
+                uint16_t maximumValue = chr->constraints.maximumValue;
+                uint16_t stepValue = chr->constraints.stepValue;
+                HAPAssert(minimumValue <= maximumValue);
 
-                    if (minimumValue || maximumValue != UINT16_MAX) {
-                        r += 35 + HAPUInt64GetNumDescriptionBytes(minimumValue) +
-                             HAPUInt64GetNumDescriptionBytes(maximumValue) + HAPUInt64GetNumDescriptionBytes(stepValue);
-                    }
-                } break;
-                case kHAPCharacteristicFormat_UInt32: {
-                    const HAPUInt32Characteristic* chr = (const HAPUInt32Characteristic*) chr_;
-                    uint32_t minimumValue = chr->constraints.minimumValue;
-                    uint32_t maximumValue = chr->constraints.maximumValue;
-                    uint32_t stepValue = chr->constraints.stepValue;
-                    HAPAssert(minimumValue <= maximumValue);
+                if (minimumValue || maximumValue != UINT16_MAX) {
+                    r += 35 + HAPUInt64GetNumDescriptionBytes(minimumValue) +
+                         HAPUInt64GetNumDescriptionBytes(maximumValue) + HAPUInt64GetNumDescriptionBytes(stepValue);
+                }
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt32: {
+                const HAPUInt32Characteristic* chr = (const HAPUInt32Characteristic*) chr_;
+                uint32_t minimumValue = chr->constraints.minimumValue;
+                uint32_t maximumValue = chr->constraints.maximumValue;
+                uint32_t stepValue = chr->constraints.stepValue;
+                HAPAssert(minimumValue <= maximumValue);
 
-                    if (minimumValue || maximumValue != UINT32_MAX) {
-                        r += 35 + HAPUInt64GetNumDescriptionBytes(minimumValue) +
-                             HAPUInt64GetNumDescriptionBytes(maximumValue) + HAPUInt64GetNumDescriptionBytes(stepValue);
-                    }
-                } break;
-                case kHAPCharacteristicFormat_UInt64: {
-                    const HAPUInt64Characteristic* chr = (const HAPUInt64Characteristic*) chr_;
-                    uint64_t minimumValue = chr->constraints.minimumValue;
-                    uint64_t maximumValue = chr->constraints.maximumValue;
-                    uint64_t stepValue = chr->constraints.stepValue;
-                    HAPAssert(minimumValue <= maximumValue);
+                if (minimumValue || maximumValue != UINT32_MAX) {
+                    r += 35 + HAPUInt64GetNumDescriptionBytes(minimumValue) +
+                         HAPUInt64GetNumDescriptionBytes(maximumValue) + HAPUInt64GetNumDescriptionBytes(stepValue);
+                }
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt64: {
+                const HAPUInt64Characteristic* chr = (const HAPUInt64Characteristic*) chr_;
+                uint64_t minimumValue = chr->constraints.minimumValue;
+                uint64_t maximumValue = chr->constraints.maximumValue;
+                uint64_t stepValue = chr->constraints.stepValue;
+                HAPAssert(minimumValue <= maximumValue);
 
-                    if (minimumValue || maximumValue != UINT64_MAX) {
-                        r += 35 + HAPUInt64GetNumDescriptionBytes(minimumValue) +
-                             HAPUInt64GetNumDescriptionBytes(maximumValue) + HAPUInt64GetNumDescriptionBytes(stepValue);
-                    }
-                } break;
-                case kHAPCharacteristicFormat_Int: {
-                    const HAPIntCharacteristic* chr = (const HAPIntCharacteristic*) chr_;
-                    int32_t minimumValue = chr->constraints.minimumValue;
-                    int32_t maximumValue = chr->constraints.maximumValue;
-                    int32_t stepValue = chr->constraints.stepValue;
-                    HAPAssert(minimumValue <= maximumValue);
-                    HAPAssert(stepValue >= 0);
+                if (minimumValue || maximumValue != UINT64_MAX) {
+                    r += 35 + HAPUInt64GetNumDescriptionBytes(minimumValue) +
+                         HAPUInt64GetNumDescriptionBytes(maximumValue) + HAPUInt64GetNumDescriptionBytes(stepValue);
+                }
+            }
+            break;
+            case kHAPCharacteristicFormat_Int: {
+                const HAPIntCharacteristic* chr = (const HAPIntCharacteristic*) chr_;
+                int32_t minimumValue = chr->constraints.minimumValue;
+                int32_t maximumValue = chr->constraints.maximumValue;
+                int32_t stepValue = chr->constraints.stepValue;
+                HAPAssert(minimumValue <= maximumValue);
+                HAPAssert(stepValue >= 0);
 
-                    if (minimumValue != INT32_MIN || maximumValue != INT32_MAX) {
-                        r += 35 + HAPInt32GetNumDescriptionBytes(minimumValue) +
-                             HAPInt32GetNumDescriptionBytes(maximumValue) + HAPInt32GetNumDescriptionBytes(stepValue);
-                    }
-                } break;
-                case kHAPCharacteristicFormat_Float: {
-                    const HAPFloatCharacteristic* chr = (const HAPFloatCharacteristic*) chr_;
-                    float minimumValue = chr->constraints.minimumValue;
-                    float maximumValue = chr->constraints.maximumValue;
-                    float stepValue = chr->constraints.stepValue;
-                    HAPAssert(HAPFloatIsFinite(minimumValue) || HAPFloatIsInfinite(minimumValue));
-                    HAPAssert(HAPFloatIsFinite(maximumValue) || HAPFloatIsInfinite(maximumValue));
-                    HAPAssert(minimumValue <= maximumValue);
-                    HAPAssert(stepValue >= 0);
+                if (minimumValue != INT32_MIN || maximumValue != INT32_MAX) {
+                    r += 35 + HAPInt32GetNumDescriptionBytes(minimumValue) +
+                         HAPInt32GetNumDescriptionBytes(maximumValue) + HAPInt32GetNumDescriptionBytes(stepValue);
+                }
+            }
+            break;
+            case kHAPCharacteristicFormat_Float: {
+                const HAPFloatCharacteristic* chr = (const HAPFloatCharacteristic*) chr_;
+                float minimumValue = chr->constraints.minimumValue;
+                float maximumValue = chr->constraints.maximumValue;
+                float stepValue = chr->constraints.stepValue;
+                HAPAssert(HAPFloatIsFinite(minimumValue) || HAPFloatIsInfinite(minimumValue));
+                HAPAssert(HAPFloatIsFinite(maximumValue) || HAPFloatIsInfinite(maximumValue));
+                HAPAssert(minimumValue <= maximumValue);
+                HAPAssert(stepValue >= 0);
 
-                    if (!(HAPFloatIsInfinite(minimumValue) && minimumValue < 0) ||
+                if (!(HAPFloatIsInfinite(minimumValue) && minimumValue < 0) ||
                         !(HAPFloatIsInfinite(maximumValue) && maximumValue > 0)) {
-                        r += 35 + HAPJSONUtilsGetFloatNumDescriptionBytes(minimumValue) +
-                             HAPJSONUtilsGetFloatNumDescriptionBytes(maximumValue) +
-                             HAPJSONUtilsGetFloatNumDescriptionBytes(stepValue);
-                    }
-                } break;
-                case kHAPCharacteristicFormat_String: {
-                    const HAPStringCharacteristic* chr = (const HAPStringCharacteristic*) chr_;
-                    uint16_t maxLength = chr->constraints.maxLength;
+                    r += 35 + HAPJSONUtilsGetFloatNumDescriptionBytes(minimumValue) +
+                         HAPJSONUtilsGetFloatNumDescriptionBytes(maximumValue) +
+                         HAPJSONUtilsGetFloatNumDescriptionBytes(stepValue);
+                }
+            }
+            break;
+            case kHAPCharacteristicFormat_String: {
+                const HAPStringCharacteristic* chr = (const HAPStringCharacteristic*) chr_;
+                uint16_t maxLength = chr->constraints.maxLength;
 
-                    if (maxLength != 64) {
-                        r += 10 + HAPUInt64GetNumDescriptionBytes(maxLength);
-                    }
-                } break;
-                case kHAPCharacteristicFormat_TLV8: {
-                } break;
-                case kHAPCharacteristicFormat_Data: {
-                    const HAPDataCharacteristic* chr = (const HAPDataCharacteristic*) chr_;
-                    uint32_t maxLength = chr->constraints.maxLength;
+                if (maxLength != 64) {
+                    r += 10 + HAPUInt64GetNumDescriptionBytes(maxLength);
+                }
+            }
+            break;
+            case kHAPCharacteristicFormat_TLV8: {
+            } break;
+            case kHAPCharacteristicFormat_Data: {
+                const HAPDataCharacteristic* chr = (const HAPDataCharacteristic*) chr_;
+                uint32_t maxLength = chr->constraints.maxLength;
 
-                    if (maxLength != 2097152) {
-                        r += 14 + HAPUInt64GetNumDescriptionBytes(maxLength);
-                    }
-                } break;
+                if (maxLength != 2097152) {
+                    r += 14 + HAPUInt64GetNumDescriptionBytes(maxLength);
+                }
+            }
+            break;
             }
         }
     }
@@ -543,11 +578,11 @@ size_t HAPIPAccessoryProtocolGetNumCharacteristicReadResponseBytes(
 
 HAP_RESULT_USE_CHECK
 HAPError HAPIPAccessoryProtocolGetCharacteristicReadResponseBytes(
-        HAPAccessoryServerRef* server,
-        HAPIPReadContextRef* readContexts,
-        size_t numReadContexts,
-        HAPIPReadRequestParameters* parameters,
-        HAPIPByteBuffer* buffer) {
+    HAPAccessoryServerRef* server,
+    HAPIPReadContextRef* readContexts,
+    size_t numReadContexts,
+    HAPIPReadRequestParameters* parameters,
+    HAPIPByteBuffer* buffer) {
     HAPPrecondition(server);
     HAPPrecondition(parameters);
     HAPPrecondition(buffer);
@@ -606,36 +641,46 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicReadResponseBytes(
         }
         if (parameters->meta && chr_) {
             switch (chr_->format) {
-                case kHAPCharacteristicFormat_Bool: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"bool\"");
-                } break;
-                case kHAPCharacteristicFormat_UInt8: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"uint8\"");
-                } break;
-                case kHAPCharacteristicFormat_UInt16: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"uint16\"");
-                } break;
-                case kHAPCharacteristicFormat_UInt32: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"uint32\"");
-                } break;
-                case kHAPCharacteristicFormat_UInt64: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"uint64\"");
-                } break;
-                case kHAPCharacteristicFormat_Int: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"int\"");
-                } break;
-                case kHAPCharacteristicFormat_Float: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"float\"");
-                } break;
-                case kHAPCharacteristicFormat_String: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"string\"");
-                } break;
-                case kHAPCharacteristicFormat_TLV8: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"tlv8\"");
-                } break;
-                case kHAPCharacteristicFormat_Data: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"data\"");
-                } break;
+            case kHAPCharacteristicFormat_Bool: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"bool\"");
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt8: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"uint8\"");
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt16: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"uint16\"");
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt32: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"uint32\"");
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt64: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"uint64\"");
+            }
+            break;
+            case kHAPCharacteristicFormat_Int: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"int\"");
+            }
+            break;
+            case kHAPCharacteristicFormat_Float: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"float\"");
+            }
+            break;
+            case kHAPCharacteristicFormat_String: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"string\"");
+            }
+            break;
+            case kHAPCharacteristicFormat_TLV8: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"tlv8\"");
+            }
+            break;
+            case kHAPCharacteristicFormat_Data: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"format\":\"data\"");
+            }
+            break;
             }
             if (err) {
                 goto error;
@@ -655,66 +700,71 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicReadResponseBytes(
                 // Section 9.75 Programmable Switch Event
                 const HAPAccessory* accessory = HAPNonnull(GetAccessory(server, readContext->aid));
                 HAPLogCharacteristicInfo(
-                        &logObject,
-                        chr_,
-                        service,
-                        accessory,
-                        "Sending null value (readHandler callback is only called for HAP events).");
+                    &logObject,
+                    chr_,
+                    service,
+                    accessory,
+                    "Sending null value (readHandler callback is only called for HAP events).");
                 err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":null}");
             } else {
                 switch (chr_->format) {
-                    case kHAPCharacteristicFormat_Bool: {
-                        err = HAPIPByteBufferAppendStringWithFormat(
-                                buffer, ",\"value\":%s}", readContext->value.unsignedIntValue ? "1" : "0");
-                    } break;
-                    case kHAPCharacteristicFormat_UInt8:
-                    case kHAPCharacteristicFormat_UInt16:
-                    case kHAPCharacteristicFormat_UInt32:
-                    case kHAPCharacteristicFormat_UInt64: {
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":");
-                        if (err) {
-                            goto error;
-                        }
-                        err = HAPUInt64GetDescription(
-                                uintval(readContext->value.unsignedIntValue), scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, "%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, "}");
-                    } break;
-                    case kHAPCharacteristicFormat_Int: {
-                        err = HAPIPByteBufferAppendStringWithFormat(
-                                buffer, ",\"value\":%ld}", (long) readContext->value.intValue);
-                    } break;
-                    case kHAPCharacteristicFormat_Float: {
-                        err = HAPJSONUtilsGetFloatDescription(
-                                readContext->value.floatValue, scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":%s}", scratch_string);
-                    } break;
-                    case kHAPCharacteristicFormat_String:
-                    case kHAPCharacteristicFormat_TLV8:
-                    case kHAPCharacteristicFormat_Data: {
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":\"");
-                        if (err) {
-                            goto error;
-                        }
-                        size_t bufferMark = buffer->position;
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, "%s", readContext->value.stringValue.bytes);
-                        if (err) {
-                            goto error;
-                        }
-                        size_t numStringDataBytes = readContext->value.stringValue.numBytes;
-                        err = HAPJSONUtilsEscapeStringData(
-                                &buffer->data[bufferMark], buffer->limit - bufferMark, &numStringDataBytes);
-                        if (err) {
-                            goto error;
-                        }
-                        buffer->position = bufferMark + numStringDataBytes;
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, "\"}");
-                    } break;
+                case kHAPCharacteristicFormat_Bool: {
+                    err = HAPIPByteBufferAppendStringWithFormat(
+                              buffer, ",\"value\":%s}", readContext->value.unsignedIntValue ? "1" : "0");
+                }
+                break;
+                case kHAPCharacteristicFormat_UInt8:
+                case kHAPCharacteristicFormat_UInt16:
+                case kHAPCharacteristicFormat_UInt32:
+                case kHAPCharacteristicFormat_UInt64: {
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":");
+                    if (err) {
+                        goto error;
+                    }
+                    err = HAPUInt64GetDescription(
+                              uintval(readContext->value.unsignedIntValue), scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, "%s", scratch_string);
+                    if (err) {
+                        goto error;
+                    }
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, "}");
+                }
+                break;
+                case kHAPCharacteristicFormat_Int: {
+                    err = HAPIPByteBufferAppendStringWithFormat(
+                              buffer, ",\"value\":%ld}", (long) readContext->value.intValue);
+                }
+                break;
+                case kHAPCharacteristicFormat_Float: {
+                    err = HAPJSONUtilsGetFloatDescription(
+                              readContext->value.floatValue, scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":%s}", scratch_string);
+                }
+                break;
+                case kHAPCharacteristicFormat_String:
+                case kHAPCharacteristicFormat_TLV8:
+                case kHAPCharacteristicFormat_Data: {
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":\"");
+                    if (err) {
+                        goto error;
+                    }
+                    size_t bufferMark = buffer->position;
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, "%s", readContext->value.stringValue.bytes);
+                    if (err) {
+                        goto error;
+                    }
+                    size_t numStringDataBytes = readContext->value.stringValue.numBytes;
+                    err = HAPJSONUtilsEscapeStringData(
+                              &buffer->data[bufferMark], buffer->limit - bufferMark, &numStringDataBytes);
+                    if (err) {
+                        goto error;
+                    }
+                    buffer->position = bufferMark + numStringDataBytes;
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, "\"}");
+                }
+                break;
                 }
             }
             if (err) {
@@ -797,250 +847,269 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicReadResponseBytes(
         if (parameters->meta && chr_) {
             HAPCharacteristicUnits unit = kHAPCharacteristicUnits_None;
             switch (chr_->format) {
-                case kHAPCharacteristicFormat_Bool: {
-                } break;
-                case kHAPCharacteristicFormat_UInt8: {
-                    unit = ((const HAPUInt8Characteristic*) chr_)->units;
-                } break;
-                case kHAPCharacteristicFormat_UInt16: {
-                    unit = ((const HAPUInt16Characteristic*) chr_)->units;
-                } break;
-                case kHAPCharacteristicFormat_UInt32: {
-                    unit = ((const HAPUInt32Characteristic*) chr_)->units;
-                } break;
-                case kHAPCharacteristicFormat_UInt64: {
-                    unit = ((const HAPUInt64Characteristic*) chr_)->units;
-                } break;
-                case kHAPCharacteristicFormat_Int: {
-                    unit = ((const HAPIntCharacteristic*) chr_)->units;
-                } break;
-                case kHAPCharacteristicFormat_Float: {
-                    unit = ((const HAPFloatCharacteristic*) chr_)->units;
-                } break;
-                case kHAPCharacteristicFormat_String:
-                case kHAPCharacteristicFormat_TLV8:
-                case kHAPCharacteristicFormat_Data: {
-                } break;
+            case kHAPCharacteristicFormat_Bool: {
+            } break;
+            case kHAPCharacteristicFormat_UInt8: {
+                unit = ((const HAPUInt8Characteristic*) chr_)->units;
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt16: {
+                unit = ((const HAPUInt16Characteristic*) chr_)->units;
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt32: {
+                unit = ((const HAPUInt32Characteristic*) chr_)->units;
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt64: {
+                unit = ((const HAPUInt64Characteristic*) chr_)->units;
+            }
+            break;
+            case kHAPCharacteristicFormat_Int: {
+                unit = ((const HAPIntCharacteristic*) chr_)->units;
+            }
+            break;
+            case kHAPCharacteristicFormat_Float: {
+                unit = ((const HAPFloatCharacteristic*) chr_)->units;
+            }
+            break;
+            case kHAPCharacteristicFormat_String:
+            case kHAPCharacteristicFormat_TLV8:
+            case kHAPCharacteristicFormat_Data: {
+            } break;
             }
             switch (unit) {
-                case kHAPCharacteristicUnits_None: {
-                } break;
-                case kHAPCharacteristicUnits_Celsius: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"unit\":\"celsius\"");
-                } break;
-                case kHAPCharacteristicUnits_ArcDegrees: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"unit\":\"arcdegrees\"");
-                } break;
-                case kHAPCharacteristicUnits_Percentage: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"unit\":\"percentage\"");
-                } break;
-                case kHAPCharacteristicUnits_Lux: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"unit\":\"lux\"");
-                } break;
-                case kHAPCharacteristicUnits_Seconds: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"unit\":\"seconds\"");
-                } break;
+            case kHAPCharacteristicUnits_None: {
+            } break;
+            case kHAPCharacteristicUnits_Celsius: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"unit\":\"celsius\"");
+            }
+            break;
+            case kHAPCharacteristicUnits_ArcDegrees: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"unit\":\"arcdegrees\"");
+            }
+            break;
+            case kHAPCharacteristicUnits_Percentage: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"unit\":\"percentage\"");
+            }
+            break;
+            case kHAPCharacteristicUnits_Lux: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"unit\":\"lux\"");
+            }
+            break;
+            case kHAPCharacteristicUnits_Seconds: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"unit\":\"seconds\"");
+            }
+            break;
             }
             if (err) {
                 goto error;
             }
             switch (chr_->format) {
-                case kHAPCharacteristicFormat_Bool: {
-                } break;
-                case kHAPCharacteristicFormat_UInt8: {
-                    const HAPUInt8Characteristic* chr = (const HAPUInt8Characteristic*) chr_;
-                    uint8_t minimumValue = chr->constraints.minimumValue;
-                    uint8_t maximumValue = chr->constraints.maximumValue;
-                    uint8_t stepValue = chr->constraints.stepValue;
-                    HAPAssert(minimumValue <= maximumValue);
+            case kHAPCharacteristicFormat_Bool: {
+            } break;
+            case kHAPCharacteristicFormat_UInt8: {
+                const HAPUInt8Characteristic* chr = (const HAPUInt8Characteristic*) chr_;
+                uint8_t minimumValue = chr->constraints.minimumValue;
+                uint8_t maximumValue = chr->constraints.maximumValue;
+                uint8_t stepValue = chr->constraints.stepValue;
+                HAPAssert(minimumValue <= maximumValue);
 
-                    if (minimumValue || maximumValue != UINT8_MAX) {
-                        err = HAPUInt64GetDescription(uintval(minimumValue), scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minValue\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
-                        err = HAPUInt64GetDescription(uintval(maximumValue), scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"maxValue\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
-                        err = HAPUInt64GetDescription(uintval(stepValue), scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minStep\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
+                if (minimumValue || maximumValue != UINT8_MAX) {
+                    err = HAPUInt64GetDescription(uintval(minimumValue), scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minValue\":%s", scratch_string);
+                    if (err) {
+                        goto error;
                     }
-                } break;
-                case kHAPCharacteristicFormat_UInt16: {
-                    const HAPUInt16Characteristic* chr = (const HAPUInt16Characteristic*) chr_;
-                    uint16_t minimumValue = chr->constraints.minimumValue;
-                    uint16_t maximumValue = chr->constraints.maximumValue;
-                    uint16_t stepValue = chr->constraints.stepValue;
-                    HAPAssert(minimumValue <= maximumValue);
-
-                    if (minimumValue || maximumValue != UINT16_MAX) {
-                        err = HAPUInt64GetDescription(uintval(minimumValue), scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minValue\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
-                        err = HAPUInt64GetDescription(uintval(maximumValue), scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"maxValue\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
-                        err = HAPUInt64GetDescription(uintval(stepValue), scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minStep\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
+                    err = HAPUInt64GetDescription(uintval(maximumValue), scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"maxValue\":%s", scratch_string);
+                    if (err) {
+                        goto error;
                     }
-                } break;
-                case kHAPCharacteristicFormat_UInt32: {
-                    const HAPUInt32Characteristic* chr = (const HAPUInt32Characteristic*) chr_;
-                    uint32_t minimumValue = chr->constraints.minimumValue;
-                    uint32_t maximumValue = chr->constraints.maximumValue;
-                    uint32_t stepValue = chr->constraints.stepValue;
-                    HAPAssert(minimumValue <= maximumValue);
-
-                    if (minimumValue || maximumValue != UINT32_MAX) {
-                        err = HAPUInt64GetDescription(uintval(minimumValue), scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minValue\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
-                        err = HAPUInt64GetDescription(uintval(maximumValue), scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"maxValue\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
-                        err = HAPUInt64GetDescription(uintval(stepValue), scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minStep\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
+                    err = HAPUInt64GetDescription(uintval(stepValue), scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minStep\":%s", scratch_string);
+                    if (err) {
+                        goto error;
                     }
-                } break;
-                case kHAPCharacteristicFormat_UInt64: {
-                    const HAPUInt64Characteristic* chr = (const HAPUInt64Characteristic*) chr_;
-                    uint64_t minimumValue = chr->constraints.minimumValue;
-                    uint64_t maximumValue = chr->constraints.maximumValue;
-                    uint64_t stepValue = chr->constraints.stepValue;
-                    HAPAssert(minimumValue <= maximumValue);
+                }
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt16: {
+                const HAPUInt16Characteristic* chr = (const HAPUInt16Characteristic*) chr_;
+                uint16_t minimumValue = chr->constraints.minimumValue;
+                uint16_t maximumValue = chr->constraints.maximumValue;
+                uint16_t stepValue = chr->constraints.stepValue;
+                HAPAssert(minimumValue <= maximumValue);
 
-                    if (minimumValue || maximumValue != UINT64_MAX) {
-                        err = HAPUInt64GetDescription(uintval(minimumValue), scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minValue\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
-                        err = HAPUInt64GetDescription(uintval(maximumValue), scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"maxValue\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
-                        err = HAPUInt64GetDescription(uintval(stepValue), scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minStep\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
+                if (minimumValue || maximumValue != UINT16_MAX) {
+                    err = HAPUInt64GetDescription(uintval(minimumValue), scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minValue\":%s", scratch_string);
+                    if (err) {
+                        goto error;
                     }
-                } break;
-                case kHAPCharacteristicFormat_Int: {
-                    const HAPIntCharacteristic* chr = (const HAPIntCharacteristic*) chr_;
-                    int32_t minimumValue = chr->constraints.minimumValue;
-                    int32_t maximumValue = chr->constraints.maximumValue;
-                    int32_t stepValue = chr->constraints.stepValue;
-                    HAPAssert(minimumValue <= maximumValue);
-                    HAPAssert(stepValue >= 0);
-
-                    if (minimumValue != INT32_MIN || maximumValue != INT32_MAX) {
-                        err = HAPIPByteBufferAppendStringWithFormat(
-                                buffer,
-                                ",\"minValue\":%ld"
-                                ",\"maxValue\":%ld"
-                                ",\"minStep\":%ld",
-                                (long) minimumValue,
-                                (long) maximumValue,
-                                (long) stepValue);
-                        if (err) {
-                            goto error;
-                        }
+                    err = HAPUInt64GetDescription(uintval(maximumValue), scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"maxValue\":%s", scratch_string);
+                    if (err) {
+                        goto error;
                     }
-                } break;
-                case kHAPCharacteristicFormat_Float: {
-                    const HAPFloatCharacteristic* chr = (const HAPFloatCharacteristic*) chr_;
-                    float minimumValue = chr->constraints.minimumValue;
-                    float maximumValue = chr->constraints.maximumValue;
-                    float stepValue = chr->constraints.stepValue;
-                    HAPAssert(HAPFloatIsFinite(minimumValue) || HAPFloatIsInfinite(minimumValue));
-                    HAPAssert(HAPFloatIsFinite(maximumValue) || HAPFloatIsInfinite(maximumValue));
-                    HAPAssert(minimumValue <= maximumValue);
-                    HAPAssert(stepValue >= 0);
+                    err = HAPUInt64GetDescription(uintval(stepValue), scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minStep\":%s", scratch_string);
+                    if (err) {
+                        goto error;
+                    }
+                }
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt32: {
+                const HAPUInt32Characteristic* chr = (const HAPUInt32Characteristic*) chr_;
+                uint32_t minimumValue = chr->constraints.minimumValue;
+                uint32_t maximumValue = chr->constraints.maximumValue;
+                uint32_t stepValue = chr->constraints.stepValue;
+                HAPAssert(minimumValue <= maximumValue);
 
-                    if (!(HAPFloatIsInfinite(minimumValue) && minimumValue < 0) ||
+                if (minimumValue || maximumValue != UINT32_MAX) {
+                    err = HAPUInt64GetDescription(uintval(minimumValue), scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minValue\":%s", scratch_string);
+                    if (err) {
+                        goto error;
+                    }
+                    err = HAPUInt64GetDescription(uintval(maximumValue), scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"maxValue\":%s", scratch_string);
+                    if (err) {
+                        goto error;
+                    }
+                    err = HAPUInt64GetDescription(uintval(stepValue), scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minStep\":%s", scratch_string);
+                    if (err) {
+                        goto error;
+                    }
+                }
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt64: {
+                const HAPUInt64Characteristic* chr = (const HAPUInt64Characteristic*) chr_;
+                uint64_t minimumValue = chr->constraints.minimumValue;
+                uint64_t maximumValue = chr->constraints.maximumValue;
+                uint64_t stepValue = chr->constraints.stepValue;
+                HAPAssert(minimumValue <= maximumValue);
+
+                if (minimumValue || maximumValue != UINT64_MAX) {
+                    err = HAPUInt64GetDescription(uintval(minimumValue), scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minValue\":%s", scratch_string);
+                    if (err) {
+                        goto error;
+                    }
+                    err = HAPUInt64GetDescription(uintval(maximumValue), scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"maxValue\":%s", scratch_string);
+                    if (err) {
+                        goto error;
+                    }
+                    err = HAPUInt64GetDescription(uintval(stepValue), scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minStep\":%s", scratch_string);
+                    if (err) {
+                        goto error;
+                    }
+                }
+            }
+            break;
+            case kHAPCharacteristicFormat_Int: {
+                const HAPIntCharacteristic* chr = (const HAPIntCharacteristic*) chr_;
+                int32_t minimumValue = chr->constraints.minimumValue;
+                int32_t maximumValue = chr->constraints.maximumValue;
+                int32_t stepValue = chr->constraints.stepValue;
+                HAPAssert(minimumValue <= maximumValue);
+                HAPAssert(stepValue >= 0);
+
+                if (minimumValue != INT32_MIN || maximumValue != INT32_MAX) {
+                    err = HAPIPByteBufferAppendStringWithFormat(
+                              buffer,
+                              ",\"minValue\":%ld"
+                              ",\"maxValue\":%ld"
+                              ",\"minStep\":%ld",
+                              (long) minimumValue,
+                              (long) maximumValue,
+                              (long) stepValue);
+                    if (err) {
+                        goto error;
+                    }
+                }
+            }
+            break;
+            case kHAPCharacteristicFormat_Float: {
+                const HAPFloatCharacteristic* chr = (const HAPFloatCharacteristic*) chr_;
+                float minimumValue = chr->constraints.minimumValue;
+                float maximumValue = chr->constraints.maximumValue;
+                float stepValue = chr->constraints.stepValue;
+                HAPAssert(HAPFloatIsFinite(minimumValue) || HAPFloatIsInfinite(minimumValue));
+                HAPAssert(HAPFloatIsFinite(maximumValue) || HAPFloatIsInfinite(maximumValue));
+                HAPAssert(minimumValue <= maximumValue);
+                HAPAssert(stepValue >= 0);
+
+                if (!(HAPFloatIsInfinite(minimumValue) && minimumValue < 0) ||
                         !(HAPFloatIsInfinite(maximumValue) && maximumValue > 0)) {
-                        err = HAPJSONUtilsGetFloatDescription(minimumValue, scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minValue\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
-                        err = HAPJSONUtilsGetFloatDescription(maximumValue, scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"maxValue\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
-                        err = HAPJSONUtilsGetFloatDescription(stepValue, scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minStep\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
+                    err = HAPJSONUtilsGetFloatDescription(minimumValue, scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minValue\":%s", scratch_string);
+                    if (err) {
+                        goto error;
                     }
-                } break;
-                case kHAPCharacteristicFormat_String: {
-                    const HAPStringCharacteristic* chr = (const HAPStringCharacteristic*) chr_;
-                    uint16_t maxLength = chr->constraints.maxLength;
+                    err = HAPJSONUtilsGetFloatDescription(maximumValue, scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"maxValue\":%s", scratch_string);
+                    if (err) {
+                        goto error;
+                    }
+                    err = HAPJSONUtilsGetFloatDescription(stepValue, scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"minStep\":%s", scratch_string);
+                    if (err) {
+                        goto error;
+                    }
+                }
+            }
+            break;
+            case kHAPCharacteristicFormat_String: {
+                const HAPStringCharacteristic* chr = (const HAPStringCharacteristic*) chr_;
+                uint16_t maxLength = chr->constraints.maxLength;
 
-                    if (maxLength != 64) {
-                        err = HAPUInt64GetDescription(uintval(maxLength), scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"maxLen\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
+                if (maxLength != 64) {
+                    err = HAPUInt64GetDescription(uintval(maxLength), scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"maxLen\":%s", scratch_string);
+                    if (err) {
+                        goto error;
                     }
-                } break;
-                case kHAPCharacteristicFormat_TLV8: {
-                } break;
-                case kHAPCharacteristicFormat_Data: {
-                    const HAPDataCharacteristic* chr = (const HAPDataCharacteristic*) chr_;
-                    uint32_t maxLength = chr->constraints.maxLength;
+                }
+            }
+            break;
+            case kHAPCharacteristicFormat_TLV8: {
+            } break;
+            case kHAPCharacteristicFormat_Data: {
+                const HAPDataCharacteristic* chr = (const HAPDataCharacteristic*) chr_;
+                uint32_t maxLength = chr->constraints.maxLength;
 
-                    if (maxLength != 2097152) {
-                        err = HAPUInt64GetDescription(uintval(maxLength), scratch_string, sizeof scratch_string);
-                        HAPAssert(!err);
-                        err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"maxDataLen\":%s", scratch_string);
-                        if (err) {
-                            goto error;
-                        }
+                if (maxLength != 2097152) {
+                    err = HAPUInt64GetDescription(uintval(maxLength), scratch_string, sizeof scratch_string);
+                    HAPAssert(!err);
+                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"maxDataLen\":%s", scratch_string);
+                    if (err) {
+                        goto error;
                     }
-                } break;
+                }
+            }
+            break;
             }
         }
     }
@@ -1056,11 +1125,11 @@ error:
 
 HAP_RESULT_USE_CHECK
 static size_t read_characteristic_write_request_parameters(
-        struct util_json_reader* r,
-        char* buffer,
-        size_t length,
-        HAPIPWriteRequestParameters* parameters,
-        HAPError* err) {
+    struct util_json_reader* r,
+    char* buffer,
+    size_t length,
+    HAPIPWriteRequestParameters* parameters,
+    HAPError* err) {
     size_t i, j, k, n;
     int frac;
     uint64_t aid, iid;
@@ -1158,169 +1227,173 @@ static size_t read_characteristic_write_request_parameters(
     } else if ((j - i == 7) && HAPRawBufferAreEqual(&buffer[i], "\"value\"", 7)) {
         k += util_json_reader_read(r, &buffer[k], length - k);
         switch (r->state) {
-            case util_JSON_READER_STATE_BEGINNING_NUMBER: {
-                HAPAssert(k <= length);
-                i = k;
-                k += util_json_reader_read(r, &buffer[k], length - k);
-                if (r->state != util_JSON_READER_STATE_COMPLETED_NUMBER) {
-                    *err = kHAPError_InvalidData;
-                    goto exit;
+        case util_JSON_READER_STATE_BEGINNING_NUMBER: {
+            HAPAssert(k <= length);
+            i = k;
+            k += util_json_reader_read(r, &buffer[k], length - k);
+            if (r->state != util_JSON_READER_STATE_COMPLETED_NUMBER) {
+                *err = kHAPError_InvalidData;
+                goto exit;
+            }
+            HAPAssert(i <= k);
+            HAPAssert(k <= length);
+            n = 0;
+            HAPAssert(n <= sizeof number);
+            frac = 0;
+            while ((i < k) && (n < sizeof number)) {
+                if (!frac && (buffer[i] == '.')) {
+                    frac = 1;
                 }
-                HAPAssert(i <= k);
-                HAPAssert(k <= length);
-                n = 0;
-                HAPAssert(n <= sizeof number);
-                frac = 0;
-                while ((i < k) && (n < sizeof number)) {
-                    if (!frac && (buffer[i] == '.')) {
-                        frac = 1;
+                number[n] = buffer[i];
+                n++;
+                i++;
+            }
+            if (n < sizeof number) {
+                HAPAssert(i == k);
+                number[n] = '\0';
+                if (frac) {
+                    *err = HAPFloatFromString(number, &fval);
+                    if (*err) {
+                        HAPAssert(*err == kHAPError_InvalidData);
+                        goto exit;
                     }
-                    number[n] = buffer[i];
-                    n++;
-                    i++;
-                }
-                if (n < sizeof number) {
-                    HAPAssert(i == k);
-                    number[n] = '\0';
-                    if (frac) {
-                        *err = HAPFloatFromString(number, &fval);
+                    parameters->value.floatValue = fval;
+                    parameters->type = kHAPIPWriteValueType_Float;
+                } else {
+                    *err = HAPInt64FromString(number, &llval);
+                    if (!*err) {
+                        if (llval < 0) {
+                            if (llval >= INT32_MIN) {
+                                parameters->value.intValue = (int32_t) llval;
+                                parameters->type = kHAPIPWriteValueType_Int;
+                            } else {
+                                *err = kHAPError_InvalidData;
+                                goto exit;
+                            }
+                        } else {
+                            parameters->value.unsignedIntValue = (uint64_t) llval;
+                            parameters->type = kHAPIPWriteValueType_UInt;
+                        }
+                    } else {
+                        HAPAssert(*err == kHAPError_InvalidData);
+                        *err = HAPUInt64FromString(number, &ullval);
                         if (*err) {
                             HAPAssert(*err == kHAPError_InvalidData);
                             goto exit;
                         }
-                        parameters->value.floatValue = fval;
-                        parameters->type = kHAPIPWriteValueType_Float;
-                    } else {
-                        *err = HAPInt64FromString(number, &llval);
-                        if (!*err) {
-                            if (llval < 0) {
-                                if (llval >= INT32_MIN) {
-                                    parameters->value.intValue = (int32_t) llval;
-                                    parameters->type = kHAPIPWriteValueType_Int;
-                                } else {
-                                    *err = kHAPError_InvalidData;
-                                    goto exit;
-                                }
-                            } else {
-                                parameters->value.unsignedIntValue = (uint64_t) llval;
-                                parameters->type = kHAPIPWriteValueType_UInt;
-                            }
-                        } else {
-                            HAPAssert(*err == kHAPError_InvalidData);
-                            *err = HAPUInt64FromString(number, &ullval);
-                            if (*err) {
-                                HAPAssert(*err == kHAPError_InvalidData);
-                                goto exit;
-                            }
-                            parameters->value.unsignedIntValue = ullval;
-                            parameters->type = kHAPIPWriteValueType_UInt;
-                        }
+                        parameters->value.unsignedIntValue = ullval;
+                        parameters->type = kHAPIPWriteValueType_UInt;
                     }
-                } else {
-                    *err = kHAPError_InvalidData;
-                    goto exit;
                 }
-            } break;
-            case util_JSON_READER_STATE_BEGINNING_STRING: {
-                HAPAssert(k <= length);
-                i = k;
-                k += util_json_reader_read(r, &buffer[k], length - k);
-                if (r->state != util_JSON_READER_STATE_COMPLETED_STRING) {
-                    *err = kHAPError_InvalidData;
-                    goto exit;
-                }
-                HAPAssert(i <= k);
-                HAPAssert(k <= length);
-                HAPAssert(k - i >= 2);
-                parameters->value.stringValue.bytes = &buffer[i + 1];
-                parameters->value.stringValue.numBytes = k - i - 2;
-                if (!HAPUTF8IsValidData(
-                            HAPNonnull(parameters->value.stringValue.bytes), parameters->value.stringValue.numBytes)) {
-                    *err = kHAPError_InvalidData;
-                    goto exit;
-                }
-                *err = HAPJSONUtilsUnescapeStringData(
-                        HAPNonnull(parameters->value.stringValue.bytes), &parameters->value.stringValue.numBytes);
-                if (*err) {
-                    HAPAssert(*err == kHAPError_InvalidData);
-                    goto exit;
-                }
-                parameters->type = kHAPIPWriteValueType_String;
-            } break;
-            case util_JSON_READER_STATE_BEGINNING_FALSE: {
-                HAPAssert(k <= length);
-                k += util_json_reader_read(r, &buffer[k], length - k);
-                if (r->state != util_JSON_READER_STATE_COMPLETED_FALSE) {
-                    *err = kHAPError_InvalidData;
-                    goto exit;
-                }
-                parameters->value.unsignedIntValue = 0;
-                parameters->type = kHAPIPWriteValueType_UInt;
-            } break;
-            case util_JSON_READER_STATE_BEGINNING_TRUE: {
-                HAPAssert(k <= length);
-                k += util_json_reader_read(r, &buffer[k], length - k);
-                if (r->state != util_JSON_READER_STATE_COMPLETED_TRUE) {
-                    *err = kHAPError_InvalidData;
-                    goto exit;
-                }
-                parameters->value.unsignedIntValue = 1;
-                parameters->type = kHAPIPWriteValueType_UInt;
-            } break;
-            default: {
+            } else {
                 *err = kHAPError_InvalidData;
-            }
                 goto exit;
+            }
+        }
+        break;
+        case util_JSON_READER_STATE_BEGINNING_STRING: {
+            HAPAssert(k <= length);
+            i = k;
+            k += util_json_reader_read(r, &buffer[k], length - k);
+            if (r->state != util_JSON_READER_STATE_COMPLETED_STRING) {
+                *err = kHAPError_InvalidData;
+                goto exit;
+            }
+            HAPAssert(i <= k);
+            HAPAssert(k <= length);
+            HAPAssert(k - i >= 2);
+            parameters->value.stringValue.bytes = &buffer[i + 1];
+            parameters->value.stringValue.numBytes = k - i - 2;
+            if (!HAPUTF8IsValidData(
+                        HAPNonnull(parameters->value.stringValue.bytes), parameters->value.stringValue.numBytes)) {
+                *err = kHAPError_InvalidData;
+                goto exit;
+            }
+            *err = HAPJSONUtilsUnescapeStringData(
+                       HAPNonnull(parameters->value.stringValue.bytes), &parameters->value.stringValue.numBytes);
+            if (*err) {
+                HAPAssert(*err == kHAPError_InvalidData);
+                goto exit;
+            }
+            parameters->type = kHAPIPWriteValueType_String;
+        }
+        break;
+        case util_JSON_READER_STATE_BEGINNING_FALSE: {
+            HAPAssert(k <= length);
+            k += util_json_reader_read(r, &buffer[k], length - k);
+            if (r->state != util_JSON_READER_STATE_COMPLETED_FALSE) {
+                *err = kHAPError_InvalidData;
+                goto exit;
+            }
+            parameters->value.unsignedIntValue = 0;
+            parameters->type = kHAPIPWriteValueType_UInt;
+        }
+        break;
+        case util_JSON_READER_STATE_BEGINNING_TRUE: {
+            HAPAssert(k <= length);
+            k += util_json_reader_read(r, &buffer[k], length - k);
+            if (r->state != util_JSON_READER_STATE_COMPLETED_TRUE) {
+                *err = kHAPError_InvalidData;
+                goto exit;
+            }
+            parameters->value.unsignedIntValue = 1;
+            parameters->type = kHAPIPWriteValueType_UInt;
+        }
+        break;
+        default: {
+            *err = kHAPError_InvalidData;
+        }
+        goto exit;
         }
     } else if ((j - i == 4) && HAPRawBufferAreEqual(&buffer[i], "\"ev\"", 4)) {
         k += util_json_reader_read(r, &buffer[k], length - k);
         switch (r->state) {
-            case util_JSON_READER_STATE_BEGINNING_NUMBER:
-                HAPAssert(k <= length);
-                i = k;
-                k += util_json_reader_read(r, &buffer[k], length - k);
-                if (r->state != util_JSON_READER_STATE_COMPLETED_NUMBER) {
-                    *err = kHAPError_InvalidData;
-                    goto exit;
-                }
-                HAPAssert(i <= k);
-                HAPAssert(k <= length);
-                n = try_read_uint(&buffer[i], k - i, &ev);
-                if (n == k - i) {
-                    if (ev == 0) {
-                        parameters->ev = kHAPIPEventNotificationState_Disabled;
-                    } else if (ev == 1) {
-                        parameters->ev = kHAPIPEventNotificationState_Enabled;
-                    } else {
-                        *err = kHAPError_InvalidData;
-                        goto exit;
-                    }
+        case util_JSON_READER_STATE_BEGINNING_NUMBER:
+            HAPAssert(k <= length);
+            i = k;
+            k += util_json_reader_read(r, &buffer[k], length - k);
+            if (r->state != util_JSON_READER_STATE_COMPLETED_NUMBER) {
+                *err = kHAPError_InvalidData;
+                goto exit;
+            }
+            HAPAssert(i <= k);
+            HAPAssert(k <= length);
+            n = try_read_uint(&buffer[i], k - i, &ev);
+            if (n == k - i) {
+                if (ev == 0) {
+                    parameters->ev = kHAPIPEventNotificationState_Disabled;
+                } else if (ev == 1) {
+                    parameters->ev = kHAPIPEventNotificationState_Enabled;
                 } else {
                     *err = kHAPError_InvalidData;
                     goto exit;
                 }
-                break;
-            case util_JSON_READER_STATE_BEGINNING_FALSE:
-                HAPAssert(k <= length);
-                k += util_json_reader_read(r, &buffer[k], length - k);
-                if (r->state != util_JSON_READER_STATE_COMPLETED_FALSE) {
-                    *err = kHAPError_InvalidData;
-                    goto exit;
-                }
-                parameters->ev = kHAPIPEventNotificationState_Disabled;
-                break;
-            case util_JSON_READER_STATE_BEGINNING_TRUE:
-                HAPAssert(k <= length);
-                k += util_json_reader_read(r, &buffer[k], length - k);
-                if (r->state != util_JSON_READER_STATE_COMPLETED_TRUE) {
-                    *err = kHAPError_InvalidData;
-                    goto exit;
-                }
-                parameters->ev = kHAPIPEventNotificationState_Enabled;
-                break;
-            default:
+            } else {
                 *err = kHAPError_InvalidData;
                 goto exit;
+            }
+            break;
+        case util_JSON_READER_STATE_BEGINNING_FALSE:
+            HAPAssert(k <= length);
+            k += util_json_reader_read(r, &buffer[k], length - k);
+            if (r->state != util_JSON_READER_STATE_COMPLETED_FALSE) {
+                *err = kHAPError_InvalidData;
+                goto exit;
+            }
+            parameters->ev = kHAPIPEventNotificationState_Disabled;
+            break;
+        case util_JSON_READER_STATE_BEGINNING_TRUE:
+            HAPAssert(k <= length);
+            k += util_json_reader_read(r, &buffer[k], length - k);
+            if (r->state != util_JSON_READER_STATE_COMPLETED_TRUE) {
+                *err = kHAPError_InvalidData;
+                goto exit;
+            }
+            parameters->ev = kHAPIPEventNotificationState_Enabled;
+            break;
+        default:
+            *err = kHAPError_InvalidData;
+            goto exit;
         }
     } else if ((j - i == 10) && HAPRawBufferAreEqual(&buffer[i], "\"authData\"", 10)) {
         k += util_json_reader_read(r, &buffer[k], length - k);
@@ -1346,7 +1419,7 @@ static size_t read_characteristic_write_request_parameters(
             goto exit;
         }
         *err = HAPJSONUtilsUnescapeStringData(
-                HAPNonnull(parameters->authorizationData.bytes), &parameters->authorizationData.numBytes);
+                   HAPNonnull(parameters->authorizationData.bytes), &parameters->authorizationData.numBytes);
         if (*err) {
             HAPAssert(*err == kHAPError_InvalidData);
             goto exit;
@@ -1354,102 +1427,102 @@ static size_t read_characteristic_write_request_parameters(
     } else if ((j - i == 8) && HAPRawBufferAreEqual(&buffer[i], "\"remote\"", 8)) {
         k += util_json_reader_read(r, &buffer[k], length - k);
         switch (r->state) {
-            case util_JSON_READER_STATE_BEGINNING_NUMBER:
-                HAPAssert(k <= length);
-                i = k;
-                k += util_json_reader_read(r, &buffer[k], length - k);
-                if (r->state != util_JSON_READER_STATE_COMPLETED_NUMBER) {
-                    *err = kHAPError_InvalidData;
-                    goto exit;
-                }
-                HAPAssert(i <= k);
-                HAPAssert(k <= length);
-                n = try_read_uint(&buffer[i], k - i, &remote);
-                if (n == k - i) {
-                    if (remote == 0) {
-                        parameters->remote = false;
-                    } else if (remote == 1) {
-                        parameters->remote = true;
-                    } else {
-                        *err = kHAPError_InvalidData;
-                        goto exit;
-                    }
+        case util_JSON_READER_STATE_BEGINNING_NUMBER:
+            HAPAssert(k <= length);
+            i = k;
+            k += util_json_reader_read(r, &buffer[k], length - k);
+            if (r->state != util_JSON_READER_STATE_COMPLETED_NUMBER) {
+                *err = kHAPError_InvalidData;
+                goto exit;
+            }
+            HAPAssert(i <= k);
+            HAPAssert(k <= length);
+            n = try_read_uint(&buffer[i], k - i, &remote);
+            if (n == k - i) {
+                if (remote == 0) {
+                    parameters->remote = false;
+                } else if (remote == 1) {
+                    parameters->remote = true;
                 } else {
                     *err = kHAPError_InvalidData;
                     goto exit;
                 }
-                break;
-            case util_JSON_READER_STATE_BEGINNING_FALSE:
-                HAPAssert(k <= length);
-                k += util_json_reader_read(r, &buffer[k], length - k);
-                if (r->state != util_JSON_READER_STATE_COMPLETED_FALSE) {
-                    *err = kHAPError_InvalidData;
-                    goto exit;
-                }
-                parameters->remote = false;
-                break;
-            case util_JSON_READER_STATE_BEGINNING_TRUE:
-                HAPAssert(k <= length);
-                k += util_json_reader_read(r, &buffer[k], length - k);
-                if (r->state != util_JSON_READER_STATE_COMPLETED_TRUE) {
-                    *err = kHAPError_InvalidData;
-                    goto exit;
-                }
-                parameters->remote = true;
-                break;
-            default:
+            } else {
                 *err = kHAPError_InvalidData;
                 goto exit;
+            }
+            break;
+        case util_JSON_READER_STATE_BEGINNING_FALSE:
+            HAPAssert(k <= length);
+            k += util_json_reader_read(r, &buffer[k], length - k);
+            if (r->state != util_JSON_READER_STATE_COMPLETED_FALSE) {
+                *err = kHAPError_InvalidData;
+                goto exit;
+            }
+            parameters->remote = false;
+            break;
+        case util_JSON_READER_STATE_BEGINNING_TRUE:
+            HAPAssert(k <= length);
+            k += util_json_reader_read(r, &buffer[k], length - k);
+            if (r->state != util_JSON_READER_STATE_COMPLETED_TRUE) {
+                *err = kHAPError_InvalidData;
+                goto exit;
+            }
+            parameters->remote = true;
+            break;
+        default:
+            *err = kHAPError_InvalidData;
+            goto exit;
         }
     } else if ((j - i == 3) && HAPRawBufferAreEqual(&buffer[i], "\"r\"", 3)) {
         k += util_json_reader_read(r, &buffer[k], length - k);
         switch (r->state) {
-            case util_JSON_READER_STATE_BEGINNING_NUMBER:
-                HAPAssert(k <= length);
-                i = k;
-                k += util_json_reader_read(r, &buffer[k], length - k);
-                if (r->state != util_JSON_READER_STATE_COMPLETED_NUMBER) {
-                    *err = kHAPError_InvalidData;
-                    goto exit;
-                }
-                HAPAssert(i <= k);
-                HAPAssert(k <= length);
-                n = try_read_uint(&buffer[i], k - i, &response);
-                if (n == k - i) {
-                    if (response == 0) {
-                        parameters->response = false;
-                    } else if (response == 1) {
-                        parameters->response = true;
-                    } else {
-                        *err = kHAPError_InvalidData;
-                        goto exit;
-                    }
+        case util_JSON_READER_STATE_BEGINNING_NUMBER:
+            HAPAssert(k <= length);
+            i = k;
+            k += util_json_reader_read(r, &buffer[k], length - k);
+            if (r->state != util_JSON_READER_STATE_COMPLETED_NUMBER) {
+                *err = kHAPError_InvalidData;
+                goto exit;
+            }
+            HAPAssert(i <= k);
+            HAPAssert(k <= length);
+            n = try_read_uint(&buffer[i], k - i, &response);
+            if (n == k - i) {
+                if (response == 0) {
+                    parameters->response = false;
+                } else if (response == 1) {
+                    parameters->response = true;
                 } else {
                     *err = kHAPError_InvalidData;
                     goto exit;
                 }
-                break;
-            case util_JSON_READER_STATE_BEGINNING_FALSE:
-                HAPAssert(k <= length);
-                k += util_json_reader_read(r, &buffer[k], length - k);
-                if (r->state != util_JSON_READER_STATE_COMPLETED_FALSE) {
-                    *err = kHAPError_InvalidData;
-                    goto exit;
-                }
-                parameters->response = false;
-                break;
-            case util_JSON_READER_STATE_BEGINNING_TRUE:
-                HAPAssert(k <= length);
-                k += util_json_reader_read(r, &buffer[k], length - k);
-                if (r->state != util_JSON_READER_STATE_COMPLETED_TRUE) {
-                    *err = kHAPError_InvalidData;
-                    goto exit;
-                }
-                parameters->response = true;
-                break;
-            default:
+            } else {
                 *err = kHAPError_InvalidData;
                 goto exit;
+            }
+            break;
+        case util_JSON_READER_STATE_BEGINNING_FALSE:
+            HAPAssert(k <= length);
+            k += util_json_reader_read(r, &buffer[k], length - k);
+            if (r->state != util_JSON_READER_STATE_COMPLETED_FALSE) {
+                *err = kHAPError_InvalidData;
+                goto exit;
+            }
+            parameters->response = false;
+            break;
+        case util_JSON_READER_STATE_BEGINNING_TRUE:
+            HAPAssert(k <= length);
+            k += util_json_reader_read(r, &buffer[k], length - k);
+            if (r->state != util_JSON_READER_STATE_COMPLETED_TRUE) {
+                *err = kHAPError_InvalidData;
+                goto exit;
+            }
+            parameters->response = true;
+            break;
+        default:
+            *err = kHAPError_InvalidData;
+            goto exit;
         }
     } else {
         size_t skippedBytes;
@@ -1468,13 +1541,13 @@ exit:
 
 HAP_RESULT_USE_CHECK
 static size_t read_characteristic_write_request(
-        struct util_json_reader* r,
-        char* buffer,
-        size_t length,
-        HAPIPWriteContextRef* contexts,
-        size_t max_contexts,
-        size_t* numReadContexts,
-        HAPError* err) {
+    struct util_json_reader* r,
+    char* buffer,
+    size_t length,
+    HAPIPWriteContextRef* contexts,
+    size_t max_contexts,
+    size_t* numReadContexts,
+    HAPError* err) {
     size_t k;
     HAPIPWriteRequestParameters parameters;
     HAPAssert(r != NULL);
@@ -1511,21 +1584,25 @@ static size_t read_characteristic_write_request(
             writeContext->iid = parameters.iid.value;
             writeContext->type = parameters.type;
             switch (parameters.type) {
-                case kHAPIPWriteValueType_None: {
-                } break;
-                case kHAPIPWriteValueType_Int: {
-                    writeContext->value.intValue = parameters.value.intValue;
-                } break;
-                case kHAPIPWriteValueType_UInt: {
-                    writeContext->value.unsignedIntValue = parameters.value.unsignedIntValue;
-                } break;
-                case kHAPIPWriteValueType_Float: {
-                    writeContext->value.floatValue = parameters.value.floatValue;
-                } break;
-                case kHAPIPWriteValueType_String: {
-                    writeContext->value.stringValue.bytes = parameters.value.stringValue.bytes;
-                    writeContext->value.stringValue.numBytes = parameters.value.stringValue.numBytes;
-                } break;
+            case kHAPIPWriteValueType_None: {
+            } break;
+            case kHAPIPWriteValueType_Int: {
+                writeContext->value.intValue = parameters.value.intValue;
+            }
+            break;
+            case kHAPIPWriteValueType_UInt: {
+                writeContext->value.unsignedIntValue = parameters.value.unsignedIntValue;
+            }
+            break;
+            case kHAPIPWriteValueType_Float: {
+                writeContext->value.floatValue = parameters.value.floatValue;
+            }
+            break;
+            case kHAPIPWriteValueType_String: {
+                writeContext->value.stringValue.bytes = parameters.value.stringValue.bytes;
+                writeContext->value.stringValue.numBytes = parameters.value.stringValue.numBytes;
+            }
+            break;
             }
             writeContext->ev = parameters.ev;
             writeContext->authorizationData.bytes = parameters.authorizationData.bytes;
@@ -1548,13 +1625,13 @@ exit:
 
 HAP_RESULT_USE_CHECK
 HAPError HAPIPAccessoryProtocolGetCharacteristicWriteRequests(
-        char* bytes,
-        size_t numBytes,
-        HAPIPWriteContextRef* writeContexts,
-        size_t maxWriteContexts,
-        size_t* numWriteContexts,
-        bool* hasPID,
-        uint64_t* pid) {
+    char* bytes,
+    size_t numBytes,
+    HAPIPWriteContextRef* writeContexts,
+    size_t maxWriteContexts,
+    size_t* numWriteContexts,
+    bool* hasPID,
+    uint64_t* pid) {
     // See HomeKit Accessory Protocol Specification R14
     // Section 6.7.2 Writing Characteristics
     struct util_json_reader json_reader;
@@ -1606,7 +1683,7 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicWriteRequests(
             HAPAssert(k <= numBytes);
             do {
                 k += read_characteristic_write_request(
-                        &json_reader, &bytes[k], numBytes - k, writeContexts, maxWriteContexts, numWriteContexts, &err);
+                         &json_reader, &bytes[k], numBytes - k, writeContexts, maxWriteContexts, numWriteContexts, &err);
                 if (err) {
                     return err;
                 }
@@ -1614,8 +1691,8 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicWriteRequests(
                 k += util_json_reader_read(&json_reader, &bytes[k], numBytes - k);
             } while ((k < numBytes) && (json_reader.state == util_JSON_READER_STATE_AFTER_VALUE_SEPARATOR));
             HAPAssert(
-                    (k == numBytes) ||
-                    ((k < numBytes) && (json_reader.state != util_JSON_READER_STATE_AFTER_VALUE_SEPARATOR)));
+                (k == numBytes) ||
+                ((k < numBytes) && (json_reader.state != util_JSON_READER_STATE_AFTER_VALUE_SEPARATOR)));
             if (json_reader.state != util_JSON_READER_STATE_COMPLETED_ARRAY) {
                 return kHAPError_InvalidData;
             }
@@ -1658,7 +1735,7 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicWriteRequests(
         k += util_json_reader_read(&json_reader, &bytes[k], numBytes - k);
     } while ((k < numBytes) && (json_reader.state == util_JSON_READER_STATE_AFTER_VALUE_SEPARATOR));
     HAPAssert(
-            (k == numBytes) || ((k < numBytes) && (json_reader.state != util_JSON_READER_STATE_AFTER_VALUE_SEPARATOR)));
+        (k == numBytes) || ((k < numBytes) && (json_reader.state != util_JSON_READER_STATE_AFTER_VALUE_SEPARATOR)));
     if (json_reader.state != util_JSON_READER_STATE_COMPLETED_OBJECT) {
         return kHAPError_InvalidData;
     }
@@ -1668,17 +1745,17 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicWriteRequests(
     } else {
         HAPAssert(k == numBytes);
         HAPAssert(
-                (json_reader.state == util_JSON_READER_STATE_COMPLETED_OBJECT) ||
-                (json_reader.state == util_JSON_READER_STATE_READING_WHITESPACE));
+            (json_reader.state == util_JSON_READER_STATE_COMPLETED_OBJECT) ||
+            (json_reader.state == util_JSON_READER_STATE_READING_WHITESPACE));
     }
     return kHAPError_None;
 }
 
 HAP_RESULT_USE_CHECK
 size_t HAPIPAccessoryProtocolGetNumCharacteristicWriteResponseBytes(
-        HAPAccessoryServerRef* server,
-        HAPIPWriteContextRef* writeContexts,
-        size_t numWriteContexts) {
+    HAPAccessoryServerRef* server,
+    HAPIPWriteContextRef* writeContexts,
+    size_t numWriteContexts) {
     HAPPrecondition(server);
     HAPPrecondition(writeContexts);
 
@@ -1694,28 +1771,33 @@ size_t HAPIPAccessoryProtocolGetNumCharacteristicWriteResponseBytes(
             const HAPBaseCharacteristic* chr_ = GetCharacteristic(server, writeContext->aid, writeContext->iid);
             HAPAssert(chr_);
             switch (chr_->format) {
-                case kHAPCharacteristicFormat_Bool: {
-                    r += 1;
-                } break;
-                case kHAPCharacteristicFormat_UInt8:
-                case kHAPCharacteristicFormat_UInt16:
-                case kHAPCharacteristicFormat_UInt32:
-                case kHAPCharacteristicFormat_UInt64: {
-                    r += HAPUInt64GetNumDescriptionBytes(writeContext->value.unsignedIntValue);
-                } break;
-                case kHAPCharacteristicFormat_Int: {
-                    r += HAPInt32GetNumDescriptionBytes(writeContext->value.intValue);
-                } break;
-                case kHAPCharacteristicFormat_Float: {
-                    r += HAPJSONUtilsGetFloatNumDescriptionBytes(writeContext->value.floatValue);
-                } break;
-                case kHAPCharacteristicFormat_String:
-                case kHAPCharacteristicFormat_TLV8:
-                case kHAPCharacteristicFormat_Data: {
-                    r += 2 + HAPJSONUtilsGetNumEscapedStringDataBytes(
-                                     HAPNonnull(writeContext->value.stringValue.bytes),
-                                     writeContext->value.stringValue.numBytes);
-                } break;
+            case kHAPCharacteristicFormat_Bool: {
+                r += 1;
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt8:
+            case kHAPCharacteristicFormat_UInt16:
+            case kHAPCharacteristicFormat_UInt32:
+            case kHAPCharacteristicFormat_UInt64: {
+                r += HAPUInt64GetNumDescriptionBytes(writeContext->value.unsignedIntValue);
+            }
+            break;
+            case kHAPCharacteristicFormat_Int: {
+                r += HAPInt32GetNumDescriptionBytes(writeContext->value.intValue);
+            }
+            break;
+            case kHAPCharacteristicFormat_Float: {
+                r += HAPJSONUtilsGetFloatNumDescriptionBytes(writeContext->value.floatValue);
+            }
+            break;
+            case kHAPCharacteristicFormat_String:
+            case kHAPCharacteristicFormat_TLV8:
+            case kHAPCharacteristicFormat_Data: {
+                r += 2 + HAPJSONUtilsGetNumEscapedStringDataBytes(
+                         HAPNonnull(writeContext->value.stringValue.bytes),
+                         writeContext->value.stringValue.numBytes);
+            }
+            break;
             }
         }
     }
@@ -1725,10 +1807,10 @@ size_t HAPIPAccessoryProtocolGetNumCharacteristicWriteResponseBytes(
 
 HAP_RESULT_USE_CHECK
 HAPError HAPIPAccessoryProtocolGetCharacteristicWriteResponseBytes(
-        HAPAccessoryServerRef* server,
-        HAPIPWriteContextRef* writeContexts,
-        size_t numWriteContexts,
-        HAPIPByteBuffer* buffer) {
+    HAPAccessoryServerRef* server,
+    HAPIPWriteContextRef* writeContexts,
+    size_t numWriteContexts,
+    HAPIPByteBuffer* buffer) {
     HAPPrecondition(server);
     HAPPrecondition(writeContexts);
     HAPPrecondition(buffer);
@@ -1751,12 +1833,12 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicWriteResponseBytes(
         err = HAPUInt64GetDescription(uintval(writeContext->iid), iidDescription, sizeof iidDescription);
         HAPAssert(!err);
         err = HAPIPByteBufferAppendStringWithFormat(
-                buffer,
-                "%s{\"aid\":%s,\"iid\":%s,\"status\":%ld",
-                i == 0 ? "" : ",",
-                aidDescription,
-                iidDescription,
-                (long) writeContext->status);
+                  buffer,
+                  "%s{\"aid\":%s,\"iid\":%s,\"status\":%ld",
+                  i == 0 ? "" : ",",
+                  aidDescription,
+                  iidDescription,
+                  (long) writeContext->status);
         if (err) {
             goto error;
         }
@@ -1764,54 +1846,59 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicWriteResponseBytes(
             const HAPBaseCharacteristic* chr_ = GetCharacteristic(server, writeContext->aid, writeContext->iid);
             HAPAssert(chr_);
             switch (chr_->format) {
-                case kHAPCharacteristicFormat_Bool: {
-                    err = HAPIPByteBufferAppendStringWithFormat(
-                            buffer, ",\"value\":%s", writeContext->value.unsignedIntValue ? "1" : "0");
-                } break;
-                case kHAPCharacteristicFormat_UInt8:
-                case kHAPCharacteristicFormat_UInt16:
-                case kHAPCharacteristicFormat_UInt32:
-                case kHAPCharacteristicFormat_UInt64: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":");
-                    if (err) {
-                        goto error;
-                    }
-                    err = HAPUInt64GetDescription(
-                            uintval(writeContext->value.unsignedIntValue), scratch_string, sizeof scratch_string);
-                    HAPAssert(!err);
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, "%s", scratch_string);
-                } break;
-                case kHAPCharacteristicFormat_Int: {
-                    err = HAPIPByteBufferAppendStringWithFormat(
-                            buffer, ",\"value\":%ld", (long) writeContext->value.intValue);
-                } break;
-                case kHAPCharacteristicFormat_Float: {
-                    err = HAPJSONUtilsGetFloatDescription(
-                            writeContext->value.floatValue, scratch_string, sizeof scratch_string);
-                    HAPAssert(!err);
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":%s", scratch_string);
-                } break;
-                case kHAPCharacteristicFormat_String:
-                case kHAPCharacteristicFormat_TLV8:
-                case kHAPCharacteristicFormat_Data: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":\"");
-                    if (err) {
-                        goto error;
-                    }
-                    size_t bufferMark = buffer->position;
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, "%s", writeContext->value.stringValue.bytes);
-                    if (err) {
-                        goto error;
-                    }
-                    size_t numStringDataBytes = writeContext->value.stringValue.numBytes;
-                    err = HAPJSONUtilsEscapeStringData(
-                            &buffer->data[bufferMark], buffer->limit - bufferMark, &numStringDataBytes);
-                    if (err) {
-                        goto error;
-                    }
-                    buffer->position = bufferMark + numStringDataBytes;
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, "\"");
-                } break;
+            case kHAPCharacteristicFormat_Bool: {
+                err = HAPIPByteBufferAppendStringWithFormat(
+                          buffer, ",\"value\":%s", writeContext->value.unsignedIntValue ? "1" : "0");
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt8:
+            case kHAPCharacteristicFormat_UInt16:
+            case kHAPCharacteristicFormat_UInt32:
+            case kHAPCharacteristicFormat_UInt64: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":");
+                if (err) {
+                    goto error;
+                }
+                err = HAPUInt64GetDescription(
+                          uintval(writeContext->value.unsignedIntValue), scratch_string, sizeof scratch_string);
+                HAPAssert(!err);
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, "%s", scratch_string);
+            }
+            break;
+            case kHAPCharacteristicFormat_Int: {
+                err = HAPIPByteBufferAppendStringWithFormat(
+                          buffer, ",\"value\":%ld", (long) writeContext->value.intValue);
+            }
+            break;
+            case kHAPCharacteristicFormat_Float: {
+                err = HAPJSONUtilsGetFloatDescription(
+                          writeContext->value.floatValue, scratch_string, sizeof scratch_string);
+                HAPAssert(!err);
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":%s", scratch_string);
+            }
+            break;
+            case kHAPCharacteristicFormat_String:
+            case kHAPCharacteristicFormat_TLV8:
+            case kHAPCharacteristicFormat_Data: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":\"");
+                if (err) {
+                    goto error;
+                }
+                size_t bufferMark = buffer->position;
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, "%s", writeContext->value.stringValue.bytes);
+                if (err) {
+                    goto error;
+                }
+                size_t numStringDataBytes = writeContext->value.stringValue.numBytes;
+                err = HAPJSONUtilsEscapeStringData(
+                          &buffer->data[bufferMark], buffer->limit - bufferMark, &numStringDataBytes);
+                if (err) {
+                    goto error;
+                }
+                buffer->position = bufferMark + numStringDataBytes;
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, "\"");
+            }
+            break;
             }
             if (err) {
                 goto error;
@@ -1834,9 +1921,9 @@ error:
 
 HAP_RESULT_USE_CHECK
 size_t HAPIPAccessoryProtocolGetNumEventNotificationBytes(
-        HAPAccessoryServerRef* server,
-        HAPIPReadContextRef* readContexts,
-        size_t numReadContexts) {
+    HAPAccessoryServerRef* server,
+    HAPIPReadContextRef* readContexts,
+    size_t numReadContexts) {
     HAPPrecondition(server);
     HAPPrecondition(readContexts);
 
@@ -1852,28 +1939,33 @@ size_t HAPIPAccessoryProtocolGetNumEventNotificationBytes(
             const HAPBaseCharacteristic* chr_ = GetCharacteristic(server, readContext->aid, readContext->iid);
             HAPAssert(chr_);
             switch (chr_->format) {
-                case kHAPCharacteristicFormat_Bool: {
-                    r += 1;
-                } break;
-                case kHAPCharacteristicFormat_UInt8:
-                case kHAPCharacteristicFormat_UInt16:
-                case kHAPCharacteristicFormat_UInt32:
-                case kHAPCharacteristicFormat_UInt64: {
-                    r += HAPUInt64GetNumDescriptionBytes(readContext->value.unsignedIntValue);
-                } break;
-                case kHAPCharacteristicFormat_Int: {
-                    r += HAPInt32GetNumDescriptionBytes(readContext->value.intValue);
-                } break;
-                case kHAPCharacteristicFormat_Float: {
-                    r += HAPJSONUtilsGetFloatNumDescriptionBytes(readContext->value.floatValue);
-                } break;
-                case kHAPCharacteristicFormat_String:
-                case kHAPCharacteristicFormat_TLV8:
-                case kHAPCharacteristicFormat_Data: {
-                    r += 2 + HAPJSONUtilsGetNumEscapedStringDataBytes(
-                                     HAPNonnull(readContext->value.stringValue.bytes),
-                                     readContext->value.stringValue.numBytes);
-                } break;
+            case kHAPCharacteristicFormat_Bool: {
+                r += 1;
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt8:
+            case kHAPCharacteristicFormat_UInt16:
+            case kHAPCharacteristicFormat_UInt32:
+            case kHAPCharacteristicFormat_UInt64: {
+                r += HAPUInt64GetNumDescriptionBytes(readContext->value.unsignedIntValue);
+            }
+            break;
+            case kHAPCharacteristicFormat_Int: {
+                r += HAPInt32GetNumDescriptionBytes(readContext->value.intValue);
+            }
+            break;
+            case kHAPCharacteristicFormat_Float: {
+                r += HAPJSONUtilsGetFloatNumDescriptionBytes(readContext->value.floatValue);
+            }
+            break;
+            case kHAPCharacteristicFormat_String:
+            case kHAPCharacteristicFormat_TLV8:
+            case kHAPCharacteristicFormat_Data: {
+                r += 2 + HAPJSONUtilsGetNumEscapedStringDataBytes(
+                         HAPNonnull(readContext->value.stringValue.bytes),
+                         readContext->value.stringValue.numBytes);
+            }
+            break;
             }
         } else {
             r += 4;
@@ -1885,10 +1977,10 @@ size_t HAPIPAccessoryProtocolGetNumEventNotificationBytes(
 
 HAP_RESULT_USE_CHECK
 HAPError HAPIPAccessoryProtocolGetEventNotificationBytes(
-        HAPAccessoryServerRef* server,
-        HAPIPReadContextRef* readContexts,
-        size_t numReadContexts,
-        HAPIPByteBuffer* buffer) {
+    HAPAccessoryServerRef* server,
+    HAPIPReadContextRef* readContexts,
+    size_t numReadContexts,
+    HAPIPByteBuffer* buffer) {
     HAPPrecondition(server);
     HAPPrecondition(readContexts);
     HAPPrecondition(buffer);
@@ -1930,50 +2022,55 @@ HAPError HAPIPAccessoryProtocolGetEventNotificationBytes(
             const HAPBaseCharacteristic* chr_ = GetCharacteristic(server, readContext->aid, readContext->iid);
             HAPAssert(chr_);
             switch (chr_->format) {
-                case kHAPCharacteristicFormat_Bool: {
-                    err = HAPIPByteBufferAppendStringWithFormat(
-                            buffer, ",\"value\":%s}", readContext->value.unsignedIntValue ? "1" : "0");
-                } break;
-                case kHAPCharacteristicFormat_UInt8:
-                case kHAPCharacteristicFormat_UInt16:
-                case kHAPCharacteristicFormat_UInt32:
-                case kHAPCharacteristicFormat_UInt64: {
-                    err = HAPUInt64GetDescription(
-                            uintval(readContext->value.unsignedIntValue), scratch_string, sizeof scratch_string);
-                    HAPAssert(!err);
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":%s}", scratch_string);
-                } break;
-                case kHAPCharacteristicFormat_Int: {
-                    err = HAPIPByteBufferAppendStringWithFormat(
-                            buffer, ",\"value\":%ld}", (long) readContext->value.intValue);
-                } break;
-                case kHAPCharacteristicFormat_Float: {
-                    err = HAPJSONUtilsGetFloatDescription(
-                            readContext->value.floatValue, scratch_string, sizeof scratch_string);
-                    HAPAssert(!err);
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":%s}", scratch_string);
-                } break;
-                case kHAPCharacteristicFormat_String:
-                case kHAPCharacteristicFormat_TLV8:
-                case kHAPCharacteristicFormat_Data: {
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":\"");
-                    if (err) {
-                        goto error;
-                    }
-                    size_t bufferMark = buffer->position;
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, "%s", readContext->value.stringValue.bytes);
-                    if (err) {
-                        goto error;
-                    }
-                    size_t numStringDataBytes = readContext->value.stringValue.numBytes;
-                    err = HAPJSONUtilsEscapeStringData(
-                            &buffer->data[bufferMark], buffer->limit - bufferMark, &numStringDataBytes);
-                    if (err) {
-                        goto error;
-                    }
-                    buffer->position = bufferMark + numStringDataBytes;
-                    err = HAPIPByteBufferAppendStringWithFormat(buffer, "\"}");
-                } break;
+            case kHAPCharacteristicFormat_Bool: {
+                err = HAPIPByteBufferAppendStringWithFormat(
+                          buffer, ",\"value\":%s}", readContext->value.unsignedIntValue ? "1" : "0");
+            }
+            break;
+            case kHAPCharacteristicFormat_UInt8:
+            case kHAPCharacteristicFormat_UInt16:
+            case kHAPCharacteristicFormat_UInt32:
+            case kHAPCharacteristicFormat_UInt64: {
+                err = HAPUInt64GetDescription(
+                          uintval(readContext->value.unsignedIntValue), scratch_string, sizeof scratch_string);
+                HAPAssert(!err);
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":%s}", scratch_string);
+            }
+            break;
+            case kHAPCharacteristicFormat_Int: {
+                err = HAPIPByteBufferAppendStringWithFormat(
+                          buffer, ",\"value\":%ld}", (long) readContext->value.intValue);
+            }
+            break;
+            case kHAPCharacteristicFormat_Float: {
+                err = HAPJSONUtilsGetFloatDescription(
+                          readContext->value.floatValue, scratch_string, sizeof scratch_string);
+                HAPAssert(!err);
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":%s}", scratch_string);
+            }
+            break;
+            case kHAPCharacteristicFormat_String:
+            case kHAPCharacteristicFormat_TLV8:
+            case kHAPCharacteristicFormat_Data: {
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":\"");
+                if (err) {
+                    goto error;
+                }
+                size_t bufferMark = buffer->position;
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, "%s", readContext->value.stringValue.bytes);
+                if (err) {
+                    goto error;
+                }
+                size_t numStringDataBytes = readContext->value.stringValue.numBytes;
+                err = HAPJSONUtilsEscapeStringData(
+                          &buffer->data[bufferMark], buffer->limit - bufferMark, &numStringDataBytes);
+                if (err) {
+                    goto error;
+                }
+                buffer->position = bufferMark + numStringDataBytes;
+                err = HAPIPByteBufferAppendStringWithFormat(buffer, "\"}");
+            }
+            break;
             }
         } else {
             err = HAPIPByteBufferAppendStringWithFormat(buffer, ",\"value\":null}");
@@ -1994,10 +2091,10 @@ error:
 
 HAP_RESULT_USE_CHECK
 HAPError HAPIPAccessoryProtocolGetCharacteristicWritePreparation(
-        const char* bytes,
-        size_t numBytes,
-        uint64_t* ttl,
-        uint64_t* pid) {
+    const char* bytes,
+    size_t numBytes,
+    uint64_t* ttl,
+    uint64_t* pid) {
     // See HomeKit Accessory Protocol Specification R14
     // Section 6.7.2.4 Timed Write Procedures
     bool hasTTL, hasPID;
@@ -2112,7 +2209,7 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicWritePreparation(
         k += util_json_reader_read(&json_reader, &bytes[k], numBytes - k);
     } while ((k < numBytes) && (json_reader.state == util_JSON_READER_STATE_AFTER_VALUE_SEPARATOR));
     HAPAssert(
-            (k == numBytes) || ((k < numBytes) && (json_reader.state != util_JSON_READER_STATE_AFTER_VALUE_SEPARATOR)));
+        (k == numBytes) || ((k < numBytes) && (json_reader.state != util_JSON_READER_STATE_AFTER_VALUE_SEPARATOR)));
     if (json_reader.state != util_JSON_READER_STATE_COMPLETED_OBJECT) {
         goto error;
     }
@@ -2122,8 +2219,8 @@ HAPError HAPIPAccessoryProtocolGetCharacteristicWritePreparation(
     } else {
         HAPAssert(k == numBytes);
         HAPAssert(
-                (json_reader.state == util_JSON_READER_STATE_COMPLETED_OBJECT) ||
-                (json_reader.state == util_JSON_READER_STATE_READING_WHITESPACE));
+            (json_reader.state == util_JSON_READER_STATE_COMPLETED_OBJECT) ||
+            (json_reader.state == util_JSON_READER_STATE_READING_WHITESPACE));
     }
     if (!hasTTL || !hasPID) {
         HAPLog(&logObject, "TTL or PID missing in request.");

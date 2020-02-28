@@ -13,67 +13,69 @@
  *      Table 5-9 Info Parameter Types
  */
 
-HAP_ENUM_BEGIN(uint8_t, HAPInfoResponseTLVType) { /**
-                                                   * HAP-Param-Current-State-Number.
-                                                   * 2 bytes.
-                                                   */
-                                                  kHAPInfoResponseTLVType_StateNumber = 0x01,
+HAP_ENUM_BEGIN(uint8_t, HAPInfoResponseTLVType) {
+    /**
+                                                       * HAP-Param-Current-State-Number.
+                                                       * 2 bytes.
+                                                       */
+    kHAPInfoResponseTLVType_StateNumber = 0x01,
 
-                                                  /**
-                                                   * HAP-Param-Current-Config-Number.
-                                                   * 2 bytes.
-                                                   */
-                                                  kHAPInfoResponseTLVType_ConfigNumber = 0x02,
+    /**
+     * HAP-Param-Current-Config-Number.
+     * 2 bytes.
+     */
+    kHAPInfoResponseTLVType_ConfigNumber = 0x02,
 
-                                                  /**
-                                                   * HAP-Param-Device-Identifier.
-                                                   * 6 bytes.
-                                                   */
-                                                  kHAPInfoResponseTLVType_DeviceIdentifier = 0x03,
+    /**
+     * HAP-Param-Device-Identifier.
+     * 6 bytes.
+     */
+    kHAPInfoResponseTLVType_DeviceIdentifier = 0x03,
 
-                                                  /**
-                                                   * HAP-Param-Feature-Flags.
-                                                   * 1 byte.
-                                                   */
-                                                  kHAPInfoResponseTLVType_FeatureFlags = 0x04,
+    /**
+     * HAP-Param-Feature-Flags.
+     * 1 byte.
+     */
+    kHAPInfoResponseTLVType_FeatureFlags = 0x04,
 
-                                                  /**
-                                                   * HAP-Param-Model-Name.
-                                                   * UTF-8 string, maximum 255 bytes.
-                                                   */
-                                                  kHAPInfoResponseTLVType_ModelName = 0x05,
+    /**
+     * HAP-Param-Model-Name.
+     * UTF-8 string, maximum 255 bytes.
+     */
+    kHAPInfoResponseTLVType_ModelName = 0x05,
 
-                                                  /**
-                                                   * HAP-Param-Protocol-Version.
-                                                   * UTF-8 string, maximum 255 bytes.
-                                                   */
-                                                  kHAPInfoResponseTLVType_ProtocolVersion = 0x06,
+    /**
+     * HAP-Param-Protocol-Version.
+     * UTF-8 string, maximum 255 bytes.
+     */
+    kHAPInfoResponseTLVType_ProtocolVersion = 0x06,
 
-                                                  /**
-                                                   * HAP-Param-Status-Flag.
-                                                   * 1 byte.
-                                                   */
-                                                  kHAPInfoResponseTLVType_StatusFlag = 0x07,
+    /**
+     * HAP-Param-Status-Flag.
+     * 1 byte.
+     */
+    kHAPInfoResponseTLVType_StatusFlag = 0x07,
 
-                                                  /**
-                                                   * HAP-Param-Category-Identifier.
-                                                   * 2 bytes.
-                                                   */
-                                                  kHAPInfoResponseTLVType_CategoryIdentifier = 0x08,
+    /**
+     * HAP-Param-Category-Identifier.
+     * 2 bytes.
+     */
+    kHAPInfoResponseTLVType_CategoryIdentifier = 0x08,
 
-                                                  /**
-                                                   * HAP-Param-Setup-Hash.
-                                                   * 4 bytes.
-                                                   */
-                                                  kHAPInfoResponseTLVType_SetupHash = 0x09
-} HAP_ENUM_END(uint8_t, HAPInfoResponseTLVType);
+    /**
+     * HAP-Param-Setup-Hash.
+     * 4 bytes.
+     */
+    kHAPInfoResponseTLVType_SetupHash = 0x09
+}
+HAP_ENUM_END(uint8_t, HAPInfoResponseTLVType);
 
 HAP_RESULT_USE_CHECK
 HAPError HAPAccessoryGetInfoResponse(
-        HAPAccessoryServerRef* server_,
-        HAPSessionRef* session_,
-        const HAPAccessory* accessory,
-        HAPTLVWriterRef* responseWriter) {
+    HAPAccessoryServerRef* server_,
+    HAPSessionRef* session_,
+    const HAPAccessory* accessory,
+    HAPTLVWriterRef* responseWriter) {
     HAPPrecondition(server_);
     HAPAccessoryServer* server = (HAPAccessoryServer*) server_;
     HAPPrecondition(session_);
@@ -93,25 +95,29 @@ HAPError HAPAccessoryGetInfoResponse(
     // HAP-Param-Current-State-Number.
     uint16_t sn = 0;
     switch (session->transportType) {
-        case kHAPTransportType_IP: {
-            sn = 1;
-        } break;
-        case kHAPTransportType_BLE: {
-            HAPBLEAccessoryServerGSN gsn;
-            err = HAPNonnull(server->transports.ble)->getGSN(server->platform.keyValueStore, &gsn);
-            if (err) {
-                HAPAssert(err == kHAPError_Unknown);
-                return err;
-            }
-            sn = gsn.gsn;
-        } break;
+    case kHAPTransportType_IP: {
+        sn = 1;
+    }
+    break;
+    case kHAPTransportType_BLE: {
+        HAPBLEAccessoryServerGSN gsn;
+        err = HAPNonnull(server->transports.ble)->getGSN(server->platform.keyValueStore, &gsn);
+        if (err) {
+            HAPAssert(err == kHAPError_Unknown);
+            return err;
+        }
+        sn = gsn.gsn;
+    }
+    break;
     }
     HAPAssert(sn);
     uint8_t snBytes[] = { HAPExpandLittleUInt16(sn) };
     err = HAPTLVWriterAppend(
-            responseWriter,
-            &(const HAPTLV) { .type = kHAPInfoResponseTLVType_StateNumber,
-                              .value = { .bytes = snBytes, .numBytes = sizeof snBytes } });
+              responseWriter,
+    &(const HAPTLV) {
+        .type = kHAPInfoResponseTLVType_StateNumber,
+        .value = { .bytes = snBytes, .numBytes = sizeof snBytes }
+    });
     if (err) {
         HAPAssert(err == kHAPError_OutOfResources);
         return err;
@@ -126,9 +132,11 @@ HAPError HAPAccessoryGetInfoResponse(
     }
     uint8_t cnBytes[] = { HAPExpandLittleUInt16(cn) };
     err = HAPTLVWriterAppend(
-            responseWriter,
-            &(const HAPTLV) { .type = kHAPInfoResponseTLVType_ConfigNumber,
-                              .value = { .bytes = cnBytes, .numBytes = sizeof cnBytes } });
+              responseWriter,
+    &(const HAPTLV) {
+        .type = kHAPInfoResponseTLVType_ConfigNumber,
+        .value = { .bytes = cnBytes, .numBytes = sizeof cnBytes }
+    });
     if (err) {
         HAPAssert(err == kHAPError_OutOfResources);
         return err;
@@ -142,9 +150,11 @@ HAPError HAPAccessoryGetInfoResponse(
         return err;
     }
     err = HAPTLVWriterAppend(
-            responseWriter,
-            &(const HAPTLV) { .type = kHAPInfoResponseTLVType_DeviceIdentifier,
-                              .value = { .bytes = deviceID.bytes, .numBytes = sizeof deviceID.bytes } });
+              responseWriter,
+    &(const HAPTLV) {
+        .type = kHAPInfoResponseTLVType_DeviceIdentifier,
+        .value = { .bytes = deviceID.bytes, .numBytes = sizeof deviceID.bytes }
+    });
     if (err) {
         HAPAssert(err == kHAPError_OutOfResources);
         return err;
@@ -153,9 +163,11 @@ HAPError HAPAccessoryGetInfoResponse(
     // HAP-Param-Feature-Flags.
     uint8_t pairingFeatureFlags = HAPAccessoryServerGetPairingFeatureFlags(server_);
     err = HAPTLVWriterAppend(
-            responseWriter,
-            &(const HAPTLV) { .type = kHAPInfoResponseTLVType_FeatureFlags,
-                              .value = { .bytes = &pairingFeatureFlags, .numBytes = sizeof pairingFeatureFlags } });
+              responseWriter,
+    &(const HAPTLV) {
+        .type = kHAPInfoResponseTLVType_FeatureFlags,
+        .value = { .bytes = &pairingFeatureFlags, .numBytes = sizeof pairingFeatureFlags }
+    });
     if (err) {
         HAPAssert(err == kHAPError_OutOfResources);
         return err;
@@ -163,10 +175,11 @@ HAPError HAPAccessoryGetInfoResponse(
 
     // HAP-Param-Model-Name.
     err = HAPTLVWriterAppend(
-            responseWriter,
-            &(const HAPTLV) {
-                    .type = kHAPInfoResponseTLVType_ModelName,
-                    .value = { .bytes = accessory->model, .numBytes = HAPStringGetNumBytes(accessory->model) } });
+              responseWriter,
+    &(const HAPTLV) {
+        .type = kHAPInfoResponseTLVType_ModelName,
+        .value = { .bytes = accessory->model, .numBytes = HAPStringGetNumBytes(accessory->model) }
+    });
     if (err) {
         HAPAssert(err == kHAPError_OutOfResources);
         return err;
@@ -175,18 +188,22 @@ HAPError HAPAccessoryGetInfoResponse(
     // HAP-Param-Protocol-Version.
     const char* pv = NULL;
     switch (session->transportType) {
-        case kHAPTransportType_IP: {
-            pv = kHAPProtocolVersion_IP;
-        } break;
-        case kHAPTransportType_BLE: {
-            pv = kHAPProtocolVersion_BLE;
-        } break;
+    case kHAPTransportType_IP: {
+        pv = kHAPProtocolVersion_IP;
+    }
+    break;
+    case kHAPTransportType_BLE: {
+        pv = kHAPProtocolVersion_BLE;
+    }
+    break;
     }
     HAPAssert(pv);
     err = HAPTLVWriterAppend(
-            responseWriter,
-            &(const HAPTLV) { .type = kHAPInfoResponseTLVType_ProtocolVersion,
-                              .value = { .bytes = pv, .numBytes = HAPStringGetNumBytes(pv) } });
+              responseWriter,
+    &(const HAPTLV) {
+        .type = kHAPInfoResponseTLVType_ProtocolVersion,
+        .value = { .bytes = pv, .numBytes = HAPStringGetNumBytes(pv) }
+    });
     if (err) {
         HAPAssert(err == kHAPError_OutOfResources);
         return err;
@@ -195,9 +212,11 @@ HAPError HAPAccessoryGetInfoResponse(
     // HAP-Param-Status-Flag.
     uint8_t statusFlags = HAPAccessoryServerGetStatusFlags(server_);
     err = HAPTLVWriterAppend(
-            responseWriter,
-            &(const HAPTLV) { .type = kHAPInfoResponseTLVType_StatusFlag,
-                              .value = { .bytes = &statusFlags, .numBytes = sizeof statusFlags } });
+              responseWriter,
+    &(const HAPTLV) {
+        .type = kHAPInfoResponseTLVType_StatusFlag,
+        .value = { .bytes = &statusFlags, .numBytes = sizeof statusFlags }
+    });
     if (err) {
         HAPAssert(err == kHAPError_OutOfResources);
         return err;
@@ -207,10 +226,11 @@ HAPError HAPAccessoryGetInfoResponse(
     HAPAssert(accessory->category);
     uint8_t categoryIdentifierBytes[] = { HAPExpandLittleUInt16((uint16_t) accessory->category) };
     err = HAPTLVWriterAppend(
-            responseWriter,
-            &(const HAPTLV) {
-                    .type = kHAPInfoResponseTLVType_CategoryIdentifier,
-                    .value = { .bytes = categoryIdentifierBytes, .numBytes = sizeof categoryIdentifierBytes } });
+              responseWriter,
+    &(const HAPTLV) {
+        .type = kHAPInfoResponseTLVType_CategoryIdentifier,
+        .value = { .bytes = categoryIdentifierBytes, .numBytes = sizeof categoryIdentifierBytes }
+    });
     if (err) {
         HAPAssert(err == kHAPError_OutOfResources);
         return err;
@@ -235,9 +255,11 @@ HAPError HAPAccessoryGetInfoResponse(
 
         // Append TLV.
         err = HAPTLVWriterAppend(
-                responseWriter,
-                &(const HAPTLV) { .type = kHAPInfoResponseTLVType_SetupHash,
-                                  .value = { .bytes = setupHash.bytes, .numBytes = sizeof setupHash.bytes } });
+                  responseWriter,
+        &(const HAPTLV) {
+            .type = kHAPInfoResponseTLVType_SetupHash,
+            .value = { .bytes = setupHash.bytes, .numBytes = sizeof setupHash.bytes }
+        });
         if (err) {
             HAPAssert(err == kHAPError_OutOfResources);
             return err;

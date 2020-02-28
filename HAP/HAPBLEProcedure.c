@@ -12,14 +12,14 @@ static const HAPLogObject logObject = { .subsystem = kHAP_LogSubsystem, .categor
 #define DEBUG_DISABLE_TIMEOUTS (false)
 
 void HAPBLEProcedureAttach(
-        HAPBLEProcedureRef* bleProcedure_,
-        void* scratchBytes,
-        size_t numScratchBytes,
-        HAPAccessoryServerRef* server,
-        HAPSessionRef* session_,
-        const HAPCharacteristic* characteristic,
-        const HAPService* service,
-        const HAPAccessory* accessory) {
+    HAPBLEProcedureRef* bleProcedure_,
+    void* scratchBytes,
+    size_t numScratchBytes,
+    HAPAccessoryServerRef* server,
+    HAPSessionRef* session_,
+    const HAPCharacteristic* characteristic,
+    const HAPService* service,
+    const HAPAccessory* accessory) {
     HAPPrecondition(bleProcedure_);
     HAPBLEProcedure* bleProcedure = (HAPBLEProcedure*) bleProcedure_;
     HAPPrecondition(scratchBytes);
@@ -71,7 +71,7 @@ static void HAPBLEProcedureReset(HAPBLEProcedureRef* bleProcedure_) {
 
     HAPBLEProcedureDestroy(bleProcedure_);
     HAPBLEProcedureAttach(
-            bleProcedure_, scratchBytes, numScratchBytes, server, session, characteristic, service, accessory);
+        bleProcedure_, scratchBytes, numScratchBytes, server, session, characteristic, service, accessory);
 }
 
 #if !DEBUG_DISABLE_TIMEOUTS
@@ -132,8 +132,8 @@ bool HAPBLEProcedureIsInProgress(const HAPBLEProcedureRef* bleProcedure_) {
  * @param[out] responseWriter       Writer.
  */
 static void DestroyRequestBodyAndCreateResponseBodyWriter(
-        HAPBLEProcedureRef* bleProcedure_,
-        HAPTLVWriterRef* responseWriter) {
+    HAPBLEProcedureRef* bleProcedure_,
+    HAPTLVWriterRef* responseWriter) {
     HAPPrecondition(bleProcedure_);
     HAPBLEProcedure* bleProcedure = (HAPBLEProcedure*) bleProcedure_;
     HAPPrecondition(responseWriter);
@@ -196,12 +196,12 @@ static HAPError HAPBLEProcedureProcessTransaction(HAPBLEProcedureRef* bleProcedu
         // See HomeKit Accessory Protocol Specification R14
         // Section 7.3.3.2 HAP Request Format
         HAPLogCharacteristic(
-                &logObject,
-                characteristic,
-                service,
-                accessory,
-                "Rejected request with unsupported opcode: 0x%02x.",
-                request.opcode);
+            &logObject,
+            characteristic,
+            service,
+            accessory,
+            "Rejected request with unsupported opcode: 0x%02x.",
+            request.opcode);
         SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
     }
 
@@ -217,19 +217,19 @@ static HAPError HAPBLEProcedureProcessTransaction(HAPBLEProcedureRef* bleProcedu
     if (request.iid != iid) {
         if (HAPBLEPDUOpcodeIsServiceOperation(request.opcode)) {
             HAPLogService(
-                    &logObject,
-                    service,
-                    accessory,
-                    "Request's IID [00000000%08X] does not match the addressed IID.",
-                    request.iid);
+                &logObject,
+                service,
+                accessory,
+                "Request's IID [00000000%08X] does not match the addressed IID.",
+                request.iid);
         } else {
             HAPLogCharacteristic(
-                    &logObject,
-                    characteristic,
-                    service,
-                    accessory,
-                    "Request's IID [00000000%08X] does not match the addressed IID.",
-                    request.iid);
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Request's IID [00000000%08X] does not match the addressed IID.",
+                request.iid);
         }
 
         if (request.opcode == kHAPPDUOpcode_ServiceSignatureRead) {
@@ -246,814 +246,814 @@ static HAPError HAPBLEProcedureProcessTransaction(HAPBLEProcedureRef* bleProcedu
     // Handle request.
     bool hasReturnResponse = true;
     switch (request.opcode) {
-        case kHAPPDUOpcode_ServiceSignatureRead: {
-            // Accessory must support only one HAP procedure on a characteristic at any point in time.
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.5 Testing Bluetooth LE Accessories
-            if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
-                HAPLogService(
-                        &logObject,
-                        service,
-                        accessory,
-                        "Rejected %s: Different HAP procedure in progress.",
-                        "HAP-Service-Signature-Read-Request");
-                return kHAPError_InvalidState;
-            }
-
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.4.4.5.4 Service Signature Characteristic
-
-            if (!HAPBLECharacteristicSupportsServiceProcedures(characteristic)) {
-                HAPLogService(
-                        &logObject,
-                        service,
-                        accessory,
-                        "Rejected %s: Not supported.",
-                        "HAP-Service-Signature-Read-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
-
-            // HAP-Service-Signature-Read-Request ok.
-            HAPTLVWriterRef writer;
-            DestroyRequestBodyAndCreateResponseBodyWriter(bleProcedure_, &writer);
-
-            // Serialize HAP-Service-Signature-Read-Response.
-            err = HAPBLEServiceGetSignatureReadResponse(request.iid == iid ? service : NULL, &writer);
-            if (err) {
-                HAPAssert(err == kHAPError_OutOfResources);
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
-            }
-
-            SEND_RESPONSE_AND_RETURN(&writer);
+    case kHAPPDUOpcode_ServiceSignatureRead: {
+        // Accessory must support only one HAP procedure on a characteristic at any point in time.
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.5 Testing Bluetooth LE Accessories
+        if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
+            HAPLogService(
+                &logObject,
+                service,
+                accessory,
+                "Rejected %s: Different HAP procedure in progress.",
+                "HAP-Service-Signature-Read-Request");
+            return kHAPError_InvalidState;
         }
-        case kHAPPDUOpcode_CharacteristicSignatureRead: {
-            // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.5 Testing Bluetooth LE Accessories
-            if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Different HAP procedure in progress.",
-                        "HAP-Characteristic-Signature-Read-Request");
-                return kHAPError_InvalidState;
-            }
 
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.3.5.1 HAP Characteristic Signature Read Procedure
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.4.4.5.4 Service Signature Characteristic
 
-            // The characteristics `Pair Setup`, `Pair Verify` and `Pairing Features` of `Pairing Service`
-            // do not support "Paired Read" and "Paired Write" and only support the
-            // `HAP Characteristic Signature Read Procedure` without a secure session.
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.3.5.1 HAP Characteristic Signature Read Procedure
-            if (HAPSessionIsSecured(bleProcedure->session) &&
+        if (!HAPBLECharacteristicSupportsServiceProcedures(characteristic)) {
+            HAPLogService(
+                &logObject,
+                service,
+                accessory,
+                "Rejected %s: Not supported.",
+                "HAP-Service-Signature-Read-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
+
+        // HAP-Service-Signature-Read-Request ok.
+        HAPTLVWriterRef writer;
+        DestroyRequestBodyAndCreateResponseBodyWriter(bleProcedure_, &writer);
+
+        // Serialize HAP-Service-Signature-Read-Response.
+        err = HAPBLEServiceGetSignatureReadResponse(request.iid == iid ? service : NULL, &writer);
+        if (err) {
+            HAPAssert(err == kHAPError_OutOfResources);
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
+        }
+
+        SEND_RESPONSE_AND_RETURN(&writer);
+    }
+    case kHAPPDUOpcode_CharacteristicSignatureRead: {
+        // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.5 Testing Bluetooth LE Accessories
+        if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Different HAP procedure in progress.",
+                "HAP-Characteristic-Signature-Read-Request");
+            return kHAPError_InvalidState;
+        }
+
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.3.5.1 HAP Characteristic Signature Read Procedure
+
+        // The characteristics `Pair Setup`, `Pair Verify` and `Pairing Features` of `Pairing Service`
+        // do not support "Paired Read" and "Paired Write" and only support the
+        // `HAP Characteristic Signature Read Procedure` without a secure session.
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.3.5.1 HAP Characteristic Signature Read Procedure
+        if (HAPSessionIsSecured(bleProcedure->session) &&
                 HAPBLECharacteristicDropsSecuritySession(characteristic)) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Only non-secure access is permitted.",
-                        "HAP-Characteristic-Signature-Read-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
-
-            // HAP-Characteristic-Signature-Read-Request ok.
-            HAPTLVWriterRef writer;
-            DestroyRequestBodyAndCreateResponseBodyWriter(bleProcedure_, &writer);
-
-            // Serialize HAP-Characteristic-Signature-Read-Response.
-            err = HAPBLECharacteristicGetSignatureReadResponse(characteristic, service, &writer);
-            if (err) {
-                HAPAssert(err == kHAPError_OutOfResources);
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
-            }
-            SEND_RESPONSE_AND_RETURN(&writer);
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Only non-secure access is permitted.",
+                "HAP-Characteristic-Signature-Read-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
         }
-        case kHAPPDUOpcode_CharacteristicConfiguration: {
-            // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.5 Testing Bluetooth LE Accessories
-            if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Different HAP procedure in progress.",
-                        "HAP-Characteristic-Configuration-Request");
-                return kHAPError_InvalidState;
-            }
-            if (HAPSessionIsTransient(bleProcedure->session)) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Session is transient.",
-                        "HAP-Characteristic-Configuration-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
 
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.3.5.8 HAP Characteristic Configuration Procedure
+        // HAP-Characteristic-Signature-Read-Request ok.
+        HAPTLVWriterRef writer;
+        DestroyRequestBodyAndCreateResponseBodyWriter(bleProcedure_, &writer);
 
-            if (!HAPSessionIsSecured(bleProcedure->session)) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Only secure access is permitted.",
-                        "HAP-Characteristic-Configuration-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
-
-            // Handle HAP-Characteristic-Configuration-Request.
-            err = HAPBLECharacteristicHandleConfigurationRequest(
-                    characteristic, service, accessory, &request.bodyReader, server->platform.keyValueStore);
-            if (err) {
-                HAPAssert(err == kHAPError_Unknown || err == kHAPError_InvalidData);
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Request handling failed with error %d.",
-                        "HAP-Characteristic-Configuration-Request",
-                        err);
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
-            }
-
-            // HAP-Characteristic-Configuration-Request ok.
-            HAPTLVWriterRef writer;
-            DestroyRequestBodyAndCreateResponseBodyWriter(bleProcedure_, &writer);
-
-            // Serialize HAP-Characteristic-Configuration-Response.
-            err = HAPBLECharacteristicGetConfigurationResponse(
-                    characteristic, service, accessory, &writer, server->platform.keyValueStore);
-            if (err) {
-                HAPAssert(err == kHAPError_Unknown || err == kHAPError_OutOfResources);
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
-            }
-            SEND_RESPONSE_AND_RETURN(&writer);
+        // Serialize HAP-Characteristic-Signature-Read-Response.
+        err = HAPBLECharacteristicGetSignatureReadResponse(characteristic, service, &writer);
+        if (err) {
+            HAPAssert(err == kHAPError_OutOfResources);
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
         }
-        case kHAPPDUOpcode_ProtocolConfiguration: {
-            // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.5 Testing Bluetooth LE Accessories
-            if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
-                HAPLogService(
-                        &logObject,
-                        service,
-                        accessory,
-                        "Rejected %s: Different HAP procedure in progress.",
-                        "HAP-Protocol-Configuration-Request");
-                return kHAPError_InvalidState;
-            }
-            if (HAPSessionIsTransient(bleProcedure->session)) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Session is transient.",
-                        "HAP-Protocol-Configuration-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
-
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.3.5.9 HAP Protocol Configuration Procedure
-
-            if (!HAPBLECharacteristicSupportsServiceProcedures(characteristic)) {
-                HAPLogService(
-                        &logObject,
-                        service,
-                        accessory,
-                        "Rejected %s: Not supported.",
-                        "HAP-Protocol-Configuration-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
-
-            if (!service->properties.ble.supportsConfiguration) {
-                HAPLogService(
-                        &logObject,
-                        service,
-                        accessory,
-                        "Rejected %s: Service does not support configuration.",
-                        "HAP-Protocol-Configuration-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
-
-            if (!HAPSessionIsSecured(bleProcedure->session)) {
-                HAPLogService(
-                        &logObject,
-                        service,
-                        accessory,
-                        "Rejected %s: Only secure access is permitted.",
-                        "HAP-Protocol-Configuration-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
-
-            // Handle HAP-Protocol-Configuration-Request.
-            bool didRequestGetAll;
-            err = HAPBLEProtocolHandleConfigurationRequest(
-                    bleProcedure->server,
-                    bleProcedure->session,
-                    service,
-                    accessory,
-                    &request.bodyReader,
-                    &didRequestGetAll,
-                    server->platform.keyValueStore);
-            if (err) {
-                HAPAssert(err == kHAPError_Unknown || err == kHAPError_InvalidData);
-                HAPLogService(
-                        &logObject,
-                        service,
-                        accessory,
-                        "Rejected %s: Request handling failed with error %d.",
-                        "HAP-Protocol-Configuration-Request",
-                        err);
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
-            }
-            if (!didRequestGetAll) {
-                SEND_RESPONSE_AND_RETURN(NULL);
-            }
-
-            // HAP-Protocol-Configuration-Request ok.
-            HAPTLVWriterRef writer;
-            DestroyRequestBodyAndCreateResponseBodyWriter(bleProcedure_, &writer);
-
-            // Serialize HAP-Protocol-Configuration-Response.
-            err = HAPBLEProtocolGetConfigurationResponse(
-                    bleProcedure->server,
-                    bleProcedure->session,
-                    service,
-                    accessory,
-                    &writer,
-                    server->platform.keyValueStore);
-            if (err) {
-                HAPAssert(err == kHAPError_Unknown || err == kHAPError_OutOfResources);
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
-            }
-            SEND_RESPONSE_AND_RETURN(&writer);
+        SEND_RESPONSE_AND_RETURN(&writer);
+    }
+    case kHAPPDUOpcode_CharacteristicConfiguration: {
+        // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.5 Testing Bluetooth LE Accessories
+        if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Different HAP procedure in progress.",
+                "HAP-Characteristic-Configuration-Request");
+            return kHAPError_InvalidState;
         }
-        case kHAPPDUOpcode_Token: {
-            // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.5 Testing Bluetooth LE Accessories
-            if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Different HAP procedure in progress.",
-                        "HAP-Token-Request");
-                return kHAPError_InvalidState;
-            }
-
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 5.15.1 HAP-Token-Request
-
-            if (!HAPUUIDAreEqual(service->serviceType, &kHAPServiceType_HAPProtocolInformation) ||
-                !HAPUUIDAreEqual(characteristic->characteristicType, &kHAPCharacteristicType_ServiceSignature)) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Only supported on the Service Signature characteristic in the "
-                        "HAP Protocol Information Service.",
-                        "HAP-Token-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
-
-            if (!HAPSessionIsSecured(bleProcedure->session)) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Only secure access is permitted.",
-                        "HAP-Token-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
-
-            // HAP-Token-Request ok.
-            HAPTLVWriterRef writer;
-            DestroyRequestBodyAndCreateResponseBodyWriter(bleProcedure_, &writer);
-
-            // Serialize HAP-Token-Response.
-            err = HAPMFiTokenAuthGetTokenResponse(bleProcedure->server, bleProcedure->session, accessory, &writer);
-            if (err) {
-                HAPAssert(err == kHAPError_Unknown || err == kHAPError_InvalidState || err == kHAPError_OutOfResources);
-                HAPLogAccessory(
-                        &logObject,
-                        accessory,
-                        "Rejected %s: Request handling failed with error %u.",
-                        "HAP-Token-Request",
-                        err);
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
-            }
-            SEND_RESPONSE_AND_RETURN(&writer);
+        if (HAPSessionIsTransient(bleProcedure->session)) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Session is transient.",
+                "HAP-Characteristic-Configuration-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
         }
-        case kHAPPDUOpcode_TokenUpdate: {
-            // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.5 Testing Bluetooth LE Accessories
-            if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Different HAP procedure in progress.",
-                        "HAP-Token-Update-Request");
-                return kHAPError_InvalidState;
-            }
 
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 5.15.3 HAP-Token-Update-Request
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.3.5.8 HAP Characteristic Configuration Procedure
 
-            if (!HAPUUIDAreEqual(service->serviceType, &kHAPServiceType_HAPProtocolInformation) ||
-                !HAPUUIDAreEqual(characteristic->characteristicType, &kHAPCharacteristicType_ServiceSignature)) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Only supported on the Service Signature characteristic in the "
-                        "HAP Protocol Information Service.",
-                        "HAP-Token-Update-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
+        if (!HAPSessionIsSecured(bleProcedure->session)) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Only secure access is permitted.",
+                "HAP-Characteristic-Configuration-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
 
-            if (!HAPSessionIsSecured(bleProcedure->session)) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Only secure access is permitted.",
-                        "HAP-Token-Update-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
+        // Handle HAP-Characteristic-Configuration-Request.
+        err = HAPBLECharacteristicHandleConfigurationRequest(
+                  characteristic, service, accessory, &request.bodyReader, server->platform.keyValueStore);
+        if (err) {
+            HAPAssert(err == kHAPError_Unknown || err == kHAPError_InvalidData);
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Request handling failed with error %d.",
+                "HAP-Characteristic-Configuration-Request",
+                err);
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
+        }
 
-            // Handle HAP-Token-Update-Request.
-            err = HAPMFiTokenAuthHandleTokenUpdateRequest(
-                    bleProcedure->server, bleProcedure->session, accessory, &request.bodyReader);
-            if (err) {
-                HAPAssert(err == kHAPError_Unknown || err == kHAPError_InvalidData);
-                HAPLogAccessory(
-                        &logObject,
-                        accessory,
-                        "Rejected %s: Request handling failed with error %u.",
-                        "HAP-Token-Update-Request",
-                        err);
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
-            }
+        // HAP-Characteristic-Configuration-Request ok.
+        HAPTLVWriterRef writer;
+        DestroyRequestBodyAndCreateResponseBodyWriter(bleProcedure_, &writer);
 
-            // Send HAP-Token-Update-Response.
+        // Serialize HAP-Characteristic-Configuration-Response.
+        err = HAPBLECharacteristicGetConfigurationResponse(
+                  characteristic, service, accessory, &writer, server->platform.keyValueStore);
+        if (err) {
+            HAPAssert(err == kHAPError_Unknown || err == kHAPError_OutOfResources);
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
+        }
+        SEND_RESPONSE_AND_RETURN(&writer);
+    }
+    case kHAPPDUOpcode_ProtocolConfiguration: {
+        // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.5 Testing Bluetooth LE Accessories
+        if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
+            HAPLogService(
+                &logObject,
+                service,
+                accessory,
+                "Rejected %s: Different HAP procedure in progress.",
+                "HAP-Protocol-Configuration-Request");
+            return kHAPError_InvalidState;
+        }
+        if (HAPSessionIsTransient(bleProcedure->session)) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Session is transient.",
+                "HAP-Protocol-Configuration-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
+
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.3.5.9 HAP Protocol Configuration Procedure
+
+        if (!HAPBLECharacteristicSupportsServiceProcedures(characteristic)) {
+            HAPLogService(
+                &logObject,
+                service,
+                accessory,
+                "Rejected %s: Not supported.",
+                "HAP-Protocol-Configuration-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
+
+        if (!service->properties.ble.supportsConfiguration) {
+            HAPLogService(
+                &logObject,
+                service,
+                accessory,
+                "Rejected %s: Service does not support configuration.",
+                "HAP-Protocol-Configuration-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
+
+        if (!HAPSessionIsSecured(bleProcedure->session)) {
+            HAPLogService(
+                &logObject,
+                service,
+                accessory,
+                "Rejected %s: Only secure access is permitted.",
+                "HAP-Protocol-Configuration-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
+
+        // Handle HAP-Protocol-Configuration-Request.
+        bool didRequestGetAll;
+        err = HAPBLEProtocolHandleConfigurationRequest(
+                  bleProcedure->server,
+                  bleProcedure->session,
+                  service,
+                  accessory,
+                  &request.bodyReader,
+                  &didRequestGetAll,
+                  server->platform.keyValueStore);
+        if (err) {
+            HAPAssert(err == kHAPError_Unknown || err == kHAPError_InvalidData);
+            HAPLogService(
+                &logObject,
+                service,
+                accessory,
+                "Rejected %s: Request handling failed with error %d.",
+                "HAP-Protocol-Configuration-Request",
+                err);
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
+        }
+        if (!didRequestGetAll) {
             SEND_RESPONSE_AND_RETURN(NULL);
         }
-        case kHAPPDUOpcode_Info: {
-            // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.5 Testing Bluetooth LE Accessories
-            if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Different HAP procedure in progress.",
-                        "HAP-Info-Request");
-                return kHAPError_InvalidState;
-            }
 
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 5.15.5 HAP-Info-Request
+        // HAP-Protocol-Configuration-Request ok.
+        HAPTLVWriterRef writer;
+        DestroyRequestBodyAndCreateResponseBodyWriter(bleProcedure_, &writer);
 
-            if (!HAPUUIDAreEqual(service->serviceType, &kHAPServiceType_HAPProtocolInformation) ||
-                !HAPUUIDAreEqual(characteristic->characteristicType, &kHAPCharacteristicType_ServiceSignature)) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Only supported on Service Signature characteristic in the "
-                        "HAP Protocol Information Service.",
-                        "HAP-Info-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
-
-            if (!HAPSessionIsSecured(bleProcedure->session)) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Only secure access is permitted.",
-                        "HAP-Info-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
-
-            // HAP-Info-Request ok.
-            HAPTLVWriterRef writer;
-            DestroyRequestBodyAndCreateResponseBodyWriter(bleProcedure_, &writer);
-
-            // Serialize HAP-Info-Response.
-            err = HAPAccessoryGetInfoResponse(bleProcedure->server, bleProcedure->session, accessory, &writer);
-            if (err) {
-                HAPAssert(err == kHAPError_Unknown || err == kHAPError_OutOfResources);
-                HAPLogAccessory(
-                        &logObject,
-                        accessory,
-                        "Rejected %s: Request handler failed with error %d.",
-                        "HAP-Info-Request",
-                        err);
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
-            }
-            SEND_RESPONSE_AND_RETURN(&writer);
-        };
-        case kHAPPDUOpcode_CharacteristicTimedWrite: {
-            // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.5 Testing Bluetooth LE Accessories
-            if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Different HAP procedure in progress.",
-                        "HAP-Characteristic-Timed-Write-Request");
-                return kHAPError_InvalidState;
-            }
-            if (HAPSessionIsTransient(bleProcedure->session)) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Session is transient.",
-                        "HAP-Characteristic-Timed-Write-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
-
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.3.5.4 HAP Characteristic Timed Write Procedure
-
-            // Cache body.
-            bleProcedure->multiTransactionType = kHAPBLEProcedureMultiTransactionType_TimedWrite;
-            HAPAssert(sizeof bleProcedure->_.timedWrite.bodyReader == sizeof request.bodyReader);
-            HAPRawBufferCopyBytes(
-                    &bleProcedure->_.timedWrite.bodyReader,
-                    &request.bodyReader,
-                    sizeof bleProcedure->_.timedWrite.bodyReader);
-
-            // The accessory must start the TTL timer after sending the HAP-Characteristic-Timed-Write-Response.
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.3.5.4 HAP Characteristic Timed Write Procedure
-            bleProcedure->_.timedWrite.timedWriteStartTime = HAPPlatformClockGetCurrent();
-            SEND_RESPONSE_AND_RETURN(NULL);
+        // Serialize HAP-Protocol-Configuration-Response.
+        err = HAPBLEProtocolGetConfigurationResponse(
+                  bleProcedure->server,
+                  bleProcedure->session,
+                  service,
+                  accessory,
+                  &writer,
+                  server->platform.keyValueStore);
+        if (err) {
+            HAPAssert(err == kHAPError_Unknown || err == kHAPError_OutOfResources);
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
         }
-        case kHAPPDUOpcode_CharacteristicExecuteWrite: {
-            // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.5 Testing Bluetooth LE Accessories
-            if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_TimedWrite) {
+        SEND_RESPONSE_AND_RETURN(&writer);
+    }
+    case kHAPPDUOpcode_Token: {
+        // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.5 Testing Bluetooth LE Accessories
+        if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Different HAP procedure in progress.",
+                "HAP-Token-Request");
+            return kHAPError_InvalidState;
+        }
+
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 5.15.1 HAP-Token-Request
+
+        if (!HAPUUIDAreEqual(service->serviceType, &kHAPServiceType_HAPProtocolInformation) ||
+                !HAPUUIDAreEqual(characteristic->characteristicType, &kHAPCharacteristicType_ServiceSignature)) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Only supported on the Service Signature characteristic in the "
+                "HAP Protocol Information Service.",
+                "HAP-Token-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
+
+        if (!HAPSessionIsSecured(bleProcedure->session)) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Only secure access is permitted.",
+                "HAP-Token-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
+
+        // HAP-Token-Request ok.
+        HAPTLVWriterRef writer;
+        DestroyRequestBodyAndCreateResponseBodyWriter(bleProcedure_, &writer);
+
+        // Serialize HAP-Token-Response.
+        err = HAPMFiTokenAuthGetTokenResponse(bleProcedure->server, bleProcedure->session, accessory, &writer);
+        if (err) {
+            HAPAssert(err == kHAPError_Unknown || err == kHAPError_InvalidState || err == kHAPError_OutOfResources);
+            HAPLogAccessory(
+                &logObject,
+                accessory,
+                "Rejected %s: Request handling failed with error %u.",
+                "HAP-Token-Request",
+                err);
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
+        }
+        SEND_RESPONSE_AND_RETURN(&writer);
+    }
+    case kHAPPDUOpcode_TokenUpdate: {
+        // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.5 Testing Bluetooth LE Accessories
+        if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Different HAP procedure in progress.",
+                "HAP-Token-Update-Request");
+            return kHAPError_InvalidState;
+        }
+
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 5.15.3 HAP-Token-Update-Request
+
+        if (!HAPUUIDAreEqual(service->serviceType, &kHAPServiceType_HAPProtocolInformation) ||
+                !HAPUUIDAreEqual(characteristic->characteristicType, &kHAPCharacteristicType_ServiceSignature)) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Only supported on the Service Signature characteristic in the "
+                "HAP Protocol Information Service.",
+                "HAP-Token-Update-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
+
+        if (!HAPSessionIsSecured(bleProcedure->session)) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Only secure access is permitted.",
+                "HAP-Token-Update-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
+
+        // Handle HAP-Token-Update-Request.
+        err = HAPMFiTokenAuthHandleTokenUpdateRequest(
+                  bleProcedure->server, bleProcedure->session, accessory, &request.bodyReader);
+        if (err) {
+            HAPAssert(err == kHAPError_Unknown || err == kHAPError_InvalidData);
+            HAPLogAccessory(
+                &logObject,
+                accessory,
+                "Rejected %s: Request handling failed with error %u.",
+                "HAP-Token-Update-Request",
+                err);
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
+        }
+
+        // Send HAP-Token-Update-Response.
+        SEND_RESPONSE_AND_RETURN(NULL);
+    }
+    case kHAPPDUOpcode_Info: {
+        // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.5 Testing Bluetooth LE Accessories
+        if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Different HAP procedure in progress.",
+                "HAP-Info-Request");
+            return kHAPError_InvalidState;
+        }
+
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 5.15.5 HAP-Info-Request
+
+        if (!HAPUUIDAreEqual(service->serviceType, &kHAPServiceType_HAPProtocolInformation) ||
+                !HAPUUIDAreEqual(characteristic->characteristicType, &kHAPCharacteristicType_ServiceSignature)) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Only supported on Service Signature characteristic in the "
+                "HAP Protocol Information Service.",
+                "HAP-Info-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
+
+        if (!HAPSessionIsSecured(bleProcedure->session)) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Only secure access is permitted.",
+                "HAP-Info-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
+
+        // HAP-Info-Request ok.
+        HAPTLVWriterRef writer;
+        DestroyRequestBodyAndCreateResponseBodyWriter(bleProcedure_, &writer);
+
+        // Serialize HAP-Info-Response.
+        err = HAPAccessoryGetInfoResponse(bleProcedure->server, bleProcedure->session, accessory, &writer);
+        if (err) {
+            HAPAssert(err == kHAPError_Unknown || err == kHAPError_OutOfResources);
+            HAPLogAccessory(
+                &logObject,
+                accessory,
+                "Rejected %s: Request handler failed with error %d.",
+                "HAP-Info-Request",
+                err);
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
+        }
+        SEND_RESPONSE_AND_RETURN(&writer);
+    };
+    case kHAPPDUOpcode_CharacteristicTimedWrite: {
+        // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.5 Testing Bluetooth LE Accessories
+        if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Different HAP procedure in progress.",
+                "HAP-Characteristic-Timed-Write-Request");
+            return kHAPError_InvalidState;
+        }
+        if (HAPSessionIsTransient(bleProcedure->session)) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Session is transient.",
+                "HAP-Characteristic-Timed-Write-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
+
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.3.5.4 HAP Characteristic Timed Write Procedure
+
+        // Cache body.
+        bleProcedure->multiTransactionType = kHAPBLEProcedureMultiTransactionType_TimedWrite;
+        HAPAssert(sizeof bleProcedure->_.timedWrite.bodyReader == sizeof request.bodyReader);
+        HAPRawBufferCopyBytes(
+            &bleProcedure->_.timedWrite.bodyReader,
+            &request.bodyReader,
+            sizeof bleProcedure->_.timedWrite.bodyReader);
+
+        // The accessory must start the TTL timer after sending the HAP-Characteristic-Timed-Write-Response.
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.3.5.4 HAP Characteristic Timed Write Procedure
+        bleProcedure->_.timedWrite.timedWriteStartTime = HAPPlatformClockGetCurrent();
+        SEND_RESPONSE_AND_RETURN(NULL);
+    }
+    case kHAPPDUOpcode_CharacteristicExecuteWrite: {
+        // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.5 Testing Bluetooth LE Accessories
+        if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_TimedWrite) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: No timed write in progress.",
+                "HAP-Characteristic-Execute-Write-Request");
+            return kHAPError_InvalidState;
+        }
+        HAPAssert(!HAPSessionIsTransient(bleProcedure->session));
+
+        bleProcedure->multiTransactionType = kHAPBLEProcedureMultiTransactionType_None;
+
+        HAPAssert(sizeof request.bodyReader == sizeof bleProcedure->_.timedWrite.bodyReader);
+        HAPRawBufferCopyBytes(
+            &request.bodyReader, &bleProcedure->_.timedWrite.bodyReader, sizeof request.bodyReader);
+
+        // Although undocumented, the pending Timed Write request may also include the Return Response flag and AAD.
+
+        // Request body has been restored and is still available.
+    } // Fallthrough.
+    case kHAPPDUOpcode_CharacteristicWrite: {
+        // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.5 Testing Bluetooth LE Accessories
+        if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Different HAP procedure in progress.",
+                "HAP-Characteristic-Write-Request");
+            return kHAPError_InvalidState;
+        }
+        if (HAPSessionIsTransient(bleProcedure->session)) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Session is transient.",
+                "HAP-Characteristic-Write-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
+
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.3.5.2 HAP Characteristic Write Procedure
+
+        // Fetch permissions.
+        bool supportsWrite = characteristic->properties.ble.writableWithoutSecurity;
+        bool supportsSecureWrite = characteristic->properties.writable;
+
+        // Unpaired Identify must be allowed only if the accessory is unpaired, i.e. it has no paired controllers.
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.4.1.9 Unpaired Identify
+        if (HAPUUIDAreEqual(characteristic->characteristicType, &kHAPCharacteristicType_Identify)) {
+            supportsWrite = !HAPAccessoryServerIsPaired(bleProcedure->server);
+        }
+
+        // Check permissions.
+        bool sessionIsSecured = HAPSessionIsSecured(bleProcedure->session);
+        if (!sessionIsSecured && !supportsWrite) {
+            if (supportsSecureWrite) {
                 HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: No timed write in progress.",
-                        "HAP-Characteristic-Execute-Write-Request");
-                return kHAPError_InvalidState;
-            }
-            HAPAssert(!HAPSessionIsTransient(bleProcedure->session));
-
-            bleProcedure->multiTransactionType = kHAPBLEProcedureMultiTransactionType_None;
-
-            HAPAssert(sizeof request.bodyReader == sizeof bleProcedure->_.timedWrite.bodyReader);
-            HAPRawBufferCopyBytes(
-                    &request.bodyReader, &bleProcedure->_.timedWrite.bodyReader, sizeof request.bodyReader);
-
-            // Although undocumented, the pending Timed Write request may also include the Return Response flag and AAD.
-
-            // Request body has been restored and is still available.
-        } // Fallthrough.
-        case kHAPPDUOpcode_CharacteristicWrite: {
-            // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.5 Testing Bluetooth LE Accessories
-            if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Different HAP procedure in progress.",
-                        "HAP-Characteristic-Write-Request");
-                return kHAPError_InvalidState;
-            }
-            if (HAPSessionIsTransient(bleProcedure->session)) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Session is transient.",
-                        "HAP-Characteristic-Write-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
-
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.3.5.2 HAP Characteristic Write Procedure
-
-            // Fetch permissions.
-            bool supportsWrite = characteristic->properties.ble.writableWithoutSecurity;
-            bool supportsSecureWrite = characteristic->properties.writable;
-
-            // Unpaired Identify must be allowed only if the accessory is unpaired, i.e. it has no paired controllers.
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.4.1.9 Unpaired Identify
-            if (HAPUUIDAreEqual(characteristic->characteristicType, &kHAPCharacteristicType_Identify)) {
-                supportsWrite = !HAPAccessoryServerIsPaired(bleProcedure->server);
-            }
-
-            // Check permissions.
-            bool sessionIsSecured = HAPSessionIsSecured(bleProcedure->session);
-            if (!sessionIsSecured && !supportsWrite) {
-                if (supportsSecureWrite) {
-                    HAPLogCharacteristic(
-                            &logObject,
-                            characteristic,
-                            service,
-                            accessory,
-                            "Rejected %s: Only secure writes are supported.",
-                            "HAP-Characteristic-Write-Request");
-                    SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InsufficientAuthentication);
-                } else {
-                    HAPLogCharacteristic(
-                            &logObject,
-                            characteristic,
-                            service,
-                            accessory,
-                            "Rejected %s: Not supported.",
-                            "HAP-Characteristic-Write-Request");
-                    SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-                }
-            }
-            if (sessionIsSecured && !supportsSecureWrite) {
-                if (supportsWrite) {
-                    HAPLogCharacteristic(
-                            &logObject,
-                            characteristic,
-                            service,
-                            accessory,
-                            "Rejected %s: Only non-secure writes are supported.",
-                            "HAP-Characteristic-Write-Request");
-                    SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-                } else {
-                    HAPLogCharacteristic(
-                            &logObject,
-                            characteristic,
-                            service,
-                            accessory,
-                            "Rejected %s: Not supported.",
-                            "HAP-Characteristic-Write-Request");
-                    SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-                }
-            }
-            if (HAPCharacteristicWriteRequiresAdminPermissions(characteristic) &&
-                !HAPSessionControllerIsAdmin(bleProcedure->session)) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Requires controller to have admin permissions.",
-                        "HAP-Characteristic-Write-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InsufficientAuthentication);
-            }
-
-            // Check for Timed Write requirement.
-            bool isTimedWrite = request.opcode == kHAPPDUOpcode_CharacteristicExecuteWrite;
-            bool requiresTimedWrite = characteristic->properties.requiresTimedWrite;
-            if (!isTimedWrite && requiresTimedWrite) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Only timed writes are supported.",
-                        "HAP-Characteristic-Write-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
-            }
-
-            // Destroy request body and process HAP-Characteristic-Write-Request.
-            HAPAssert(server->ble.connection.connected);
-            HAPAssert(!server->ble.connection.write.characteristic);
-            HAPAssert(!server->ble.connection.write.service);
-            HAPAssert(!server->ble.connection.write.accessory);
-            server->ble.connection.write.characteristic = characteristic;
-            server->ble.connection.write.service = service;
-            server->ble.connection.write.accessory = accessory;
-            bool hasExpired;
-            err = HAPBLECharacteristicParseAndWriteValue(
-                    bleProcedure->server,
-                    bleProcedure->session,
+                    &logObject,
                     characteristic,
                     service,
                     accessory,
-                    &request.bodyReader,
-                    isTimedWrite ? &bleProcedure->_.timedWrite.timedWriteStartTime : NULL,
-                    &hasExpired,
-                    &hasReturnResponse);
-            server->ble.connection.write.characteristic = NULL;
-            server->ble.connection.write.service = NULL;
-            server->ble.connection.write.accessory = NULL;
-            if (err == kHAPError_NotAuthorized) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Write failed due to insufficient authorization.",
-                        "HAP-Characteristic-Write-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InsufficientAuthorization);
-            } else if (err) {
-                HAPAssert(
-                        err == kHAPError_Unknown || err == kHAPError_InvalidState || err == kHAPError_InvalidData ||
-                        err == kHAPError_OutOfResources || err == kHAPError_Busy);
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Write failed with error %d.",
-                        "HAP-Characteristic-Write-Request",
-                        err);
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
-            }
-            if (hasExpired) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Timed Write expired.",
-                        "HAP-Characteristic-Write-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
-            if (!hasReturnResponse) {
-                if (characteristic->properties.ip.supportsWriteResponse) {
-                    // The supportsWriteResponse characteristic property provides a guarantee to the application
-                    // that the characteristic's handleRead callback is always called after a successful handleWrite.
-                    // Whether the controller actually requested write response is hidden from the application.
-                    // Although write response is mainly used in the HAP over IP transport it makes sense
-                    // to follow the same behaviour when such a characteristic is accessed using HAP over Bluetooth LE.
-                    HAPLogCharacteristic(
-                            &logObject,
-                            characteristic,
-                            service,
-                            accessory,
-                            "Characteristic supports write response: Calling read handler.");
-                } else {
-                    SEND_RESPONSE_AND_RETURN(NULL);
-                }
-            }
-
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.3.5.5 HAP Characteristic Write-with-Response Procedure.
-
-            // Request body has been destroyed!
-        } // Fallthrough.
-        case kHAPPDUOpcode_CharacteristicRead: {
-            // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.5 Testing Bluetooth LE Accessories
-            if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Different HAP procedure in progress.",
-                        "HAP-Characteristic-Read-Request");
-                return kHAPError_InvalidState;
-            }
-            if (HAPSessionIsTransient(bleProcedure->session)) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Session is transient.",
-                        "HAP-Characteristic-Read-Request");
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-            }
-
-            // See HomeKit Accessory Protocol Specification R14
-            // Section 7.3.5.3 HAP Characteristic Read Procedure
-
-            // Check permissions.
-            bool sessionIsSecured = HAPSessionIsSecured(bleProcedure->session);
-            bool supportsRead = characteristic->properties.ble.readableWithoutSecurity;
-            bool supportsSecureRead = characteristic->properties.readable;
-            if (!sessionIsSecured && !supportsRead) {
-                if (supportsSecureRead) {
-                    HAPLogCharacteristic(
-                            &logObject,
-                            characteristic,
-                            service,
-                            accessory,
-                            "Rejected %s: Only secure reads are supported.",
-                            "HAP-Characteristic-Read-Request");
-                    SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InsufficientAuthentication);
-                } else {
-                    HAPLogCharacteristic(
-                            &logObject,
-                            characteristic,
-                            service,
-                            accessory,
-                            "Rejected %s: Not supported.",
-                            "HAP-Characteristic-Read-Request");
-                    SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-                }
-            }
-            if (sessionIsSecured && !supportsSecureRead) {
-                if (supportsRead) {
-                    HAPLogCharacteristic(
-                            &logObject,
-                            characteristic,
-                            service,
-                            accessory,
-                            "Rejected %s: Only non-secure reads are supported.",
-                            "HAP-Characteristic-Read-Request");
-                    SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-                } else {
-                    HAPLogCharacteristic(
-                            &logObject,
-                            characteristic,
-                            service,
-                            accessory,
-                            "Rejected %s: Not supported.",
-                            "HAP-Characteristic-Read-Request");
-                    SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
-                }
-            }
-            if (HAPCharacteristicReadRequiresAdminPermissions(characteristic) &&
-                !HAPSessionControllerIsAdmin(bleProcedure->session)) {
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Requires controller to have admin permissions.",
-                        "HAP-Characteristic-Read-Request");
+                    "Rejected %s: Only secure writes are supported.",
+                    "HAP-Characteristic-Write-Request");
                 SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InsufficientAuthentication);
-            }
-
-            // HAP-Characteristic-Read-Request ok.
-            HAPTLVWriterRef writer;
-            DestroyRequestBodyAndCreateResponseBodyWriter(bleProcedure_, &writer);
-
-            // Serialize HAP-Characteristic-Read-Response.
-            err = HAPBLECharacteristicReadAndSerializeValue(
-                    bleProcedure->server, bleProcedure->session, characteristic, service, accessory, &writer);
-            if (err) {
-                HAPAssert(
-                        err == kHAPError_Unknown || err == kHAPError_InvalidState || err == kHAPError_OutOfResources ||
-                        err == kHAPError_Busy);
-                HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "Rejected %s: Read failed with error %d.",
-                        "HAP-Characteristic-Read-Request",
-                        err);
-                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
-            }
-            if (hasReturnResponse) {
-                SEND_RESPONSE_AND_RETURN(&writer);
             } else {
                 HAPLogCharacteristic(
-                        &logObject,
-                        characteristic,
-                        service,
-                        accessory,
-                        "HAP-Param-Return-Response not set: Discarding write response.");
+                    &logObject,
+                    characteristic,
+                    service,
+                    accessory,
+                    "Rejected %s: Not supported.",
+                    "HAP-Characteristic-Write-Request");
+                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+            }
+        }
+        if (sessionIsSecured && !supportsSecureWrite) {
+            if (supportsWrite) {
+                HAPLogCharacteristic(
+                    &logObject,
+                    characteristic,
+                    service,
+                    accessory,
+                    "Rejected %s: Only non-secure writes are supported.",
+                    "HAP-Characteristic-Write-Request");
+                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+            } else {
+                HAPLogCharacteristic(
+                    &logObject,
+                    characteristic,
+                    service,
+                    accessory,
+                    "Rejected %s: Not supported.",
+                    "HAP-Characteristic-Write-Request");
+                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+            }
+        }
+        if (HAPCharacteristicWriteRequiresAdminPermissions(characteristic) &&
+                !HAPSessionControllerIsAdmin(bleProcedure->session)) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Requires controller to have admin permissions.",
+                "HAP-Characteristic-Write-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InsufficientAuthentication);
+        }
+
+        // Check for Timed Write requirement.
+        bool isTimedWrite = request.opcode == kHAPPDUOpcode_CharacteristicExecuteWrite;
+        bool requiresTimedWrite = characteristic->properties.requiresTimedWrite;
+        if (!isTimedWrite && requiresTimedWrite) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Only timed writes are supported.",
+                "HAP-Characteristic-Write-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
+        }
+
+        // Destroy request body and process HAP-Characteristic-Write-Request.
+        HAPAssert(server->ble.connection.connected);
+        HAPAssert(!server->ble.connection.write.characteristic);
+        HAPAssert(!server->ble.connection.write.service);
+        HAPAssert(!server->ble.connection.write.accessory);
+        server->ble.connection.write.characteristic = characteristic;
+        server->ble.connection.write.service = service;
+        server->ble.connection.write.accessory = accessory;
+        bool hasExpired;
+        err = HAPBLECharacteristicParseAndWriteValue(
+                  bleProcedure->server,
+                  bleProcedure->session,
+                  characteristic,
+                  service,
+                  accessory,
+                  &request.bodyReader,
+                  isTimedWrite ? &bleProcedure->_.timedWrite.timedWriteStartTime : NULL,
+                  &hasExpired,
+                  &hasReturnResponse);
+        server->ble.connection.write.characteristic = NULL;
+        server->ble.connection.write.service = NULL;
+        server->ble.connection.write.accessory = NULL;
+        if (err == kHAPError_NotAuthorized) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Write failed due to insufficient authorization.",
+                "HAP-Characteristic-Write-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InsufficientAuthorization);
+        } else if (err) {
+            HAPAssert(
+                err == kHAPError_Unknown || err == kHAPError_InvalidState || err == kHAPError_InvalidData ||
+                err == kHAPError_OutOfResources || err == kHAPError_Busy);
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Write failed with error %d.",
+                "HAP-Characteristic-Write-Request",
+                err);
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
+        }
+        if (hasExpired) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Timed Write expired.",
+                "HAP-Characteristic-Write-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
+        if (!hasReturnResponse) {
+            if (characteristic->properties.ip.supportsWriteResponse) {
+                // The supportsWriteResponse characteristic property provides a guarantee to the application
+                // that the characteristic's handleRead callback is always called after a successful handleWrite.
+                // Whether the controller actually requested write response is hidden from the application.
+                // Although write response is mainly used in the HAP over IP transport it makes sense
+                // to follow the same behaviour when such a characteristic is accessed using HAP over Bluetooth LE.
+                HAPLogCharacteristic(
+                    &logObject,
+                    characteristic,
+                    service,
+                    accessory,
+                    "Characteristic supports write response: Calling read handler.");
+            } else {
                 SEND_RESPONSE_AND_RETURN(NULL);
             }
         }
+
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.3.5.5 HAP Characteristic Write-with-Response Procedure.
+
+        // Request body has been destroyed!
+    } // Fallthrough.
+    case kHAPPDUOpcode_CharacteristicRead: {
+        // 10. Accessory must support only one HAP procedure on a characteristic at any point in time.
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.5 Testing Bluetooth LE Accessories
+        if (bleProcedure->multiTransactionType != kHAPBLEProcedureMultiTransactionType_None) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Different HAP procedure in progress.",
+                "HAP-Characteristic-Read-Request");
+            return kHAPError_InvalidState;
+        }
+        if (HAPSessionIsTransient(bleProcedure->session)) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Session is transient.",
+                "HAP-Characteristic-Read-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+        }
+
+        // See HomeKit Accessory Protocol Specification R14
+        // Section 7.3.5.3 HAP Characteristic Read Procedure
+
+        // Check permissions.
+        bool sessionIsSecured = HAPSessionIsSecured(bleProcedure->session);
+        bool supportsRead = characteristic->properties.ble.readableWithoutSecurity;
+        bool supportsSecureRead = characteristic->properties.readable;
+        if (!sessionIsSecured && !supportsRead) {
+            if (supportsSecureRead) {
+                HAPLogCharacteristic(
+                    &logObject,
+                    characteristic,
+                    service,
+                    accessory,
+                    "Rejected %s: Only secure reads are supported.",
+                    "HAP-Characteristic-Read-Request");
+                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InsufficientAuthentication);
+            } else {
+                HAPLogCharacteristic(
+                    &logObject,
+                    characteristic,
+                    service,
+                    accessory,
+                    "Rejected %s: Not supported.",
+                    "HAP-Characteristic-Read-Request");
+                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+            }
+        }
+        if (sessionIsSecured && !supportsSecureRead) {
+            if (supportsRead) {
+                HAPLogCharacteristic(
+                    &logObject,
+                    characteristic,
+                    service,
+                    accessory,
+                    "Rejected %s: Only non-secure reads are supported.",
+                    "HAP-Characteristic-Read-Request");
+                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+            } else {
+                HAPLogCharacteristic(
+                    &logObject,
+                    characteristic,
+                    service,
+                    accessory,
+                    "Rejected %s: Not supported.",
+                    "HAP-Characteristic-Read-Request");
+                SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_UnsupportedPDU);
+            }
+        }
+        if (HAPCharacteristicReadRequiresAdminPermissions(characteristic) &&
+                !HAPSessionControllerIsAdmin(bleProcedure->session)) {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Requires controller to have admin permissions.",
+                "HAP-Characteristic-Read-Request");
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InsufficientAuthentication);
+        }
+
+        // HAP-Characteristic-Read-Request ok.
+        HAPTLVWriterRef writer;
+        DestroyRequestBodyAndCreateResponseBodyWriter(bleProcedure_, &writer);
+
+        // Serialize HAP-Characteristic-Read-Response.
+        err = HAPBLECharacteristicReadAndSerializeValue(
+                  bleProcedure->server, bleProcedure->session, characteristic, service, accessory, &writer);
+        if (err) {
+            HAPAssert(
+                err == kHAPError_Unknown || err == kHAPError_InvalidState || err == kHAPError_OutOfResources ||
+                err == kHAPError_Busy);
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejected %s: Read failed with error %d.",
+                "HAP-Characteristic-Read-Request",
+                err);
+            SEND_ERROR_AND_RETURN(kHAPBLEPDUStatus_InvalidRequest);
+        }
+        if (hasReturnResponse) {
+            SEND_RESPONSE_AND_RETURN(&writer);
+        } else {
+            HAPLogCharacteristic(
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "HAP-Param-Return-Response not set: Discarding write response.");
+            SEND_RESPONSE_AND_RETURN(NULL);
+        }
+    }
     }
     HAPFatalError();
 }
@@ -1076,11 +1076,11 @@ HAPError HAPBLEProcedureHandleGATTWrite(HAPBLEProcedureRef* bleProcedure_, void*
     // If session is terminal, no more requests may be accepted.
     if (HAPBLESessionIsTerminal(&session->_.ble)) {
         HAPLogCharacteristic(
-                &logObject,
-                characteristic,
-                service,
-                accessory,
-                "Rejecting GATT write: Session is terminal. No more requests are accepted.");
+            &logObject,
+            characteristic,
+            service,
+            accessory,
+            "Rejecting GATT write: Session is terminal. No more requests are accepted.");
         return kHAPError_InvalidState;
     }
 
@@ -1090,11 +1090,11 @@ HAPError HAPBLEProcedureHandleGATTWrite(HAPBLEProcedureRef* bleProcedure_, void*
         // Better to disconnect earlier than to end up with ambiguity whether the transaction completed successfully.
         if (HAPBLESessionIsTerminalSoon(&session->_.ble)) {
             HAPLogCharacteristic(
-                    &logObject,
-                    characteristic,
-                    service,
-                    accessory,
-                    "Rejecting GATT write: Session is terminal soon. No new procedures are started.");
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Rejecting GATT write: Session is terminal soon. No new procedures are started.");
             return kHAPError_InvalidState;
         }
 
@@ -1103,12 +1103,12 @@ HAPError HAPBLEProcedureHandleGATTWrite(HAPBLEProcedureRef* bleProcedure_, void*
         // Section 7.3.1 HAP Transactions and Procedures
         if (HAPSessionIsSecured(bleProcedure->session) && HAPBLECharacteristicDropsSecuritySession(characteristic)) {
             HAPLogCharacteristicInfo(
-                    &logObject,
-                    characteristic,
-                    service,
-                    accessory,
-                    "Terminating existing security session (%s).",
-                    "Characteristic drops security session");
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Terminating existing security session (%s).",
+                "Characteristic drops security session");
             HAPSessionInvalidate(bleProcedure->server, bleProcedure->session, /* terminateLink: */ false);
             HAPBLEProcedureReset(bleProcedure_);
         }
@@ -1121,18 +1121,18 @@ HAPError HAPBLEProcedureHandleGATTWrite(HAPBLEProcedureRef* bleProcedure_, void*
         HAPAssert(!bleProcedure->procedureTimer);
 #if !DEBUG_DISABLE_TIMEOUTS
         err = HAPPlatformTimerRegister(
-                &bleProcedure->procedureTimer,
-                HAPPlatformClockGetCurrent() + 10 * HAPSecond,
-                ProcedureTimerExpired,
-                bleProcedure);
+                  &bleProcedure->procedureTimer,
+                  HAPPlatformClockGetCurrent() + 10 * HAPSecond,
+                  ProcedureTimerExpired,
+                  bleProcedure);
         if (err) {
             HAPAssert(err == kHAPError_OutOfResources);
             HAPLogCharacteristic(
-                    &logObject,
-                    characteristic,
-                    service,
-                    accessory,
-                    "Not enough resources to start procedure timer. Disconnecting immediately!");
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Not enough resources to start procedure timer. Disconnecting immediately!");
             return err;
         }
 #else
@@ -1146,13 +1146,13 @@ HAPError HAPBLEProcedureHandleGATTWrite(HAPBLEProcedureRef* bleProcedure_, void*
         if (numBytes < CHACHA20_POLY1305_TAG_BYTES) {
             // Auth tag not present.
             HAPLogCharacteristicBuffer(
-                    &logObject,
-                    characteristic,
-                    service,
-                    accessory,
-                    bytes,
-                    numBytes,
-                    "Secure request too short, auth tag not present.");
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                bytes,
+                numBytes,
+                "Secure request too short, auth tag not present.");
             return kHAPError_InvalidData;
         }
         err = HAPSessionDecryptControlMessage(bleProcedure->server, bleProcedure->session, bytes, bytes, numBytes);
@@ -1166,14 +1166,14 @@ HAPError HAPBLEProcedureHandleGATTWrite(HAPBLEProcedureRef* bleProcedure_, void*
     }
 
     HAPLogCharacteristicBufferDebug(
-            &logObject,
-            characteristic,
-            service,
-            accessory,
-            bytes,
-            numBytes,
-            "< (%s)",
-            bleProcedure->startedSecured ? "encrypted" : "plaintext");
+        &logObject,
+        characteristic,
+        service,
+        accessory,
+        bytes,
+        numBytes,
+        "< (%s)",
+        bleProcedure->startedSecured ? "encrypted" : "plaintext");
 
     // Process PDU.
     err = HAPBLETransactionHandleWrite(&bleProcedure->transaction, bytes, numBytes);
@@ -1202,33 +1202,33 @@ static void CompleteTransaction(HAPBLEProcedureRef* bleProcedure_) {
     HAPPrecondition(session->transportType == kHAPTransportType_BLE);
 
     switch (bleProcedure->multiTransactionType) {
-        case kHAPBLEProcedureMultiTransactionType_None: {
-            // Procedure complete.
-            HAPAssert(bleProcedure->procedureTimer);
+    case kHAPBLEProcedureMultiTransactionType_None: {
+        // Procedure complete.
+        HAPAssert(bleProcedure->procedureTimer);
 #if !DEBUG_DISABLE_TIMEOUTS
-            HAPPlatformTimerDeregister(bleProcedure->procedureTimer);
+        HAPPlatformTimerDeregister(bleProcedure->procedureTimer);
 #endif
-            bleProcedure->procedureTimer = 0;
+        bleProcedure->procedureTimer = 0;
 
-            HAPBLETransactionCreate(
-                    &bleProcedure->transaction, bleProcedure->scratchBytes, bleProcedure->numScratchBytes);
-            return;
-        }
-        case kHAPBLEProcedureMultiTransactionType_TimedWrite: {
-            // The buffer still stores the pending write request. It must not be reused for new requests until cleared.
-            HAPBLETransactionCreate(&bleProcedure->transaction, NULL, 0);
-            return;
-        }
+        HAPBLETransactionCreate(
+            &bleProcedure->transaction, bleProcedure->scratchBytes, bleProcedure->numScratchBytes);
+        return;
+    }
+    case kHAPBLEProcedureMultiTransactionType_TimedWrite: {
+        // The buffer still stores the pending write request. It must not be reused for new requests until cleared.
+        HAPBLETransactionCreate(&bleProcedure->transaction, NULL, 0);
+        return;
+    }
     }
     HAPFatalError();
 }
 
 HAP_RESULT_USE_CHECK
 HAPError HAPBLEProcedureHandleGATTRead(
-        HAPBLEProcedureRef* bleProcedure_,
-        void* bytes,
-        size_t maxBytes,
-        size_t* numBytes) {
+    HAPBLEProcedureRef* bleProcedure_,
+    void* bytes,
+    size_t maxBytes,
+    size_t* numBytes) {
     HAPPrecondition(bleProcedure_);
     HAPBLEProcedure* bleProcedure = (HAPBLEProcedure*) bleProcedure_;
     HAPPrecondition(bleProcedure->server);
@@ -1247,11 +1247,11 @@ HAPError HAPBLEProcedureHandleGATTRead(
     // If session is terminal, no more requests may be accepted.
     if (HAPBLESessionIsTerminal(&session->_.ble)) {
         HAPLogCharacteristic(
-                &logObject,
-                characteristic,
-                service,
-                accessory,
-                "Rejecting GATT read: Session is terminal. No more requests are accepted.");
+            &logObject,
+            characteristic,
+            service,
+            accessory,
+            "Rejecting GATT read: Session is terminal. No more requests are accepted.");
         return kHAPError_InvalidState;
     }
 
@@ -1259,11 +1259,11 @@ HAPError HAPBLEProcedureHandleGATTRead(
     if (bleProcedure->startedSecured) {
         if (maxBytes < CHACHA20_POLY1305_TAG_BYTES) {
             HAPLogCharacteristic(
-                    &logObject,
-                    characteristic,
-                    service,
-                    accessory,
-                    "Secure response buffer does not have enough space for auth tag.");
+                &logObject,
+                characteristic,
+                service,
+                accessory,
+                "Secure response buffer does not have enough space for auth tag.");
             return kHAPError_OutOfResources;
         }
         maxBytes -= CHACHA20_POLY1305_TAG_BYTES;
@@ -1287,14 +1287,14 @@ HAPError HAPBLEProcedureHandleGATTRead(
     }
 
     HAPLogCharacteristicBufferDebug(
-            &logObject,
-            characteristic,
-            service,
-            accessory,
-            bytes,
-            *numBytes,
-            "> (%s)",
-            bleProcedure->startedSecured ? "encrypted" : "plaintext");
+        &logObject,
+        characteristic,
+        service,
+        accessory,
+        bytes,
+        *numBytes,
+        "> (%s)",
+        bleProcedure->startedSecured ? "encrypted" : "plaintext");
 
     // Encrypt if secured.
     if (bleProcedure->startedSecured) {

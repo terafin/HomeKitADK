@@ -7,7 +7,7 @@
 #include "HAP+Internal.h"
 
 static const HAPLogObject logObject = { .subsystem = kHAP_LogSubsystem, .category = "AccessorySetupInfo" };
-  
+
 // Use Cases:
 //
 // 1. Accessory that does not have a display or programmable NFC tag.
@@ -65,7 +65,7 @@ static HAPPlatformAccessorySetupCapabilities GetLegacyAccessorySetupCapabilities
     HAP_DIAGNOSTIC_IGNORED_ARMCC(2570)
     HAP_DIAGNOSTIC_IGNORED_ICCARM(Pe1444)
     HAPPlatformAccessorySetupCapabilities accessorySetupCapabilities =
-            HAPPlatformAccessorySetupGetCapabilities(server->platform.accessorySetup);
+        HAPPlatformAccessorySetupGetCapabilities(server->platform.accessorySetup);
     HAP_DIAGNOSTIC_RESTORE_ICCARM(Pe1444)
     HAP_DIAGNOSTIC_POP
 
@@ -81,7 +81,7 @@ static void SynchronizeDisplayAndNFC(HAPAccessoryServerRef* server_) {
     HAPPlatformAccessorySetupCapabilities legacyCapabilities = GetLegacyAccessorySetupCapabilities(server_);
 
     if (!server->platform.setupDisplay && !legacyCapabilities.supportsDisplay && !server->platform.setupNFC &&
-        !legacyCapabilities.supportsProgrammableNFC) {
+            !legacyCapabilities.supportsProgrammableNFC) {
         return;
     }
 
@@ -91,16 +91,17 @@ static void SynchronizeDisplayAndNFC(HAPAccessoryServerRef* server_) {
     // Derive setup payload flags.
     HAPAccessorySetupSetupPayloadFlags flags = { .isPaired = HAPAccessoryServerIsPaired(server_),
                                                  .ipSupported = (server->transports.ip != NULL),
-                                                 .bleSupported = (server->transports.ble != NULL) };
+                                                 .bleSupported = (server->transports.ble != NULL)
+                                               };
 
     // Generate non-pairable setup payload.
     HAPSetupPayload nonPairablePayload;
     HAPAccessorySetupGetSetupPayload(
-            &nonPairablePayload,
-            /* setupCode: */ NULL,
-            /* setupID: */ NULL,
-            flags,
-            server->primaryAccessory->category);
+        &nonPairablePayload,
+        /* setupCode: */ NULL,
+        /* setupID: */ NULL,
+        flags,
+        server->primaryAccessory->category);
 
     // Fetch setup code.
     HAPSetupCode* _Nullable setupCode = NULL;
@@ -112,8 +113,8 @@ static void SynchronizeDisplayAndNFC(HAPAccessoryServerRef* server_) {
     HAPSetupPayload pairablePayload;
     bool hasPairablePayload = false;
     if (setupCode &&
-        (legacyCapabilities.supportsDisplay || legacyCapabilities.supportsProgrammableNFC ||
-         server->platform.setupDisplay || (server->platform.setupNFC && server->accessorySetup.nfcPairingModeTimer))) {
+            (legacyCapabilities.supportsDisplay || legacyCapabilities.supportsProgrammableNFC ||
+             server->platform.setupDisplay || (server->platform.setupNFC && server->accessorySetup.nfcPairingModeTimer))) {
         HAPSetupID setupID;
         bool hasSetupID;
         HAPPlatformAccessorySetupLoadSetupID(server->platform.accessorySetup, &hasSetupID, &setupID);
@@ -122,7 +123,7 @@ static void SynchronizeDisplayAndNFC(HAPAccessoryServerRef* server_) {
             HAPAssert(!flags.isPaired);
             hasPairablePayload = true;
             HAPAccessorySetupGetSetupPayload(
-                    &pairablePayload, setupCode, &setupID, flags, server->primaryAccessory->category);
+                &pairablePayload, setupCode, &setupID, flags, server->primaryAccessory->category);
         } else {
             HAPLog(&logObject, "QR code displays / NFC require a setup ID to be provisioned.");
         }
@@ -131,9 +132,9 @@ static void SynchronizeDisplayAndNFC(HAPAccessoryServerRef* server_) {
     // Update legacy API.
     if (legacyCapabilities.supportsDisplay || legacyCapabilities.supportsProgrammableNFC) {
         HAPLogError(
-                &logObject,
-                "HAPPlatformAccessorySetupUpdateSetupPayload is deprecated. "
-                "Use HAPPlatformAccessorySetupDisplay / HAPPlatformAccessorySetupNFC instead.");
+            &logObject,
+            "HAPPlatformAccessorySetupUpdateSetupPayload is deprecated. "
+            "Use HAPPlatformAccessorySetupDisplay / HAPPlatformAccessorySetupNFC instead.");
 
         HAP_DIAGNOSTIC_PUSH
         HAP_DIAGNOSTIC_IGNORED_CLANG("-Wdeprecated-declarations")
@@ -141,11 +142,11 @@ static void SynchronizeDisplayAndNFC(HAPAccessoryServerRef* server_) {
         HAP_DIAGNOSTIC_IGNORED_ARMCC(2570)
         HAP_DIAGNOSTIC_IGNORED_ICCARM(Pe1444)
         HAPLogSensitiveInfo(
-                &logObject,
-                "Updating legacy setup payload: %s.",
-                hasPairablePayload ? pairablePayload.stringValue : "NULL");
+            &logObject,
+            "Updating legacy setup payload: %s.",
+            hasPairablePayload ? pairablePayload.stringValue : "NULL");
         HAPPlatformAccessorySetupUpdateSetupPayload(
-                server->platform.accessorySetup, hasPairablePayload ? &pairablePayload : NULL, setupCode);
+            server->platform.accessorySetup, hasPairablePayload ? &pairablePayload : NULL, setupCode);
         HAP_DIAGNOSTIC_RESTORE_ICCARM(Pe1444)
         HAP_DIAGNOSTIC_POP
     }
@@ -153,28 +154,28 @@ static void SynchronizeDisplayAndNFC(HAPAccessoryServerRef* server_) {
     // Update displays.
     if (server->platform.setupDisplay) {
         HAPLogSensitiveInfo(
-                &logObject,
-                "Updating display setup payload: %s.",
-                hasPairablePayload ? pairablePayload.stringValue : "NULL");
+            &logObject,
+            "Updating display setup payload: %s.",
+            hasPairablePayload ? pairablePayload.stringValue : "NULL");
         HAPPlatformAccessorySetupDisplayUpdateSetupPayload(
-                HAPNonnull(server->platform.setupDisplay), hasPairablePayload ? &pairablePayload : NULL, setupCode);
+            HAPNonnull(server->platform.setupDisplay), hasPairablePayload ? &pairablePayload : NULL, setupCode);
     }
 
     // Update programmable NFC tags.
     if (server->platform.setupNFC) {
         if (server->accessorySetup.nfcPairingModeTimer) {
             HAPLogSensitiveInfo(
-                    &logObject,
-                    "Updating NFC setup payload: %s.",
-                    hasPairablePayload ? pairablePayload.stringValue : nonPairablePayload.stringValue);
+                &logObject,
+                "Updating NFC setup payload: %s.",
+                hasPairablePayload ? pairablePayload.stringValue : nonPairablePayload.stringValue);
             HAPPlatformAccessorySetupNFCUpdateSetupPayload(
-                    HAPNonnull(server->platform.setupNFC),
-                    hasPairablePayload ? &pairablePayload : &nonPairablePayload,
-                    hasPairablePayload);
+                HAPNonnull(server->platform.setupNFC),
+                hasPairablePayload ? &pairablePayload : &nonPairablePayload,
+                hasPairablePayload);
         } else {
             HAPLogSensitiveInfo(&logObject, "Updating NFC setup payload: %s.", nonPairablePayload.stringValue);
             HAPPlatformAccessorySetupNFCUpdateSetupPayload(
-                    HAPNonnull(server->platform.setupNFC), &nonPairablePayload, /* isPairable: */ false);
+                HAPNonnull(server->platform.setupNFC), &nonPairablePayload, /* isPairable: */ false);
         }
     }
 }
@@ -243,10 +244,10 @@ static void PrepareSetupInfo(HAPAccessoryServerRef* server_, bool lockSetupInfo)
         if (!server->accessorySetup.state.lockSetupInfo) {
             HAPPrecondition(!server->accessorySetup.dynamicRefreshTimer);
             err = HAPPlatformTimerRegister(
-                    &server->accessorySetup.dynamicRefreshTimer,
-                    HAPPlatformClockGetCurrent() + kHAPAccessorySetupInfo_DynamicRefreshInterval,
-                    DynamicSetupInfoExpired,
-                    server_);
+                      &server->accessorySetup.dynamicRefreshTimer,
+                      HAPPlatformClockGetCurrent() + kHAPAccessorySetupInfo_DynamicRefreshInterval,
+                      DynamicSetupInfoExpired,
+                      server_);
             if (err) {
                 HAPAssert(err == kHAPError_OutOfResources);
                 HAPLogError(&logObject, "Not enough resources to allocate timer.");
@@ -259,13 +260,13 @@ static void PrepareSetupInfo(HAPAccessoryServerRef* server_, bool lockSetupInfo)
         // Load static setup code (only available if programmable NFC tag is supported).
         if (server->platform.setupNFC || legacyCapabilities.supportsProgrammableNFC) {
             HAPPlatformAccessorySetupLoadSetupCode(
-                    server->platform.accessorySetup, &server->accessorySetup.state.setupCode);
+                server->platform.accessorySetup, &server->accessorySetup.state.setupCode);
             server->accessorySetup.state.setupCodeIsAvailable = true;
         }
 
         // Load static setup info.
         HAPPlatformAccessorySetupLoadSetupInfo(
-                server->platform.accessorySetup, &server->accessorySetup.state.setupInfo);
+            server->platform.accessorySetup, &server->accessorySetup.state.setupInfo);
         server->accessorySetup.state.setupInfoIsAvailable = true;
     }
     HAPAssert(server->accessorySetup.state.setupInfoIsAvailable || server->accessorySetup.state.setupCodeIsAvailable);
@@ -282,7 +283,7 @@ static void DynamicSetupInfoExpired(HAPPlatformTimerRef timer, void* _Nullable c
     HAPPrecondition(!HAPAccessoryServerIsPaired(server_));
     HAPPrecondition(!server->accessorySetup.state.lockSetupInfo);
     HAPPrecondition(
-            server->accessorySetup.state.setupInfoIsAvailable || server->accessorySetup.state.setupCodeIsAvailable);
+        server->accessorySetup.state.setupInfoIsAvailable || server->accessorySetup.state.setupCodeIsAvailable);
 
     HAPLogInfo(&logObject, "Dynamic setup code expired.");
     ClearSetupInfo(server_);
@@ -300,12 +301,12 @@ HAPSetupInfo* _Nullable HAPAccessorySetupInfoGetSetupInfo(HAPAccessoryServerRef*
     HAPAccessoryServer* server = (HAPAccessoryServer*) server_;
 
     if (restorePrevious && !server->accessorySetup.state.setupInfoIsAvailable &&
-        !server->accessorySetup.state.setupCodeIsAvailable) {
+            !server->accessorySetup.state.setupCodeIsAvailable) {
         HAPLog(&logObject, "Cannot restore setup code from previous pairing attempt.");
         return NULL;
     }
     HAPPrecondition(
-            server->accessorySetup.state.setupInfoIsAvailable || server->accessorySetup.state.setupCodeIsAvailable);
+        server->accessorySetup.state.setupInfoIsAvailable || server->accessorySetup.state.setupCodeIsAvailable);
 
     // TODO Or should we keep it?
     if (!restorePrevious && server->accessorySetup.state.keepSetupInfo) {
@@ -320,15 +321,15 @@ HAPSetupInfo* _Nullable HAPAccessorySetupInfoGetSetupInfo(HAPAccessoryServerRef*
 
         HAPLogDebug(&logObject, "Generating SRP verifier for dynamic setup code.");
         HAPPlatformRandomNumberFill(
-                server->accessorySetup.state.setupInfo.salt, sizeof server->accessorySetup.state.setupInfo.salt);
+            server->accessorySetup.state.setupInfo.salt, sizeof server->accessorySetup.state.setupInfo.salt);
         static const uint8_t srpUserName[] = "Pair-Setup";
         HAP_srp_verifier(
-                server->accessorySetup.state.setupInfo.verifier,
-                server->accessorySetup.state.setupInfo.salt,
-                srpUserName,
-                sizeof srpUserName - 1,
-                (const uint8_t*) &server->accessorySetup.state.setupCode.stringValue,
-                sizeof server->accessorySetup.state.setupCode.stringValue - 1);
+            server->accessorySetup.state.setupInfo.verifier,
+            server->accessorySetup.state.setupInfo.salt,
+            srpUserName,
+            sizeof srpUserName - 1,
+            (const uint8_t*) &server->accessorySetup.state.setupCode.stringValue,
+            sizeof server->accessorySetup.state.setupCode.stringValue - 1);
         server->accessorySetup.state.setupInfoIsAvailable = true;
     }
     HAPAssert(server->accessorySetup.state.setupInfoIsAvailable);
@@ -499,10 +500,10 @@ void HAPAccessorySetupInfoEnterNFCPairingMode(HAPAccessoryServerRef* server_) {
         forceSynchronization = true;
     }
     err = HAPPlatformTimerRegister(
-            &server->accessorySetup.nfcPairingModeTimer,
-            HAPPlatformClockGetCurrent() + kHAPAccessoryServer_NFCPairingModeDuration,
-            NFCPairingModeExpired,
-            server_);
+              &server->accessorySetup.nfcPairingModeTimer,
+              HAPPlatformClockGetCurrent() + kHAPAccessoryServer_NFCPairingModeDuration,
+              NFCPairingModeExpired,
+              server_);
     if (err) {
         HAPAssert(err == kHAPError_OutOfResources);
         HAPLogError(&logObject, "Not enough resources to allocate timer.");

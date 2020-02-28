@@ -47,9 +47,9 @@ static void CallbackTimerExpired(HAPPlatformTimerRef timer, void* _Nullable cont
     // Complete shutdown if accessory server has been stopped using a server engine.
     if (server->transports.ip) {
         const HAPAccessoryServerServerEngine* _Nullable serverEngine =
-                HAPNonnull(server->transports.ip)->serverEngine.get();
+            HAPNonnull(server->transports.ip)->serverEngine.get();
         if (serverEngine && serverEngine->stop &&
-            HAPAccessoryServerGetState(server_) == kHAPAccessoryServerState_Idle) {
+                HAPAccessoryServerGetState(server_) == kHAPAccessoryServerState_Idle) {
             CompleteShutdown(server_);
             return;
         }
@@ -78,11 +78,11 @@ void HAPAccessoryServerDelegateScheduleHandleUpdatedState(HAPAccessoryServerRef*
 }
 
 void HAPAccessoryServerCreate(
-        HAPAccessoryServerRef* server_,
-        const HAPAccessoryServerOptions* options,
-        const HAPPlatform* platform,
-        const HAPAccessoryServerCallbacks* callbacks,
-        void* _Nullable context) {
+    HAPAccessoryServerRef* server_,
+    const HAPAccessoryServerOptions* options,
+    const HAPPlatform* platform,
+    const HAPAccessoryServerCallbacks* callbacks,
+    void* _Nullable context) {
     HAPPrecondition(HAPPlatformGetCompatibilityVersion() == HAP_PLATFORM_COMPATIBILITY_VERSION);
     HAPPrecondition(server_);
     HAPAccessoryServer* server = (HAPAccessoryServer*) server_;
@@ -97,18 +97,18 @@ void HAPAccessoryServerCreate(
         HAPStringBuilderAppend(&stringBuilder, "Version information:");
         HAPStringBuilderAppend(&stringBuilder, "\nlibhap: %s", HAPGetIdentification());
         HAPStringBuilderAppend(
-                &stringBuilder,
-                "\n  - Version: %s (%s) - compatibility version %lu",
-                HAPGetVersion(),
-                HAPGetBuild(),
-                (unsigned long) HAPGetCompatibilityVersion());
+            &stringBuilder,
+            "\n  - Version: %s (%s) - compatibility version %lu",
+            HAPGetVersion(),
+            HAPGetBuild(),
+            (unsigned long) HAPGetCompatibilityVersion());
         HAPStringBuilderAppend(&stringBuilder, "\nUsing platform: %s", HAPPlatformGetIdentification());
         HAPStringBuilderAppend(
-                &stringBuilder,
-                "\n  - Version: %s (%s) - compatibility version %lu",
-                HAPPlatformGetVersion(),
-                HAPPlatformGetBuild(),
-                (unsigned long) HAPPlatformGetCompatibilityVersion());
+            &stringBuilder,
+            "\n  - Version: %s (%s) - compatibility version %lu",
+            HAPPlatformGetVersion(),
+            HAPPlatformGetBuild(),
+            (unsigned long) HAPPlatformGetCompatibilityVersion());
         HAPStringBuilderAppend(&stringBuilder, "\n  - Available features:");
         if (platform->keyValueStore) {
             HAPStringBuilderAppend(&stringBuilder, "\n    - Key-Value store");
@@ -163,20 +163,20 @@ void HAPAccessoryServerCreate(
     HAP_DIAGNOSTIC_IGNORED_ARMCC(2570)
     HAP_DIAGNOSTIC_IGNORED_ICCARM(Pe1444)
     HAPPlatformAccessorySetupCapabilities accessorySetupCapabilities =
-            HAPPlatformAccessorySetupGetCapabilities(server->platform.accessorySetup);
+        HAPPlatformAccessorySetupGetCapabilities(server->platform.accessorySetup);
     HAP_DIAGNOSTIC_RESTORE_ICCARM(Pe1444)
     HAP_DIAGNOSTIC_POP
     if (accessorySetupCapabilities.supportsDisplay) {
         HAPLogError(
-                &logObject,
-                "HAPPlatformAccessorySetupGetCapabilities is deprecated. "
-                "Return false and use HAPPlatformAccessorySetupDisplay instead.");
+            &logObject,
+            "HAPPlatformAccessorySetupGetCapabilities is deprecated. "
+            "Return false and use HAPPlatformAccessorySetupDisplay instead.");
     }
     if (accessorySetupCapabilities.supportsProgrammableNFC) {
         HAPLogError(
-                &logObject,
-                "HAPPlatformAccessorySetupGetCapabilities is deprecated. "
-                "Return false and use HAPPlatformAccessorySetupNFC instead.");
+            &logObject,
+            "HAPPlatformAccessorySetupGetCapabilities is deprecated. "
+            "Return false and use HAPPlatformAccessorySetupNFC instead.");
     }
     if (server->platform.setupDisplay || server->platform.setupNFC) {
         HAPPrecondition(!accessorySetupCapabilities.supportsDisplay);
@@ -196,16 +196,16 @@ void HAPAccessoryServerCreate(
     HAP_DIAGNOSTIC_IGNORED_ICCARM(Pe1444)
     if (options->ip.available) {
         HAPLogFault(
-                &logObject,
-                "HAPAccessoryServerOptions must no longer set ip.available. "
-                "Set ip.transport to &kHAPAccessoryServerTransport_IP instead.");
+            &logObject,
+            "HAPAccessoryServerOptions must no longer set ip.available. "
+            "Set ip.transport to &kHAPAccessoryServerTransport_IP instead.");
         HAPFatalError();
     }
     if (options->ble.available) {
         HAPLogFault(
-                &logObject,
-                "HAPAccessoryServerOptions must no longer set ble.available. "
-                "Set ble.transport to &kHAPAccessoryServerTransport_BLE instead.");
+            &logObject,
+            "HAPAccessoryServerOptions must no longer set ble.available. "
+            "Set ble.transport to &kHAPAccessoryServerTransport_BLE instead.");
         HAPFatalError();
     }
     HAP_DIAGNOSTIC_RESTORE_ICCARM(Pe1444)
@@ -235,7 +235,7 @@ void HAPAccessoryServerCreate(
 
     if (server->transports.ip) {
         const HAPAccessoryServerServerEngine* _Nullable serverEngine =
-                HAPNonnull(server->transports.ip)->serverEngine.get();
+            HAPNonnull(server->transports.ip)->serverEngine.get();
         if (serverEngine && serverEngine->init) {
             serverEngine->init(server_);
         }
@@ -262,7 +262,7 @@ void HAPAccessoryServerRelease(HAPAccessoryServerRef* server_) {
 
     if (server->transports.ip) {
         const HAPAccessoryServerServerEngine* _Nullable serverEngine =
-                HAPNonnull(server->transports.ip)->serverEngine.get();
+            HAPNonnull(server->transports.ip)->serverEngine.get();
         if (serverEngine && serverEngine->deinit) {
             err = serverEngine->deinit(server_);
             if (err) {
@@ -298,7 +298,7 @@ HAPAccessoryServerState HAPAccessoryServerGetState(HAPAccessoryServerRef* server
 
     if (server->transports.ip) {
         const HAPAccessoryServerServerEngine* _Nullable serverEngine =
-                HAPNonnull(server->transports.ip)->serverEngine.get();
+            HAPNonnull(server->transports.ip)->serverEngine.get();
         if (serverEngine && serverEngine->get_state) {
             return serverEngine->get_state(server_);
         }
@@ -412,13 +412,13 @@ void HAPAccessoryServerLoadLTSK(HAPPlatformKeyValueStoreRef keyValueStore, HAPAc
     bool found;
     size_t numBytes;
     err = HAPPlatformKeyValueStoreGet(
-            keyValueStore,
-            kHAPKeyValueStoreDomain_Configuration,
-            kHAPKeyValueStoreKey_Configuration_LTSK,
-            ltsk->bytes,
-            sizeof ltsk->bytes,
-            &numBytes,
-            &found);
+              keyValueStore,
+              kHAPKeyValueStoreDomain_Configuration,
+              kHAPKeyValueStoreKey_Configuration_LTSK,
+              ltsk->bytes,
+              sizeof ltsk->bytes,
+              &numBytes,
+              &found);
     if (err) {
         HAPAssert(err == kHAPError_Unknown);
         HAPLogError(&logObject, "Reading LTSK failed.");
@@ -439,11 +439,11 @@ void HAPAccessoryServerLoadLTSK(HAPPlatformKeyValueStoreRef keyValueStore, HAPAc
 
         // Store new LTSK.
         err = HAPPlatformKeyValueStoreSet(
-                keyValueStore,
-                kHAPKeyValueStoreDomain_Configuration,
-                kHAPKeyValueStoreKey_Configuration_LTSK,
-                ltsk->bytes,
-                sizeof ltsk->bytes);
+                  keyValueStore,
+                  kHAPKeyValueStoreDomain_Configuration,
+                  kHAPKeyValueStoreKey_Configuration_LTSK,
+                  ltsk->bytes,
+                  sizeof ltsk->bytes);
         if (err) {
             HAPAssert(err == kHAPError_Unknown);
             HAPLogError(&logObject, "Storing LTSK failed.");
@@ -463,9 +463,9 @@ void HAPAccessoryServerLoadLTSK(HAPPlatformKeyValueStoreRef keyValueStore, HAPAc
  * @param      bridgedAccessories   NULL-terminated array of bridged accessories for a bridge accessory. NULL otherwise.
  */
 static void HAPAccessoryServerPrepareStart(
-        HAPAccessoryServerRef* server_,
-        const HAPAccessory* primaryAccessory,
-        const HAPAccessory* _Nullable const* _Nullable bridgedAccessories) {
+    HAPAccessoryServerRef* server_,
+    const HAPAccessory* primaryAccessory,
+    const HAPAccessory* _Nullable const* _Nullable bridgedAccessories) {
     HAPPrecondition(server_);
     HAPAccessoryServer* server = (HAPAccessoryServer*) server_;
     HAPPrecondition(server->state == kHAPAccessoryServerState_Idle);
@@ -500,11 +500,11 @@ static void HAPAccessoryServerPrepareStart(
             HAPFatalError();
         }
         HAPLogInfo(
-                &logObject,
-                "Firmware version: %lu.%lu.%lu",
-                (unsigned long) major,
-                (unsigned long) minor,
-                (unsigned long) revision);
+            &logObject,
+            "Firmware version: %lu.%lu.%lu",
+            (unsigned long) major,
+            (unsigned long) minor,
+            (unsigned long) revision);
 
         // Check for configuration change.
         HAPPrecondition(server->platform.keyValueStore);
@@ -512,13 +512,13 @@ static void HAPAccessoryServerPrepareStart(
         bool found;
         size_t numBytes;
         err = HAPPlatformKeyValueStoreGet(
-                server->platform.keyValueStore,
-                kHAPKeyValueStoreDomain_Configuration,
-                kHAPKeyValueStoreKey_Configuration_FirmwareVersion,
-                bytes,
-                sizeof bytes,
-                &numBytes,
-                &found);
+                  server->platform.keyValueStore,
+                  kHAPKeyValueStoreDomain_Configuration,
+                  kHAPKeyValueStoreKey_Configuration_FirmwareVersion,
+                  bytes,
+                  sizeof bytes,
+                  &numBytes,
+                  &found);
         if (err) {
             HAPAssert(err == kHAPError_Unknown);
             HAPFatalError();
@@ -527,9 +527,9 @@ static void HAPAccessoryServerPrepareStart(
         if (found) {
             if (numBytes != sizeof bytes) {
                 HAPLogError(
-                        &logObject,
-                        "Key-value store corrupted - unexpected length for firmware revision: %lu.",
-                        (unsigned long) numBytes);
+                    &logObject,
+                    "Key-value store corrupted - unexpected length for firmware revision: %lu.",
+                    (unsigned long) numBytes);
                 HAPFatalError();
             }
             uint32_t previousMajor = HAPReadLittleUInt32(&bytes[0]);
@@ -537,30 +537,30 @@ static void HAPAccessoryServerPrepareStart(
             uint32_t previousRevision = HAPReadLittleUInt32(&bytes[8]);
             if (major != previousMajor || minor != previousMinor || revision != previousRevision) {
                 if (major < previousMajor || (major == previousMajor && minor < previousMinor) ||
-                    (major == previousMajor && minor == previousMinor && revision < previousRevision)) {
+                        (major == previousMajor && minor == previousMinor && revision < previousRevision)) {
                     HAPLogError(
-                            &logObject,
-                            "[%lu.%lu.%lu > %lu.%lu.%lu] Firmware must not be downgraded! Not starting "
-                            "HAPAccessoryServer.",
-                            (unsigned long) previousMajor,
-                            (unsigned long) previousMinor,
-                            (unsigned long) previousRevision,
-                            (unsigned long) major,
-                            (unsigned long) minor,
-                            (unsigned long) revision);
-                    server->state = kHAPAccessoryServerState_Idle;
-                    return;
-                }
-
-                HAPLogInfo(
                         &logObject,
-                        "[%lu.%lu.%lu > %lu.%lu.%lu] Performing post firmware update tasks.",
+                        "[%lu.%lu.%lu > %lu.%lu.%lu] Firmware must not be downgraded! Not starting "
+                        "HAPAccessoryServer.",
                         (unsigned long) previousMajor,
                         (unsigned long) previousMinor,
                         (unsigned long) previousRevision,
                         (unsigned long) major,
                         (unsigned long) minor,
                         (unsigned long) revision);
+                    server->state = kHAPAccessoryServerState_Idle;
+                    return;
+                }
+
+                HAPLogInfo(
+                    &logObject,
+                    "[%lu.%lu.%lu > %lu.%lu.%lu] Performing post firmware update tasks.",
+                    (unsigned long) previousMajor,
+                    (unsigned long) previousMinor,
+                    (unsigned long) previousRevision,
+                    (unsigned long) major,
+                    (unsigned long) minor,
+                    (unsigned long) revision);
                 err = HAPHandleFirmwareUpdate(server_);
                 if (err) {
                     HAPAssert(err == kHAPError_Unknown);
@@ -570,11 +570,11 @@ static void HAPAccessoryServerPrepareStart(
             }
         } else {
             HAPLogInfo(
-                    &logObject,
-                    "[%lu.%lu.%lu] Storing initial firmware version.",
-                    (unsigned long) major,
-                    (unsigned long) minor,
-                    (unsigned long) revision);
+                &logObject,
+                "[%lu.%lu.%lu] Storing initial firmware version.",
+                (unsigned long) major,
+                (unsigned long) minor,
+                (unsigned long) revision);
             saveVersion = true;
         }
         if (saveVersion) {
@@ -582,11 +582,11 @@ static void HAPAccessoryServerPrepareStart(
             HAPWriteLittleUInt32(&bytes[4], minor);
             HAPWriteLittleUInt32(&bytes[8], revision);
             err = HAPPlatformKeyValueStoreSet(
-                    server->platform.keyValueStore,
-                    kHAPKeyValueStoreDomain_Configuration,
-                    kHAPKeyValueStoreKey_Configuration_FirmwareVersion,
-                    bytes,
-                    sizeof bytes);
+                      server->platform.keyValueStore,
+                      kHAPKeyValueStoreDomain_Configuration,
+                      kHAPKeyValueStoreKey_Configuration_FirmwareVersion,
+                      bytes,
+                      sizeof bytes);
             if (err) {
                 HAPAssert(err == kHAPError_Unknown);
                 HAPFatalError();
@@ -629,9 +629,9 @@ void HAPAccessoryServerStart(HAPAccessoryServerRef* server_, const HAPAccessory*
     HAPPrecondition(accessory);
 
     HAPLogDebug(
-            &logObject,
-            "Checking accessory definition. "
-            "If this crashes, verify that service and characteristic lists are properly NULL-terminated.");
+        &logObject,
+        "Checking accessory definition. "
+        "If this crashes, verify that service and characteristic lists are properly NULL-terminated.");
     HAPPrecondition(HAPRegularAccessoryIsValid(server_, accessory));
     HAPLogDebug(&logObject, "Accessory definition ok.");
 
@@ -649,7 +649,7 @@ void HAPAccessoryServerStart(HAPAccessoryServerRef* server_, const HAPAccessory*
 
     if (server->transports.ip) {
         const HAPAccessoryServerServerEngine* _Nullable serverEngine =
-                HAPNonnull(server->transports.ip)->serverEngine.get();
+            HAPNonnull(server->transports.ip)->serverEngine.get();
         if (serverEngine && serverEngine->start) {
             serverEngine->start(server_);
         }
@@ -657,10 +657,10 @@ void HAPAccessoryServerStart(HAPAccessoryServerRef* server_, const HAPAccessory*
 }
 
 void HAPAccessoryServerStartBridge(
-        HAPAccessoryServerRef* server_,
-        const HAPAccessory* bridgeAccessory,
-        const HAPAccessory* _Nullable const* _Nullable bridgedAccessories,
-        bool configurationChanged) {
+    HAPAccessoryServerRef* server_,
+    const HAPAccessory* bridgeAccessory,
+    const HAPAccessory* _Nullable const* _Nullable bridgedAccessories,
+    bool configurationChanged) {
     HAPPrecondition(server_);
     HAPAccessoryServer* server = (HAPAccessoryServer*) server_;
     HAPPrecondition(bridgeAccessory);
@@ -668,9 +668,9 @@ void HAPAccessoryServerStartBridge(
     HAPError err;
 
     HAPLogDebug(
-            &logObject,
-            "Checking accessory definition. "
-            "If this crashes, verify that accessory, service and characteristic lists are properly NULL-terminated.");
+        &logObject,
+        "Checking accessory definition. "
+        "If this crashes, verify that accessory, service and characteristic lists are properly NULL-terminated.");
     HAPPrecondition(HAPRegularAccessoryIsValid(server_, bridgeAccessory));
     if (bridgedAccessories) {
         size_t i;
@@ -699,7 +699,7 @@ void HAPAccessoryServerStartBridge(
 
     if (server->transports.ip) {
         const HAPAccessoryServerServerEngine* _Nullable serverEngine =
-                HAPNonnull(server->transports.ip)->serverEngine.get();
+            HAPNonnull(server->transports.ip)->serverEngine.get();
         if (serverEngine && serverEngine->start) {
             serverEngine->start(server_);
         }
@@ -749,7 +749,7 @@ void HAPAccessoryServerStop(HAPAccessoryServerRef* server_) {
     // - CompleteShutdown.
     if (server->transports.ip) {
         const HAPAccessoryServerServerEngine* _Nullable serverEngine =
-                HAPNonnull(server->transports.ip)->serverEngine.get();
+            HAPNonnull(server->transports.ip)->serverEngine.get();
         if (serverEngine && serverEngine->stop) {
             err = serverEngine->stop(server_);
             if (err) {
@@ -778,11 +778,11 @@ typedef struct {
 
 HAP_RESULT_USE_CHECK
 static HAPError PairingExistsEnumerateCallback(
-        void* _Nullable context,
-        HAPPlatformKeyValueStoreRef keyValueStore,
-        HAPPlatformKeyValueStoreDomain domain,
-        HAPPlatformKeyValueStoreKey key HAP_UNUSED,
-        bool* shouldContinue) {
+    void* _Nullable context,
+    HAPPlatformKeyValueStoreRef keyValueStore,
+    HAPPlatformKeyValueStoreDomain domain,
+    HAPPlatformKeyValueStoreKey key HAP_UNUSED,
+    bool* shouldContinue) {
     HAPPrecondition(context);
     PairingExistsEnumerateContext* arguments = context;
     HAPPrecondition(keyValueStore);
@@ -804,7 +804,7 @@ bool HAPAccessoryServerIsPaired(HAPAccessoryServerRef* server_) {
     // Enumerate pairings.
     PairingExistsEnumerateContext context = { .exists = false };
     err = HAPPlatformKeyValueStoreEnumerate(
-            server->platform.keyValueStore, kHAPKeyValueStoreDomain_Pairings, PairingExistsEnumerateCallback, &context);
+              server->platform.keyValueStore, kHAPKeyValueStoreDomain_Pairings, PairingExistsEnumerateCallback, &context);
     if (err) {
         HAPAssert(err == kHAPError_Unknown);
         return false;
@@ -814,8 +814,8 @@ bool HAPAccessoryServerIsPaired(HAPAccessoryServerRef* server_) {
 }
 
 HAP_DEPRECATED_MSG(
-        "For displays: See HAPPlatformAccessorySetupDisplay. For NFC: Use HAPAccessoryServerEnterNFCPairingMode "
-        "instead.")
+    "For displays: See HAPPlatformAccessorySetupDisplay. For NFC: Use HAPAccessoryServerEnterNFCPairingMode "
+    "instead.")
 void HAPAccessoryServerEnterPairingMode(HAPAccessoryServerRef* server_) {
     HAPPrecondition(server_);
     HAPAccessoryServer* server = (HAPAccessoryServer*) server_;
@@ -875,12 +875,12 @@ uint8_t HAPAccessoryServerGetPairingFeatureFlags(HAPAccessoryServerRef* server_)
     bool supportsSoftwareAuthentication = false;
     if (server->platform.authentication.mfiTokenAuth) {
         err = HAPPlatformMFiTokenAuthLoad(
-                HAPNonnull(server->platform.authentication.mfiTokenAuth),
-                &supportsSoftwareAuthentication,
-                NULL,
-                NULL,
-                0,
-                NULL);
+                  HAPNonnull(server->platform.authentication.mfiTokenAuth),
+                  &supportsSoftwareAuthentication,
+                  NULL,
+                  NULL,
+                  0,
+                  NULL);
         if (err) {
             HAPAssert(err == kHAPError_Unknown || err == kHAPError_OutOfResources);
             HAPLogError(&logObject, "HAPPlatformMFiTokenAuthLoad failed: %u.", err);
@@ -918,7 +918,8 @@ HAP_ENUM_BEGIN(uint8_t, HAPAccessoryServerStatusFlags) {
      * - Used by accessories supporting HAP over IP (Ethernet / Wi-Fi) only.
      */
     kHAPAccessoryServerStatusFlags_ProblemDetected = 1 << 2
-} HAP_ENUM_END(uint8_t, HAPAccessoryServerStatusFlags);
+}
+HAP_ENUM_END(uint8_t, HAPAccessoryServerStatusFlags);
 
 HAP_RESULT_USE_CHECK
 uint8_t HAPAccessoryServerGetStatusFlags(HAPAccessoryServerRef* server_) {
@@ -938,11 +939,11 @@ typedef struct {
 
 HAP_RESULT_USE_CHECK
 static HAPError FindAdminPairingEnumerateCallback(
-        void* _Nullable context,
-        HAPPlatformKeyValueStoreRef keyValueStore,
-        HAPPlatformKeyValueStoreDomain domain,
-        HAPPlatformKeyValueStoreKey key,
-        bool* shouldContinue) {
+    void* _Nullable context,
+    HAPPlatformKeyValueStoreRef keyValueStore,
+    HAPPlatformKeyValueStoreDomain domain,
+    HAPPlatformKeyValueStoreKey key,
+    bool* shouldContinue) {
     FindAdminPairingEnumerateContext* arguments = context;
     HAPPrecondition(arguments);
     HAPPrecondition(!arguments->adminFound);
@@ -997,10 +998,10 @@ HAPError HAPAccessoryServerCleanupPairings(HAPAccessoryServerRef* server_) {
     // Look for admin pairing.
     FindAdminPairingEnumerateContext context = { .adminFound = false };
     err = HAPPlatformKeyValueStoreEnumerate(
-            server->platform.keyValueStore,
-            kHAPKeyValueStoreDomain_Pairings,
-            FindAdminPairingEnumerateCallback,
-            &context);
+              server->platform.keyValueStore,
+              kHAPKeyValueStoreDomain_Pairings,
+              FindAdminPairingEnumerateCallback,
+              &context);
     if (err) {
         HAPAssert(err == kHAPError_Unknown);
         return err;
@@ -1022,17 +1023,17 @@ HAPError HAPAccessoryServerCleanupPairings(HAPAccessoryServerRef* server_) {
         // Purge Pair Resume cache.
         if (server->transports.ble) {
             HAPRawBufferZero(
-                    server->ble.storage->sessionCacheElements,
-                    server->ble.storage->numSessionCacheElements * sizeof *server->ble.storage->sessionCacheElements);
+                server->ble.storage->sessionCacheElements,
+                server->ble.storage->numSessionCacheElements * sizeof *server->ble.storage->sessionCacheElements);
         }
 
         // Purge broadcast encryption key and advertising identifier.
         // See HomeKit Certification Test Cases R7.2
         // Test Case TCB052
         err = HAPPlatformKeyValueStoreRemove(
-                server->platform.keyValueStore,
-                kHAPKeyValueStoreDomain_Configuration,
-                kHAPKeyValueStoreKey_Configuration_BLEBroadcastParameters);
+                  server->platform.keyValueStore,
+                  kHAPKeyValueStoreDomain_Configuration,
+                  kHAPKeyValueStoreKey_Configuration_BLEBroadcastParameters);
         if (err) {
             HAPAssert(err == kHAPError_Unknown);
             return err;
@@ -1066,13 +1067,13 @@ HAPError HAPAccessoryServerGetCN(HAPPlatformKeyValueStoreRef keyValueStore, uint
     size_t numBytes;
     uint8_t cnBytes[sizeof(uint32_t)];
     err = HAPPlatformKeyValueStoreGet(
-            keyValueStore,
-            kHAPKeyValueStoreDomain_Configuration,
-            kHAPKeyValueStoreKey_Configuration_ConfigurationNumber,
-            cnBytes,
-            sizeof cnBytes,
-            &numBytes,
-            &found);
+              keyValueStore,
+              kHAPKeyValueStoreDomain_Configuration,
+              kHAPKeyValueStoreKey_Configuration_ConfigurationNumber,
+              cnBytes,
+              sizeof cnBytes,
+              &numBytes,
+              &found);
     if (err) {
         HAPAssert(err == kHAPError_Unknown);
         return err;
@@ -1083,11 +1084,11 @@ HAPError HAPAccessoryServerGetCN(HAPPlatformKeyValueStoreRef keyValueStore, uint
 
         // Store new configuration number.
         err = HAPPlatformKeyValueStoreSet(
-                keyValueStore,
-                kHAPKeyValueStoreDomain_Configuration,
-                kHAPKeyValueStoreKey_Configuration_ConfigurationNumber,
-                cnBytes,
-                sizeof cnBytes);
+                  keyValueStore,
+                  kHAPKeyValueStoreDomain_Configuration,
+                  kHAPKeyValueStoreKey_Configuration_ConfigurationNumber,
+                  cnBytes,
+                  sizeof cnBytes);
         if (err) {
             HAPAssert(err == kHAPError_Unknown);
             return err;
@@ -1115,13 +1116,13 @@ HAPError HAPAccessoryServerIncrementCN(HAPPlatformKeyValueStoreRef keyValueStore
     size_t numBytes;
     uint8_t cnBytes[sizeof(uint32_t)];
     err = HAPPlatformKeyValueStoreGet(
-            keyValueStore,
-            kHAPKeyValueStoreDomain_Configuration,
-            kHAPKeyValueStoreKey_Configuration_ConfigurationNumber,
-            cnBytes,
-            sizeof cnBytes,
-            &numBytes,
-            &found);
+              keyValueStore,
+              kHAPKeyValueStoreDomain_Configuration,
+              kHAPKeyValueStoreKey_Configuration_ConfigurationNumber,
+              cnBytes,
+              sizeof cnBytes,
+              &numBytes,
+              &found);
     if (err) {
         HAPAssert(err == kHAPError_Unknown);
         return err;
@@ -1145,11 +1146,11 @@ HAPError HAPAccessoryServerIncrementCN(HAPPlatformKeyValueStoreRef keyValueStore
 
     // Save CN.
     err = HAPPlatformKeyValueStoreSet(
-            keyValueStore,
-            kHAPKeyValueStoreDomain_Configuration,
-            kHAPKeyValueStoreKey_Configuration_ConfigurationNumber,
-            cnBytes,
-            sizeof cnBytes);
+              keyValueStore,
+              kHAPKeyValueStoreDomain_Configuration,
+              kHAPKeyValueStoreKey_Configuration_ConfigurationNumber,
+              cnBytes,
+              sizeof cnBytes);
     if (err) {
         HAPAssert(err == kHAPError_Unknown);
         return err;
@@ -1159,10 +1160,10 @@ HAPError HAPAccessoryServerIncrementCN(HAPPlatformKeyValueStoreRef keyValueStore
 }
 
 void HAPAccessoryServerRaiseEvent(
-        HAPAccessoryServerRef* server_,
-        const HAPCharacteristic* characteristic,
-        const HAPService* service,
-        const HAPAccessory* accessory) {
+    HAPAccessoryServerRef* server_,
+    const HAPCharacteristic* characteristic,
+    const HAPService* service,
+    const HAPAccessory* accessory) {
     HAPPrecondition(server_);
     HAPAccessoryServer* server = (HAPAccessoryServer*) server_;
     HAPPrecondition(characteristic);
@@ -1183,7 +1184,7 @@ void HAPAccessoryServerRaiseEvent(
 
     if (server->transports.ip) {
         const HAPAccessoryServerServerEngine* _Nullable serverEngine =
-                HAPNonnull(server->transports.ip)->serverEngine.get();
+            HAPNonnull(server->transports.ip)->serverEngine.get();
         if (serverEngine && serverEngine->raise_event) {
             err = serverEngine->raise_event(server_, characteristic, service, accessory);
             if (err) {
@@ -1194,11 +1195,11 @@ void HAPAccessoryServerRaiseEvent(
 }
 
 void HAPAccessoryServerRaiseEventOnSession(
-        HAPAccessoryServerRef* server_,
-        const HAPCharacteristic* characteristic,
-        const HAPService* service,
-        const HAPAccessory* accessory,
-        HAPSessionRef* session) {
+    HAPAccessoryServerRef* server_,
+    const HAPCharacteristic* characteristic,
+    const HAPService* service,
+    const HAPAccessory* accessory,
+    HAPSessionRef* session) {
     HAPPrecondition(server_);
     HAPAccessoryServer* server = (HAPAccessoryServer*) server_;
     HAPPrecondition(characteristic);
@@ -1218,7 +1219,7 @@ void HAPAccessoryServerRaiseEventOnSession(
 
     if (server->transports.ip) {
         const HAPAccessoryServerServerEngine* _Nullable serverEngine =
-                HAPNonnull(server->transports.ip)->serverEngine.get();
+            HAPNonnull(server->transports.ip)->serverEngine.get();
         if (serverEngine && serverEngine->raise_event_on_session) {
             err = serverEngine->raise_event_on_session(server_, characteristic, service, accessory, session);
             if (err) {
@@ -1229,11 +1230,11 @@ void HAPAccessoryServerRaiseEventOnSession(
 }
 
 void HAPAccessoryServerHandleSubscribe(
-        HAPAccessoryServerRef* server,
-        HAPSessionRef* session_,
-        const HAPCharacteristic* characteristic,
-        const HAPService* service,
-        const HAPAccessory* accessory) {
+    HAPAccessoryServerRef* server,
+    HAPSessionRef* session_,
+    const HAPCharacteristic* characteristic,
+    const HAPService* service,
+    const HAPAccessory* accessory) {
     HAPPrecondition(server);
     HAPPrecondition(session_);
     HAPSession* session = (HAPSession*) session_;
@@ -1242,135 +1243,145 @@ void HAPAccessoryServerHandleSubscribe(
     HAPPrecondition(accessory);
 
     switch (((const HAPBaseCharacteristic*) characteristic)->format) {
-        case kHAPCharacteristicFormat_Data: {
-            HAPDataCharacteristicHandleSubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPDataCharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_Bool: {
-            HAPBoolCharacteristicHandleSubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPBoolCharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_UInt8: {
-            HAPUInt8CharacteristicHandleSubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPUInt8CharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_UInt16: {
-            HAPUInt16CharacteristicHandleSubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPUInt16CharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_UInt32: {
-            HAPUInt32CharacteristicHandleSubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPUInt32CharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_UInt64: {
-            HAPUInt64CharacteristicHandleSubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPUInt64CharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_Int: {
-            HAPIntCharacteristicHandleSubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPIntCharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_Float: {
-            HAPFloatCharacteristicHandleSubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPFloatCharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_String: {
-            HAPStringCharacteristicHandleSubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPStringCharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_TLV8: {
-            HAPTLV8CharacteristicHandleSubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPTLV8CharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
+    case kHAPCharacteristicFormat_Data: {
+        HAPDataCharacteristicHandleSubscribe(
+            HAPNonnull(session->server),
+        &(const HAPDataCharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_Bool: {
+        HAPBoolCharacteristicHandleSubscribe(
+            HAPNonnull(session->server),
+        &(const HAPBoolCharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_UInt8: {
+        HAPUInt8CharacteristicHandleSubscribe(
+            HAPNonnull(session->server),
+        &(const HAPUInt8CharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_UInt16: {
+        HAPUInt16CharacteristicHandleSubscribe(
+            HAPNonnull(session->server),
+        &(const HAPUInt16CharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_UInt32: {
+        HAPUInt32CharacteristicHandleSubscribe(
+            HAPNonnull(session->server),
+        &(const HAPUInt32CharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_UInt64: {
+        HAPUInt64CharacteristicHandleSubscribe(
+            HAPNonnull(session->server),
+        &(const HAPUInt64CharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_Int: {
+        HAPIntCharacteristicHandleSubscribe(
+            HAPNonnull(session->server),
+        &(const HAPIntCharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_Float: {
+        HAPFloatCharacteristicHandleSubscribe(
+            HAPNonnull(session->server),
+        &(const HAPFloatCharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_String: {
+        HAPStringCharacteristicHandleSubscribe(
+            HAPNonnull(session->server),
+        &(const HAPStringCharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_TLV8: {
+        HAPTLV8CharacteristicHandleSubscribe(
+            HAPNonnull(session->server),
+        &(const HAPTLV8CharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
     }
 }
 
 void HAPAccessoryServerHandleUnsubscribe(
-        HAPAccessoryServerRef* server,
-        HAPSessionRef* session_,
-        const HAPCharacteristic* characteristic,
-        const HAPService* service,
-        const HAPAccessory* accessory) {
+    HAPAccessoryServerRef* server,
+    HAPSessionRef* session_,
+    const HAPCharacteristic* characteristic,
+    const HAPService* service,
+    const HAPAccessory* accessory) {
     HAPPrecondition(server);
     HAPPrecondition(session_);
     HAPSession* session = (HAPSession*) session_;
@@ -1379,134 +1390,144 @@ void HAPAccessoryServerHandleUnsubscribe(
     HAPPrecondition(accessory);
 
     switch (((const HAPBaseCharacteristic*) characteristic)->format) {
-        case kHAPCharacteristicFormat_Data: {
-            HAPDataCharacteristicHandleUnsubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPDataCharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_Bool: {
-            HAPBoolCharacteristicHandleUnsubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPBoolCharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_UInt8: {
-            HAPUInt8CharacteristicHandleUnsubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPUInt8CharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_UInt16: {
-            HAPUInt16CharacteristicHandleUnsubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPUInt16CharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_UInt32: {
-            HAPUInt32CharacteristicHandleUnsubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPUInt32CharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_UInt64: {
-            HAPUInt64CharacteristicHandleUnsubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPUInt64CharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_Int: {
-            HAPIntCharacteristicHandleUnsubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPIntCharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_Float: {
-            HAPFloatCharacteristicHandleUnsubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPFloatCharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_String: {
-            HAPStringCharacteristicHandleUnsubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPStringCharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
-        case kHAPCharacteristicFormat_TLV8: {
-            HAPTLV8CharacteristicHandleUnsubscribe(
-                    HAPNonnull(session->server),
-                    &(const HAPTLV8CharacteristicSubscriptionRequest) {
-                            .transportType = session->transportType,
-                            .session = session_,
-                            .characteristic = characteristic,
-                            .service = service,
-                            .accessory = accessory,
-                    },
-                    HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
-        } break;
+    case kHAPCharacteristicFormat_Data: {
+        HAPDataCharacteristicHandleUnsubscribe(
+            HAPNonnull(session->server),
+        &(const HAPDataCharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_Bool: {
+        HAPBoolCharacteristicHandleUnsubscribe(
+            HAPNonnull(session->server),
+        &(const HAPBoolCharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_UInt8: {
+        HAPUInt8CharacteristicHandleUnsubscribe(
+            HAPNonnull(session->server),
+        &(const HAPUInt8CharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_UInt16: {
+        HAPUInt16CharacteristicHandleUnsubscribe(
+            HAPNonnull(session->server),
+        &(const HAPUInt16CharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_UInt32: {
+        HAPUInt32CharacteristicHandleUnsubscribe(
+            HAPNonnull(session->server),
+        &(const HAPUInt32CharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_UInt64: {
+        HAPUInt64CharacteristicHandleUnsubscribe(
+            HAPNonnull(session->server),
+        &(const HAPUInt64CharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_Int: {
+        HAPIntCharacteristicHandleUnsubscribe(
+            HAPNonnull(session->server),
+        &(const HAPIntCharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_Float: {
+        HAPFloatCharacteristicHandleUnsubscribe(
+            HAPNonnull(session->server),
+        &(const HAPFloatCharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_String: {
+        HAPStringCharacteristicHandleUnsubscribe(
+            HAPNonnull(session->server),
+        &(const HAPStringCharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
+    case kHAPCharacteristicFormat_TLV8: {
+        HAPTLV8CharacteristicHandleUnsubscribe(
+            HAPNonnull(session->server),
+        &(const HAPTLV8CharacteristicSubscriptionRequest) {
+            .transportType = session->transportType,
+            .session = session_,
+            .characteristic = characteristic,
+            .service = service,
+            .accessory = accessory,
+        },
+        HAPAccessoryServerGetClientContext(HAPNonnull(session->server)));
+    }
+    break;
     }
 }
 
 HAP_RESULT_USE_CHECK
 bool HAPAccessoryServerSupportsService(
-        HAPAccessoryServerRef* server_,
-        HAPTransportType transportType,
-        const HAPService* service) {
+    HAPAccessoryServerRef* server_,
+    HAPTransportType transportType,
+    const HAPService* service) {
     HAPPrecondition(server_);
     HAPPrecondition(transportType == kHAPTransportType_IP || transportType == kHAPTransportType_BLE);
     HAPPrecondition(service);
@@ -1559,9 +1580,9 @@ size_t HAPAccessoryServerGetNumServiceInstances(HAPAccessoryServerRef* server_, 
 
 HAP_RESULT_USE_CHECK
 HAPServiceTypeIndex HAPAccessoryServerGetServiceTypeIndex(
-        HAPAccessoryServerRef* server_,
-        const HAPService* service,
-        const HAPAccessory* accessory) {
+    HAPAccessoryServerRef* server_,
+    const HAPService* service,
+    const HAPAccessory* accessory) {
     HAPPrecondition(server_);
     HAPAccessoryServer* server = (HAPAccessoryServer*) server_;
     HAPPrecondition(service);
@@ -1608,11 +1629,11 @@ HAPServiceTypeIndex HAPAccessoryServerGetServiceTypeIndex(
 }
 
 void HAPAccessoryServerGetServiceFromServiceTypeIndex(
-        HAPAccessoryServerRef* server_,
-        const HAPUUID* serviceType,
-        HAPServiceTypeIndex serviceTypeIndex,
-        const HAPService** service,
-        const HAPAccessory** accessory) {
+    HAPAccessoryServerRef* server_,
+    const HAPUUID* serviceType,
+    HAPServiceTypeIndex serviceTypeIndex,
+    const HAPService** service,
+    const HAPAccessory** accessory) {
     HAPPrecondition(server_);
     HAPAccessoryServer* server = (HAPAccessoryServer*) server_;
     HAPPrecondition(serviceType);
@@ -1662,9 +1683,9 @@ void HAPAccessoryServerGetServiceFromServiceTypeIndex(
 //----------------------------------------------------------------------------------------------------------------------
 
 void HAPAccessoryServerEnumerateConnectedSessions(
-        HAPAccessoryServerRef* server_,
-        HAPAccessoryServerEnumerateSessionsCallback callback,
-        void* _Nullable context) {
+    HAPAccessoryServerRef* server_,
+    HAPAccessoryServerEnumerateSessionsCallback callback,
+    void* _Nullable context) {
     HAPPrecondition(server_);
     HAPAccessoryServer* server = (HAPAccessoryServer*) server_;
     HAPPrecondition(callback);
