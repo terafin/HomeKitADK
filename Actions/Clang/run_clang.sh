@@ -21,9 +21,11 @@ for element in "${ADDED_FILES[@]}"
 do
     clang_arguments+="$element "
 done
-clang_arguments+="$CLANG_ARGUMENTS "
 
 clang_arguments+=" -export-fixes=fixes.yml"
+
+clang_arguments+=" $CLANG_ARGUMENTS "
+
 
 echo "clang arguments: $clang_arguments"
 
@@ -39,7 +41,7 @@ echo $CLANG_OUTPUT
 
 PULL_REQUEST_COMMENT=""
 PULL_REQUEST_COMMENT+=$'\n```\n'
-PULL_REQUEST_COMMENT+=$'Clang output:\n'
+PULL_REQUEST_COMMENT+=$'Clang Warnings & Errors:\n'
 PULL_REQUEST_COMMENT+="$CLANG_OUTPUT"
 PULL_REQUEST_COMMENT+="$FIXES_OUTPUT"
 PULL_REQUEST_COMMENTz+=$'\n```\n'
