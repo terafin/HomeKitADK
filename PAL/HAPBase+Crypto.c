@@ -56,15 +56,15 @@ void HAP_constant_time_copy(void* x, const void* y, size_t length) {
 #ifndef HAVE_CUSTOM_SINGLE_SHOT_CHACHA20_POLY1305
 
 void HAP_chacha20_poly1305_encrypt_aad(
-    uint8_t tag[CHACHA20_POLY1305_TAG_BYTES],
-    uint8_t* c,
-    const uint8_t* m,
-    size_t m_len,
-    const uint8_t* a,
-    size_t a_len,
-    const uint8_t* n,
-    size_t n_len,
-    const uint8_t k[CHACHA20_POLY1305_KEY_BYTES]) {
+        uint8_t tag[CHACHA20_POLY1305_TAG_BYTES],
+        uint8_t* c,
+        const uint8_t* m,
+        size_t m_len,
+        const uint8_t* a,
+        size_t a_len,
+        const uint8_t* n,
+        size_t n_len,
+        const uint8_t k[CHACHA20_POLY1305_KEY_BYTES]) {
     HAP_chacha20_poly1305_ctx ctx;
     HAP_chacha20_poly1305_init(&ctx, n, n_len, k);
     if (a_len > 0) {
@@ -75,15 +75,15 @@ void HAP_chacha20_poly1305_encrypt_aad(
 }
 
 int HAP_chacha20_poly1305_decrypt_aad(
-    const uint8_t tag[CHACHA20_POLY1305_TAG_BYTES],
-    uint8_t* m,
-    const uint8_t* c,
-    size_t c_len,
-    const uint8_t* a,
-    size_t a_len,
-    const uint8_t* n,
-    size_t n_len,
-    const uint8_t k[CHACHA20_POLY1305_KEY_BYTES]) {
+        const uint8_t tag[CHACHA20_POLY1305_TAG_BYTES],
+        uint8_t* m,
+        const uint8_t* c,
+        size_t c_len,
+        const uint8_t* a,
+        size_t a_len,
+        const uint8_t* n,
+        size_t n_len,
+        const uint8_t k[CHACHA20_POLY1305_KEY_BYTES]) {
     HAP_chacha20_poly1305_ctx ctx;
     HAP_chacha20_poly1305_init(&ctx, n, n_len, k);
     if (a_len > 0) {
@@ -96,23 +96,23 @@ int HAP_chacha20_poly1305_decrypt_aad(
 #endif
 
 void HAP_chacha20_poly1305_encrypt(
-    uint8_t tag[CHACHA20_POLY1305_TAG_BYTES],
-    uint8_t* c,
-    const uint8_t* m,
-    size_t m_len,
-    const uint8_t* n,
-    size_t n_len,
-    const uint8_t k[CHACHA20_POLY1305_KEY_BYTES]) {
+        uint8_t tag[CHACHA20_POLY1305_TAG_BYTES],
+        uint8_t* c,
+        const uint8_t* m,
+        size_t m_len,
+        const uint8_t* n,
+        size_t n_len,
+        const uint8_t k[CHACHA20_POLY1305_KEY_BYTES]) {
     HAP_chacha20_poly1305_encrypt_aad(tag, c, m, m_len, NULL, 0, n, n_len, k);
 }
 
 int HAP_chacha20_poly1305_decrypt(
-    const uint8_t tag[CHACHA20_POLY1305_TAG_BYTES],
-    uint8_t* m,
-    const uint8_t* c,
-    size_t c_len,
-    const uint8_t* n,
-    size_t n_len,
-    const uint8_t k[CHACHA20_POLY1305_KEY_BYTES]) {
+        const uint8_t tag[CHACHA20_POLY1305_TAG_BYTES],
+        uint8_t* m,
+        const uint8_t* c,
+        size_t c_len,
+        const uint8_t* n,
+        size_t n_len,
+        const uint8_t k[CHACHA20_POLY1305_KEY_BYTES]) {
     return HAP_chacha20_poly1305_decrypt_aad(tag, m, c, c_len, NULL, 0, n, n_len, k);
 }
