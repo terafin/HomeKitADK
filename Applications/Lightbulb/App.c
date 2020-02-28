@@ -75,13 +75,13 @@ static void LoadAccessoryState(void) {
     size_t numBytes;
 
     err = HAPPlatformKeyValueStoreGet(
-            accessoryConfiguration.keyValueStore,
-            kAppKeyValueStoreDomain_Configuration,
-            kAppKeyValueStoreKey_Configuration_State,
-            &accessoryConfiguration.state,
-            sizeof accessoryConfiguration.state,
-            &numBytes,
-            &found);
+              accessoryConfiguration.keyValueStore,
+              kAppKeyValueStoreDomain_Configuration,
+              kAppKeyValueStoreKey_Configuration_State,
+              &accessoryConfiguration.state,
+              sizeof accessoryConfiguration.state,
+              &numBytes,
+              &found);
 
     if (err) {
         HAPAssert(err == kHAPError_Unknown);
@@ -103,11 +103,11 @@ static void SaveAccessoryState(void) {
 
     HAPError err;
     err = HAPPlatformKeyValueStoreSet(
-            accessoryConfiguration.keyValueStore,
-            kAppKeyValueStoreDomain_Configuration,
-            kAppKeyValueStoreKey_Configuration_State,
-            &accessoryConfiguration.state,
-            sizeof accessoryConfiguration.state);
+              accessoryConfiguration.keyValueStore,
+              kAppKeyValueStoreDomain_Configuration,
+              kAppKeyValueStoreKey_Configuration_State,
+              &accessoryConfiguration.state,
+              sizeof accessoryConfiguration.state);
     if (err) {
         HAPAssert(err == kHAPError_Unknown);
         HAPFatalError();
@@ -129,30 +129,33 @@ static HAPAccessory accessory = { .aid = 1,
                                   .serialNumber = "099DB48E9E28",
                                   .firmwareVersion = "1",
                                   .hardwareVersion = "1",
-                                  .services = (const HAPService* const[]) { &accessoryInformationService,
-                                                                            &hapProtocolInformationService,
-                                                                            &pairingService,
-                                                                            &lightBulbService,
-                                                                            NULL },
-                                  .callbacks = { .identify = IdentifyAccessory } };
+.services = (const HAPService* const[]) {
+    &accessoryInformationService,
+    &hapProtocolInformationService,
+    &pairingService,
+    &lightBulbService,
+    NULL
+},
+.callbacks = { .identify = IdentifyAccessory }
+                                };
 
 //----------------------------------------------------------------------------------------------------------------------
 
 HAP_RESULT_USE_CHECK
 HAPError IdentifyAccessory(
-        HAPAccessoryServerRef* server HAP_UNUSED,
-        const HAPAccessoryIdentifyRequest* request HAP_UNUSED,
-        void* _Nullable context HAP_UNUSED) {
+    HAPAccessoryServerRef* server HAP_UNUSED,
+    const HAPAccessoryIdentifyRequest* request HAP_UNUSED,
+    void* _Nullable context HAP_UNUSED) {
     HAPLogInfo(&kHAPLog_Default, "%s", __func__);
     return kHAPError_None;
 }
 
 HAP_RESULT_USE_CHECK
 HAPError HandleLightBulbOnRead(
-        HAPAccessoryServerRef* server HAP_UNUSED,
-        const HAPBoolCharacteristicReadRequest* request HAP_UNUSED,
-        bool* value,
-        void* _Nullable context HAP_UNUSED) {
+    HAPAccessoryServerRef* server HAP_UNUSED,
+    const HAPBoolCharacteristicReadRequest* request HAP_UNUSED,
+    bool* value,
+    void* _Nullable context HAP_UNUSED) {
     *value = accessoryConfiguration.state.lightBulbOn;
     HAPLogInfo(&kHAPLog_Default, "%s: %s", __func__, *value ? "true" : "false");
 
@@ -161,10 +164,10 @@ HAPError HandleLightBulbOnRead(
 
 HAP_RESULT_USE_CHECK
 HAPError HandleLightBulbOnWrite(
-        HAPAccessoryServerRef* server,
-        const HAPBoolCharacteristicWriteRequest* request,
-        bool value,
-        void* _Nullable context HAP_UNUSED) {
+    HAPAccessoryServerRef* server,
+    const HAPBoolCharacteristicWriteRequest* request,
+    bool value,
+    void* _Nullable context HAP_UNUSED) {
     HAPLogInfo(&kHAPLog_Default, "%s: %s", __func__, value ? "true" : "false");
     if (accessoryConfiguration.state.lightBulbOn != value) {
         accessoryConfiguration.state.lightBulbOn = value;
@@ -180,10 +183,10 @@ HAPError HandleLightBulbOnWrite(
 //----------------------------------------------------------------------------------------------------------------------
 
 void AccessoryNotification(
-        const HAPAccessory* accessory,
-        const HAPService* service,
-        const HAPCharacteristic* characteristic,
-        void* ctx) {
+    const HAPAccessory* accessory,
+    const HAPService* service,
+    const HAPCharacteristic* characteristic,
+    void* ctx) {
     HAPLogInfo(&kHAPLog_Default, "Accessory Notification");
 
     HAPAccessoryServerRaiseEvent(accessoryConfiguration.server, characteristic, service, accessory);
@@ -215,18 +218,18 @@ void AccessoryServerHandleUpdatedState(HAPAccessoryServerRef* server, void* _Nul
     HAPPrecondition(!context);
 
     switch (HAPAccessoryServerGetState(server)) {
-        case kHAPAccessoryServerState_Idle: {
-            HAPLogInfo(&kHAPLog_Default, "Accessory Server State did update: Idle.");
-            return;
-        }
-        case kHAPAccessoryServerState_Running: {
-            HAPLogInfo(&kHAPLog_Default, "Accessory Server State did update: Running.");
-            return;
-        }
-        case kHAPAccessoryServerState_Stopping: {
-            HAPLogInfo(&kHAPLog_Default, "Accessory Server State did update: Stopping.");
-            return;
-        }
+    case kHAPAccessoryServerState_Idle: {
+        HAPLogInfo(&kHAPLog_Default, "Accessory Server State did update: Idle.");
+        return;
+    }
+    case kHAPAccessoryServerState_Running: {
+        HAPLogInfo(&kHAPLog_Default, "Accessory Server State did update: Running.");
+        return;
+    }
+    case kHAPAccessoryServerState_Stopping: {
+        HAPLogInfo(&kHAPLog_Default, "Accessory Server State did update: Stopping.");
+        return;
+    }
     }
     HAPFatalError();
 }
@@ -236,9 +239,9 @@ const HAPAccessory* AppGetAccessoryInfo() {
 }
 
 void AppInitialize(
-        HAPAccessoryServerOptions* hapAccessoryServerOptions,
-        HAPPlatform* hapPlatform,
-        HAPAccessoryServerCallbacks* hapAccessoryServerCallbacks) {
+    HAPAccessoryServerOptions* hapAccessoryServerOptions,
+    HAPPlatform* hapPlatform,
+    HAPAccessoryServerCallbacks* hapAccessoryServerCallbacks) {
     /*no-op*/
 }
 
