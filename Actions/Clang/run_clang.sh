@@ -37,16 +37,18 @@ LINES_OF_FIXES=$(echo $FIXES_OUTPUT | wc -l)
 rm clang_output.txt
 rm fixes.yml
 
-PULL_REQUEST_COMMENT="### Automated clang-tidy Review\n"
-PULL_REQUEST_COMMENT="#### Clang Warnings & Errors\n"
-PULL_REQUEST_COMMENT+=$'\n```\n'
-PULL_REQUEST_COMMENT+="$CLANG_OUTPUT"
-PULL_REQUEST_COMMENTz+=$'\n```\n'
+PULL_REQUEST_COMMENT=""
+PULL_REQUEST_COMMENT+=$'### Automated clang-tidy Review\n'
 
-PULL_REQUEST_COMMENT="#### Recommended Fixes\n"
-PULL_REQUEST_COMMENTz+=$'\n```\n'
+PULL_REQUEST_COMMENT+=$'#### Clang Warnings & Errors\n'
+PULL_REQUEST_COMMENT+=$'\n```\n'
+PULL_REQUEST_COMMENT+=$'$CLANG_OUTPUT'
+PULL_REQUEST_COMMENT+=$'\n```\n'
+
+PULL_REQUEST_COMMENT+=$'#### Recommended Fixes\n'
+PULL_REQUEST_COMMENT+=$'\n```\n'
 PULL_REQUEST_COMMENT+="$FIXES_OUTPUT"
-PULL_REQUEST_COMMENTz+=$'\n```\n'
+PULL_REQUEST_COMMENT+=$'\n```\n'
 
 PULL_REQUEST_COMMENT_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
   
