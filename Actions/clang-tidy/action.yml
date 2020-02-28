@@ -16,3 +16,6 @@ outputs:
 runs:
   using: "docker"
   image: "Dockerfile"
+branding:
+  color: "blue"
+  icon: "shield"
