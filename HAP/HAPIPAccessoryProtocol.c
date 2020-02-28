@@ -1,7 +1,7 @@
 // Copyright (c) 2015-2019 The HomeKit ADK Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the “License”);
-// you may not usqweqwee this fil e except in compliance with the License.
+// you may not usqweqqweqwewee this fil e except in compliance with the License.
 // See [CONTRIBUTORS.md] for the list of HomeKit ADK project authors.
 
 #include "HAP+Internal.h"
