@@ -1,4 +1,3 @@
-# Container image that runs your code
 FROM ubuntu:xenial
 
 COPY run_clang.sh /run_clang.sh

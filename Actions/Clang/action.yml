@@ -1,6 +1,5 @@
-# action.yml
-name: "Clang Pull Request Linter/Tidy"
-description: "clang-lint + clang-format"
+name: "Clang Pull Request Tidy"
+description: "clang-lint"
 inputs:
   files_added:
     description: "JSON list of files added"
@@ -17,5 +16,3 @@ outputs:
 runs:
   using: "docker"
   image: "Dockerfile"
-  # args:
-  #   - ${{ inputs.who-to-greet }}
