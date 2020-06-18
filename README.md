@@ -1,5 +1,7 @@
 # HomeKit Accessory Development Kit (ADK) ![C/C++ CI](https://github.com/terafin/HomeKitADK/workflows/C/C++%20CI/badge.svg) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2dadcbce799e44cabb5e120336e18c54)](https://www.codacy.com/manual/jwood/HomeKitADK?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=terafin/HomeKitADK&amp;utm_campaign=Badge_Grade) [![CodeFactor](https://www.codefactor.io/repository/github/terafin/homekitadk/badge)](https://www.codefactor.io/repository/github/terafin/homekitadk)
 
+
+
 The HomeKit ADK is used by silicon vendors and accessory manufacturers to build HomeKit compatible devices.
 
 The HomeKit ADK implements key components of the HomeKit Accessory Protocol (HAP), which embodies the core principles Apple brings to smart home technology: security, privacy, and reliability.
